@@ -5,7 +5,8 @@ const express        = require('express'),
       morgan         = require('morgan'),
       mongoose       = require('mongoose'),
       passport       = require('passport'),
-      methodOverride = require('method-override');
+      methodOverride = require('method-override')
+      cors           = require('cors');
 
 /* Setup our app */
 const app = express();
@@ -13,6 +14,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.use(cors());
 
 /* ROUTES */
 
