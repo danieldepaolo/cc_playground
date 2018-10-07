@@ -27,54 +27,74 @@ app.get("/", (req, res) => {
 
 // GET all transactions
 app.get("/transactions", (req, res) => {
-  
+  res.json({
+    message: "Reached transactions index route"
+  });
 });
 
 // get a particular transaction
-// app.get("/transactions/:id", (req, res) => {
-  
-// });
+app.get("/transactions/:id", (req, res) => {
+  res.json({
+    message: "Reached transactions show route"
+  });
+});
 
 // add transaction(s) to database
 app.post("/transactions", (req, res) => {
-  
+  res.json({
+    message: "Reached transactions create route"
+  });
 });
 
 // modify a particular transaction
 app.put("/transactions/:id", (req, res) => {
-  
+  res.json({
+    message: "Reached transactions update route"
+  });
 });
 
 // delete a transaction
 app.put("/transactions/:id", (req, res) => {
-  
+  res.json({
+    message: "Reached transactions destroy route"
+  });
 });
 
 //// Cards ////
 
 // get all cards
 app.get("/cards", (req, res) => {
-  
+  res.json({
+    message: "Reached Cards index route"
+  });
 });
 
 // get one card by id
 app.get("/cards/:id", (req, res) => {
-  
+  res.json({
+    message: "Reached Cards show route"
+  });
 });
 
 // add a new card to database
 app.post("/cards", (req, res) => {
-  
+  res.json({
+    message: "Reached Cards create route"
+  });
 });
 
 // modify a particular card in database
 app.put("/cards/:id", (req, res) => {
-  
+  res.json({
+    message: "Reached Cards update route"
+  });
 });
 
 // delete one card
 app.delete("/cards/:id", (req, res) => {
-  
+  res.json({
+    message: "Reached Cards destroy route"
+  });
 });
 
 //// Merchants ////
@@ -82,7 +102,7 @@ app.delete("/cards/:id", (req, res) => {
 // OR don't accept particular kinds of credit cards (Amex andDiscover for example)
 
 
-
 app.listen(process.env.PORT, process.env.IP, () => {
-  console.log("CC Playground server is running...");
+  console.log(`CC Playground server is running on 
+    ${process.env.IP}:${process.env.PORT}`);
 });
