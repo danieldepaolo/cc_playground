@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ControlLabel, Form, FormGroup, FormControl, HelpBlock  } from 'react-bootstrap';
+import { Button, ControlLabel, FormGroup, FormControl, HelpBlock  } from 'react-bootstrap';
 import isEmail from 'validator/lib/isEmail';
 
 class RegisterUser extends Component {

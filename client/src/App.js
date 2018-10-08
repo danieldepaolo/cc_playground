@@ -8,6 +8,7 @@ import TestArea from './Components/TestArea';
 import Navigation from './Components/Navigation';
 import Playground from './Components/Playground';
 import SettingsView from './Components/SettingsView';
+import TransactionsView from './Components/TransactionView';
 import RegisterUser from './Components/RegisterUser';
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
           <div id="mainArea">
             <Route path="/" component={TestArea} />
             <Route path="/settings" component={SettingsView} />
+            <Route path="/transactions" component={TransactionsView} />
             <Route path="/playground" component={Playground} />
             <Route path="/register" component={RegisterUser} />
           </div>

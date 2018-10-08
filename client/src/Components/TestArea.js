@@ -6,7 +6,7 @@ class TestArea extends Component {
   async sendTestRequest() {
     const response = await fetch('http://localhost:8080/transactions');
     const data = await response.json();
-    console.log(data.message);
+    console.log(data);
   }
   
   render() {

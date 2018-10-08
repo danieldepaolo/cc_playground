@@ -50,9 +50,7 @@ let testTransactions = [{
 
 // GET all transactions
 app.get("/transactions", (req, res) => {
-  res.json({
-    transactions: testTransactions
-  });
+  res.json(testTransactions);
 });
 
 // get a particular transaction

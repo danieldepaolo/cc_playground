@@ -3,7 +3,8 @@ import { Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const items = [
-  {name: "Settings", path: "/settings"}, 
+  {name: "Settings", path: "/settings"},
+  {name: "Transactions", path: "/transactions"},
   {name: "Playground", path: "/playground"},
   {name: "Register", path: "/register"}
 ];

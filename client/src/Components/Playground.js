@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactTable from "react-table";
-import Loader from 'react-loader';
-import classNames from 'classnames';
+import _ from 'underscore';
 
 import CardGridView from './CardGridView';
+import BonusBox from './BonusBox';
 
 const columns = [{
   Header: 'Date',
@@ -40,17 +40,17 @@ class Playground extends Component {
     this.fetchData();
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.cardSelectStatus !== this.state.cardSelectStatus) {
-      this.fetchBonusAmount();
-    }
-  }
+  // async componentDidUpdate(prevProps, prevState, snapshot) {
+  //   if (prevState.cardSelectStatus !== this.state.cardSelectStatus) {
+  //     this.fetchBonusAmount();
+  //   }
+  // }
 
   fetchData = async () => {
-    let response = await fetch('http://localhost:8000/cardmanager/creditcards/');
+    let response = await fetch('http://localhost:8080/cards');
     const cards = await response.json();
 
-    response = await fetch('http://localhost:8000/cardmanager/transactions/');
+    response = await fetch('http://localhost:8080/transactions');
     const transactions = await response.json();
 
     const cardStatus = {};
@@ -65,24 +65,22 @@ class Playground extends Component {
   }
 
   fetchBonusAmount = async () => {
-    let url = 'http://localhost:8000/cardmanager/playground';
+    let url = 'http://localhost:8080/playground/calcbonus?';
 
-    let firstArg = true;
-    for (let cardId in this.state.cardSelectStatus) {
-      if (this.state.cardSelectStatus[cardId]) {
-        firstArg ? url += ('?card_id=' + cardId)
-          : url += ('&card_id=' + cardId);
-        firstArg = false;
-      }
-    }
+    let args = _.filter(
+      _.keys(this.state.cardSelectStatus),
+      this.state.cardSelectStatus === true
+    );
+    url += args.join('&');
 
     this.setState({bonusLoading: true});
 
     let response = await fetch(url);
+    // $TODO also return bonus for each transaction or similar
     let data = await response.json();
 
     this.setState({
-      bonus: data.calc_bonus,
+      bonus: data.bonus,
       bonusLoading: false
     });
   };
@@ -100,23 +98,12 @@ class Playground extends Component {
     const { cards, cardSelectStatus, 
       transactions, bonus } = this.state;
 
-    const bonusBoxClass = classNames({
-      bonusBox: true,
-      loadingDimmer: this.state.bonusLoading
-    });
-
     return (
       <div>
-        <div className={bonusBoxClass}>
-          <Loader
-            loaded={!this.state.bonusLoading}
-            length={5}
-            width={3}
-            radius={5}
-          >
-          </Loader>
-          <p className="bonus">Bonus: {bonus}</p>
-        </div>
+        <BonusBox
+          loading={this.state.bonusLoading}
+          bonus={bonus}
+        />
         <div className="playgroundArea">
           <CardGridView
             cards={cards}
@@ -128,14 +115,6 @@ class Playground extends Component {
               columns={columns}
               data={transactions}
               defaultPageSize={20}
-              SubComponent={row => {
-                const text = row.original.description;
-                return (
-                  <div className="transactionDesc">
-                    {text}
-                  </div>
-                );
-              }}
             />
           </div>
         </div>

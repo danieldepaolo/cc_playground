@@ -1,10 +1,35 @@
 import React, { Component } from 'react';
 import { Label, Table } from 'react-bootstrap';
+import _ from 'underscore';
+import update from 'immutability-helper';
 
 class CardSettingsItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
   handleChange = (event) => {
     this.props.notifySelectChange(this.props.cardInfo.id);
   }
+
+  handleChangePointValue = async event => {
+    let { cards, selectedCard } = this.state;
+    const index = _.findIndex(cards, {id: selectedCard});
+
+    // Create a new copy of cards array ...
+    // where the point value of selected card is updated
+    const cardsCopy = update(cards, {
+      [index]: {
+        $merge: {ptValue: +event.target.value}
+      }
+    });
+
+    this.setState({
+      cards: cardsCopy
+    });
+  };
 
   render() {
     const { 
