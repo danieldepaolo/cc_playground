@@ -20,7 +20,7 @@ class BonusBox extends Component {
           radius={5}
         >
         </Loader>
-        <p className="bonus">Bonus: {bonus}</p>
+        <p className="bonus">Bonus: ${Number(bonus).toFixed(2)}</p>
       </div>
     );
   }

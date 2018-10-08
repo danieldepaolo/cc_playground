@@ -40,11 +40,11 @@ class Playground extends Component {
     this.fetchData();
   }
 
-  // async componentDidUpdate(prevProps, prevState, snapshot) {
-  //   if (prevState.cardSelectStatus !== this.state.cardSelectStatus) {
-  //     this.fetchBonusAmount();
-  //   }
-  // }
+  async componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.cardSelectStatus !== this.state.cardSelectStatus) {
+      this.fetchBonusAmount();
+    }
+  }
 
   fetchData = async () => {
     let response = await fetch('http://localhost:8080/cards');
@@ -67,11 +67,13 @@ class Playground extends Component {
   fetchBonusAmount = async () => {
     let url = 'http://localhost:8080/playground/calcbonus?';
 
-    let args = _.filter(
+    let cardIdsToGet = _.filter(
       _.keys(this.state.cardSelectStatus),
-      this.state.cardSelectStatus === true
+      cardId => this.state.cardSelectStatus[cardId] === true
     );
+    let args = cardIdsToGet.map(cardId => `card_id=${cardId}`);
     url += args.join('&');
+    console.log(url);
 
     this.setState({bonusLoading: true});
 

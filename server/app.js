@@ -9,6 +9,8 @@ const express        = require('express'),
       cors           = require('cors'),
       _              = require('underscore');
 
+const calc = require('./calculations');
+
 /* Setup our app */
 const app = express();
 app.use(morgan('dev'));
@@ -17,16 +19,65 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(cors());
 
-/* ROUTES */
+/* Stupid test data that will later be replaced with database */
 
-app.get("/", (req, res) => {
-  res.json({
-    route: "/",
-    routeName: "index"
-  });
-});
-
-// Transactions //
+let testCards = [{
+  id: 0,
+  issuer: "Chase",
+  name: "Freedom",
+  defaultReturn: 1,
+  ptValue: 1,
+  fees: {
+    annual: 0,
+    waivedFirstYear: "no"
+  },
+  bonus: {
+    categories: {},
+    special: []
+  },
+  perks: []
+}, {
+  id: 1,
+  issuer: "Citibank",
+  name: "AAdvantage Platinum Plus",
+  defaultReturn: 1,
+  ptValue: 1.2,
+  fees: {
+    annual: 99,
+    waivedFirstYear: "yes"
+  },
+  bonus: {
+    categories: {
+      merchant: [{
+        category: "American Airlines",
+        bonus: 2
+      }],
+      product: [{
+        category: "Restaurants",
+        bonus: 2
+      }, {
+        category: "Gas & Fuel",
+        bonus: 2
+      }]
+    },
+    special: [{
+      period: "annual",
+      type: "spend",
+      threshold: 25000,
+      rewardCurrency: "credit",
+      rewardAmt: 100
+    }]
+  },
+  perks: [{
+    name: "Free first checked bag",
+    description: "Free first checked bag on domestic AA flights",
+    value: 85
+  }, {
+    name: "Priority Boarding",
+    description: "Priority Boarding on AA flights",
+    value: 85
+  }]
+}];
 
 // test transactions
 // Until we have a database this is easy
@@ -48,6 +99,48 @@ let testTransactions = [{
   amount: 4.69
 }];
 
+/* ROUTES */
+
+app.get("/", (req, res) => {
+  res.json({
+    route: "/",
+    routeName: "index"
+  });
+});
+
+// Used to calculate the bonus value
+// Response has overall bonus and FUTURE FEATURE bonus per transaction
+// $TODO FUTURE: Plus card used for each transaction to get that bonus
+/*
+  {
+    overallBonus: x,
+    transactions: [{
+      id: =transaction id=,
+      cardUsed: =card id=,
+      bonus: y
+    }]
+  }
+*/
+app.get("/playground/calcbonus", (req, res) => {
+  // get cards from the query string
+  const { card_id } = req.query;
+  let cards = [];
+  if (card_id) {
+    if (Array.isArray(card_id)) {
+      cards = card_id.map(cardId => testCards[cardId]);
+    } else {
+      cards.push(testCards[card_id]);
+    }
+  }
+
+  const bonus = calc.getBonusWithCards(cards, testTransactions);
+  res.json({
+    bonus: bonus
+  });
+});
+
+// Transactions //
+ 
 // GET all transactions
 app.get("/transactions", (req, res) => {
   res.json(testTransactions);
@@ -98,46 +191,6 @@ app.delete("/transactions/:id", (req, res) => {
 // 2. points
 
 // $TODO perks will be their own model and referenced in card
-
-let testCards = [{
-  id: 0,
-  issuer: "Chase",
-  name: "Freedom",
-  defaultReturn: 1,
-  ptValue: 1,
-  fees: {
-    annual: 0,
-    waivedFirstYear: "no"
-  },
-  bonus: [],
-  perks: []
-}, {
-  id: 1,
-  issuer: "Citibank",
-  name: "AAdvantage Platinum Plus",
-  defaultReturn: 1,
-  ptValue: 1.2,
-  fees: {
-    annual: 99,
-    waivedFirstYear: "yes"
-  },
-  bonus: [{
-    period: "annual",
-    type: "spend",
-    threshold: 25000,
-    rewardCurrency: "credit",
-    rewardAmt: 100
-  }],
-  perks: [{
-    name: "Free first checked bag",
-    description: "Free first checked bag on domestic AA flights",
-    value: 85
-  }, {
-    name: "Priority Boarding",
-    description: "Priority Boarding on AA flights",
-    value: 85
-  }]
-}];
 
 // get all cards
 app.get("/cards", (req, res) => {
