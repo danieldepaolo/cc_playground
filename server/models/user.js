@@ -5,6 +5,16 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  // Whether or not use wants to use their own perk/currency values or default
+  useDefaultValues: Boolean,
+  
+  // User's favorite cards!
+  favoriteCards: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Card"
+  }],
+
+  // User-specific values for perks and currencies
   perkValues: [{
     perk: {
       type: mongoose.Schema.Types.ObjectId,
