@@ -38,21 +38,7 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-/* ROUTES */
-
-app.get("/", (req, res) => {
-  res.json({
-    route: "/",
-    routeName: "index"
-  });
-});
-
-//// $TODO Merchants? ////
-// This is used to track what merchants don't accept credit cards
-// OR don't accept particular kinds of credit cards (Amex andDiscover for example)
-// Do we want a model, or routes, or both, or neither for merchants?
-
-// Start using our routes from external files
+/* Routes */
 app.use(cardRoutes);
 app.use(playgroundRoutes);
 app.use(transactionsRoutes);
