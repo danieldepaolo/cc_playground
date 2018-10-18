@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import 'react-table/react-table.css'
 import './Styles/App.css';
@@ -7,9 +7,9 @@ import './Styles/App.css';
 import TestArea from './Components/TestArea';
 import Navigation from './Components/Navigation';
 import Playground from './Components/Playground';
-import SettingsView from './Components/SettingsView';
-import TransactionsView from './Components/TransactionView';
-import RegisterUser from './Components/RegisterUser';
+import Transactions from './Components/Transactions';
+import Register from './Components/User/Register';
+import Login from './Components/User/Login';
 
 class App extends Component {
   render() {
@@ -18,11 +18,14 @@ class App extends Component {
         <div className="App">
           <Navigation />
           <div id="mainArea">
-            <Route path="/" component={TestArea} />
-            <Route path="/settings" component={SettingsView} />
-            <Route path="/transactions" component={TransactionsView} />
-            <Route path="/playground" component={Playground} />
-            <Route path="/register" component={RegisterUser} />
+            <Switch>
+              <Route exact path="/" component={Playground} />
+              <Route path="/perks/edit" component={TestArea} />
+              <Route path="/currency/edit" component={TestArea} />
+              <Route path="/transactions" component={Transactions} />
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+            </Switch>
           </div>
         </div>
       </BrowserRouter>

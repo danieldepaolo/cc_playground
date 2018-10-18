@@ -9,7 +9,7 @@ import { Button } from 'semantic-ui-react';
   or attempt to merge with the transactions that are already there
 */
 
-class TransactionView extends Component {
+class Transaction extends Component {
 
   handleFileSelected = (event, file) => {
     console.log(event);
@@ -52,4 +52,4 @@ class TransactionView extends Component {
   }
 };
 
-export default TransactionView;
+export default Transaction;

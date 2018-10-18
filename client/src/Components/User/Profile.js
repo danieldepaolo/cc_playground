@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 
 */
 
-class UserPage extends Component {
+class Profile extends Component {
 
 }
 
-export default UserPage;
+export default Profile;

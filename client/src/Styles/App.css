@@ -5,7 +5,7 @@ input[type=number] {
   width: 5em; }
 
 div.formBox {
-  width: 22em;
+  max-width: 25em;
   margin: 0 auto; }
 
 .help-block.error {

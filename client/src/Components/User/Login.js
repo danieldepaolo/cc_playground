@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Form } from 'semantic-ui-react';
 import isEmail from 'validator/lib/isEmail';
 
 // props
@@ -8,7 +9,7 @@ class Login extends Component {
     super(props);
 
     this.state = {
-      userOrEmail: '',
+      username: '',
       password: '',
       error: null
     };
@@ -48,35 +49,33 @@ class Login extends Component {
     });
   }
 
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
   render() {
+    const { username, password } = this.state;
+
+
     return (
-      <FormGroup>
-        <ControlLabel>Username</ControlLabel>
-        <FormControl
-          type="text"
-          value={this.state.userOrEmail}
-          onChange={e => this.setState({userOrEmail: e.target.value})}
-        />
-        <ControlLabel>Password</ControlLabel>
-        <FormControl
-          type="password"
-          value={this.state.password}
-          onChange={e => this.setState({password: e.target.value})}
-        />
-        <div className="submitBox">
-          <Button 
-            bsStyle="primary" 
-            onClick={this.handleFormSubmit}
-          >
-            Login
-          </Button>
-          {this.state.error &&
-            <span className="requestErr">
-              {this.state.error}
-            </span>
-          }
-        </div>
-      </FormGroup>
+      <div className="formBox">
+        <Form onSubmit={this.handleFormSubmit}>
+          <Form.Input
+            label="Username"
+            name='username'
+            value={username}
+            placeholder="Username"
+            onChange={this.handleChange}
+          />
+          <Form.Input
+            label="Password"
+            name='password'
+            value={password}
+            type='password'
+            placeholder="Username"
+            onChange={this.handleChange}
+          />
+          <Button type='submit'>Login</Button>
+        </Form>
+      </div>
     );
   }
 }

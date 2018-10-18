@@ -1,13 +1,30 @@
 import React, { Component } from 'react';
-import { Navbar } from 'react-bootstrap';
+import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-const items = [
-  {name: "Settings", path: "/settings"},
-  {name: "Transactions", path: "/transactions"},
-  {name: "Playground", path: "/playground"},
-  {name: "Register", path: "/register"}
-];
+const items = {
+  loggedIn: {
+    left: [
+      {name: "Playground", path: "/"},
+      {name: "Transactions", path: "/transactions"}
+    ],
+    right: [
+      {name: "Perk Values", path: "/perks/edit"},
+      {name: "Currency Values", path: "/currency/edit"},
+      {name: "Logout", path: "/"}
+    ]
+  },
+  loggedOut: {
+    left: [
+      {name: "Playground", path: "/"},
+      {name: "Transactions", path: "/transactions"}
+    ],
+    right: [
+      {name: "Login", path: "/login"},
+      {name: "Register", path: "/register"}
+    ]
+  }
+};
 
 class Navigation extends Component {
   constructor(props) {
@@ -17,22 +34,33 @@ class Navigation extends Component {
 
   render() {
     return (
-      <Navbar>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">CC Playground</Link>
-          </Navbar.Brand>
-        </Navbar.Header>
-        {items.map(item => (
-          <Link 
-            key={item.name} 
-            to={item.path} 
-            className="navLink"
-          >
-            {item.name}
-          </Link>
-        ))}
-      </Navbar>
+      <Menu>
+        <Menu.Header>
+          <Link to="/">CC Playground</Link>
+        </Menu.Header>
+        <Menu.Menu position='left'>
+          {items.loggedOut.left.map(item => (
+            <Link 
+              key={item.name} 
+              to={item.path} 
+              className="navLink"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </Menu.Menu>
+        <Menu.Menu position='right'>
+          {items.loggedOut.right.map(item => (
+            <Link 
+              key={item.name} 
+              to={item.path} 
+              className="navLink"
+            >
+              {item.name}
+            </Link>
+          ))}
+        </Menu.Menu>
+      </Menu>
     );
   }
 }

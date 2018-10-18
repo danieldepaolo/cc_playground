@@ -5,7 +5,7 @@ const CardItem = (props) => {
 
   return (
     <div className="cardContent">
-      <img src={card_image} />
+      <img src={card_image} alt={name} />
       <h4>{issuer} {name}</h4>
     </div>
   );
