@@ -5,9 +5,12 @@ const express        = require('express'),
       morgan         = require('morgan'),
       mongoose       = require('mongoose'),
       passport       = require('passport'),
+      localStrategy  = require("passport-local"),
       methodOverride = require('method-override'),
       cors           = require('cors'),
       _              = require('underscore');
+
+const User = require('./models/user');
 
 // Route files
 const cardRoutes          = require("./routes/cards"),
@@ -21,6 +24,19 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.use(cors());
+
+// PASSPORT setup
+app.use(session({
+  secret: "Bountiful rewards await",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 /* ROUTES */
 
