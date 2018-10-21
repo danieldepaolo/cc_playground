@@ -22,6 +22,7 @@
     "sass": "^1.14.1",
     "semantic-ui-css": "^2.4.0",
     "semantic-ui-react": "^0.79.1",
+    "styled-components": "^4.0.2",
     "underscore": "^1.9.1",
     "validator": "^10.8.0"
   },

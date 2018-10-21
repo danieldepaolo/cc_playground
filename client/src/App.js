@@ -10,6 +10,8 @@ import Playground from './Components/Playground';
 import Transactions from './Components/Transactions';
 import Register from './Components/User/Register';
 import Login from './Components/User/Login';
+import CardForm from './Components/Forms/CardForm';
+import PerkForm from './Components/Forms/PerkForm';
 
 class App extends Component {
   render() {
@@ -20,9 +22,11 @@ class App extends Component {
           <div id="mainArea">
             <Switch>
               <Route exact path="/" component={Playground} />
+              <Route path="/perks/new" component={PerkForm} />
               <Route path="/perks/edit" component={TestArea} />
               <Route path="/currency/edit" component={TestArea} />
               <Route path="/transactions" component={Transactions} />
+              <Route path="/cards/new" component={CardForm} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
             </Switch>

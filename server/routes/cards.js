@@ -26,12 +26,13 @@ router.get("/cards/:id", (req, res) => {
 
 // add a new card to database
 router.post("/cards", (req, res) => {
-  const { card } = req.body;
-  card.id = testData.testCards.length;
-  testData.testCards.push(card);
+  console.log(req.body);
+  //const { card } = req.body;
+  //card.id = testData.testCards.length;
+  //testData.testCards.push(card);
 
   res.json({
-    message: `Successfully added: ${card.name}!`
+    message: `Successfully added card!`
   });
 });
 

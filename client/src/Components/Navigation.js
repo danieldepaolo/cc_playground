@@ -20,6 +20,8 @@ const items = {
       {name: "Transactions", path: "/transactions"}
     ],
     right: [
+      {name: "Add Card", path: "/cards/new"},
+      {name: "Add Perk", path: "/perks/new"},
       {name: "Login", path: "/login"},
       {name: "Register", path: "/register"}
     ]

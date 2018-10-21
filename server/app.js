@@ -14,14 +14,17 @@ const User = require('./models/user');
 
 // Route files
 const cardRoutes          = require("./routes/cards"),
+      perkRoutes          = require("./routes/perks"),
       playgroundRoutes    = require("./routes/playground"),
       transactionsRoutes  = require("./routes/transactions");
+
+mongoose.connect("mongodb://localhost/cc_playground", { useNewUrlParser: true });
 
 /* Setup our app */
 const app = express();
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(methodOverride("_method"));
 app.use(cors());
 
@@ -40,6 +43,7 @@ passport.deserializeUser(User.deserializeUser());
 
 /* Routes */
 app.use(cardRoutes);
+app.use(perkRoutes);
 app.use(playgroundRoutes);
 app.use(transactionsRoutes);
 

@@ -16,7 +16,7 @@ class Login extends Component {
   }
 
   async handleFormSubmit () {
-    const url = 'http://localhost:8000/cardmanager/rest-auth/login/';
+    const url = 'http://localhost:8080/';
 
     let loginBody = isEmail(this.state.userOrEmail) ? {
       email: this.state.userOrEmail
@@ -53,7 +53,6 @@ class Login extends Component {
 
   render() {
     const { username, password } = this.state;
-
 
     return (
       <div className="formBox">
