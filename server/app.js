@@ -7,13 +7,13 @@ const express        = require('express'),
       passport       = require('passport'),
       localStrategy  = require("passport-local"),
       methodOverride = require('method-override'),
-      cors           = require('cors'),
-      _              = require('underscore');
+      cors           = require('cors');
 
 const User = require('./models/user');
 
 // Route files
 const cardRoutes          = require("./routes/cards"),
+      currencyRoutes      = require("./routes/currencies"),
       perkRoutes          = require("./routes/perks"),
       playgroundRoutes    = require("./routes/playground"),
       transactionsRoutes  = require("./routes/transactions");
@@ -43,6 +43,7 @@ passport.deserializeUser(User.deserializeUser());
 
 /* Routes */
 app.use(cardRoutes);
+app.use(currencyRoutes);
 app.use(perkRoutes);
 app.use(playgroundRoutes);
 app.use(transactionsRoutes);

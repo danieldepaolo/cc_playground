@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Input, Select } from 'semantic-ui-react';
+import update from 'immutability-helper';
 import styled from 'styled-components';
 
 const processorOptions = [
@@ -30,24 +31,32 @@ class CardForm extends Component {
       issuer: '',
       name: '',
       processor: '',
+      selectedCurrency: null,
       defaultReturn: 1,
       annualFee: 0,
       ftf: false,
-      waivedFirstYear: false
+      waivedFirstYear: false,
+      selectedPerks: new Set()
     };
   }
 
   handleFormSubmit = async () => {
     const url = "http://localhost:8080/cards";
     console.log(this.state);
+
+    let formObj = this.state;
+    formObj.selectedPerks = Array.from(formObj.selectedPerks);
   
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({card: this.state})
+      body: JSON.stringify({card: formObj})
     });
+
+    const data = await response.json();
+    console.log(data);
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -57,11 +66,15 @@ class CardForm extends Component {
       issuer,
       name,
       processor,
+      selectedCurrency,
       defaultReturn,
       annualFee,
       ftf,
-      waivedFirstYear
+      waivedFirstYear,
+      selectedPerks
     } = this.state;
+
+    const { perks, currencies } = this.props;
   
     return (
       <FormBox>
@@ -128,9 +141,34 @@ class CardForm extends Component {
               onChange={this.handleChange}
             />
           </Form.Group>
+          <Form.Group>
+            {perks.map(perk => (
+              <Form.Checkbox
+                key={perk._id}
+                label={perk.name}
+                value={perk._id}
+                checked={ selectedPerks.has(perk._id) }
+                onChange={() => {selectedPerks.has(perk._id) 
+                  ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perk._id]}) })
+                  : this.setState({ selectedPerks: update(selectedPerks, {$add: [perk._id]}) })
+                }}
+              />
+            ))}
+          </Form.Group>
+          <Form.Group>
+            {currencies.map(currency => (
+              <Form.Radio
+                key={currency._id}
+                label={currency.name}
+                value={currency._id}
+                checked={currency._id === selectedCurrency}
+                onChange={() => this.setState({selectedCurrency: currency._id})}
+              />
+            ))}
+          </Form.Group>
           <Button type='submit'>Submit</Button>
         </Form>
-      </FormBox>     
+      </FormBox>
     );
   }
 }

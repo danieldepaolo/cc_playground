@@ -5,7 +5,18 @@ const Perk = require("../models/perk");
 
 // get all perks
 router.get("/perks", (req, res) => {
-  res.json([]);
+  let responseErr = null;
+
+  Perk.find({}, (err, allPerks) => {
+    if (err) {
+      responseErr = err;
+    }
+
+    res.json({
+      err: responseErr,
+      perks: allPerks
+    });
+  });
 });
 
 router.post("/perks", (req, res) => {

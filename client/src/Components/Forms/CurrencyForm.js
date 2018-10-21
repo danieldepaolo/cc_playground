@@ -10,7 +10,7 @@ const FormBox = styled.div`
   }
 `;
 
-class PerkForm extends Component {
+class CurrencyForm extends Component {
   constructor(props) {
     super(props);
 
@@ -28,14 +28,14 @@ class PerkForm extends Component {
   }
 
   handleFormSubmit = async () => {
-    const url = "http://localhost:8080/perks";
+    const url = "http://localhost:8080/currencies";
   
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({perk: this.state})
+      body: JSON.stringify({currency: this.state})
     });
 
     const data = await response.json();
@@ -61,15 +61,16 @@ class PerkForm extends Component {
               label="Name"
               name='name'
               value={name}
-              placeholder="Perk name"
+              placeholder="Currency name"
               onChange={this.handleChange}
             />
             <Form.Field
               control={Input}
-              label="Default Value ($)"
+              label="Default Value (cents)"
               name='defaultValue'
               type='number'
               min={0}
+              step={0.1}
               value={defaultValue}
               onChange={this.handleChange}
             />
@@ -79,7 +80,7 @@ class PerkForm extends Component {
             label="Description"
             name='description'
             value={description}
-            placeholder="Description of perk benefits"
+            placeholder="Description of currency"
             onChange={this.handleChange}
           />
           <Button type='submit'>Submit</Button>
@@ -89,4 +90,4 @@ class PerkForm extends Component {
   }
 }
 
-export default PerkForm;
+export default CurrencyForm;

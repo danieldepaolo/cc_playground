@@ -10,7 +10,7 @@ const items = {
     ],
     right: [
       {name: "Perk Values", path: "/perks/edit"},
-      {name: "Currency Values", path: "/currency/edit"},
+      {name: "Currency Values", path: "/currencies/edit"},
       {name: "Logout", path: "/"}
     ]
   },
@@ -22,6 +22,7 @@ const items = {
     right: [
       {name: "Add Card", path: "/cards/new"},
       {name: "Add Perk", path: "/perks/new"},
+      {name: "Add Currency", path: "/currencies/new"},
       {name: "Login", path: "/login"},
       {name: "Register", path: "/register"}
     ]
