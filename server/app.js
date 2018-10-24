@@ -12,7 +12,8 @@ const express        = require('express'),
 const User = require('./models/user');
 
 // Route files
-const cardRoutes          = require("./routes/cards"),
+const indexRoutes         = require('./routes'),
+      cardRoutes          = require("./routes/cards"),
       currencyRoutes      = require("./routes/currencies"),
       perkRoutes          = require("./routes/perks"),
       playgroundRoutes    = require("./routes/playground"),
@@ -42,6 +43,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 /* Routes */
+app.use(indexRoutes);
 app.use(cardRoutes);
 app.use(currencyRoutes);
 app.use(perkRoutes);

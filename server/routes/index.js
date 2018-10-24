@@ -1,14 +1,10 @@
 const express = require("express"),
       passport = require("passport");
+
+const router = express.Router();
       
 const User = require("../models/user");
-      
-const router = express.Router();
-
-// ROOT route
-app.get("/", (req, res) => {
-  res.redirect("/playground");
-});
+const rewardCategories = require("../constants/rewardCategories");
 
 // AUTH routes
 // ==============
@@ -48,6 +44,20 @@ router.post('/login', passport.authenticate("local"), (req, res) => {
 router.get('/logout', (req, res) => {
   req.logout();
   res.json({success: true});
+});
+
+// OTHER
+
+router.get('/rewardcategories', (req, res) => {
+  const sortedCategories = Array.from(rewardCategories).sort();
+  res.json({
+    categories: sortedCategories
+  });
+});
+
+// ROOT route
+router.get("/", (req, res) => {
+  res.redirect("/playground");
 });
 
 module.exports = router;

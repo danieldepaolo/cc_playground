@@ -3,17 +3,9 @@ import { Button, Form, Input, Select } from 'semantic-ui-react';
 import update from 'immutability-helper';
 import styled from 'styled-components';
 
-const processorOptions = [
-  { key: 'a', text: 'American Express', value: 'amex' },
-  { key: 'd', text: 'Discover', value: 'discover'},
-  { key: 'm', text: 'Mastercard', value: 'mc'},
-  { key: 'v', text: 'Visa', value: 'visa' }
-];
-
-const trueFalse = [
-  { key: 'y', text: 'Yes', value: true },
-  { key: 'n', text: 'No', value: false },
-];
+import AddCategory from './AddCategory';
+import BonusCategoryList from './BonusCategoryList';
+import { processorOptions, trueFalse } from './constants';
 
 const FormBox = styled.div`
   max-width: 50em;
@@ -27,7 +19,7 @@ class CardForm extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.defaultState = {
       issuer: '',
       name: '',
       processor: '',
@@ -36,8 +28,15 @@ class CardForm extends Component {
       annualFee: 0,
       ftf: false,
       waivedFirstYear: false,
+      bonusCategories: {},
       selectedPerks: new Set()
     };
+
+    this.state = this.defaultState;
+  }
+
+  reset = () => {
+    this.setState(this.defaultState);
   }
 
   handleFormSubmit = async () => {
@@ -56,7 +55,16 @@ class CardForm extends Component {
     });
 
     const data = await response.json();
+    this.reset();
     console.log(data);
+  }
+
+  categoryAdded = (category, returnAmt) => {
+    this.setState({bonusCategories: update(
+      this.state.bonusCategories, {
+        $merge: {[category]: returnAmt}
+      }
+    )});
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -71,10 +79,14 @@ class CardForm extends Component {
       annualFee,
       ftf,
       waivedFirstYear,
+      bonusCategories,
       selectedPerks
     } = this.state;
 
-    const { perks, currencies } = this.props;
+    console.log(typeof selectedPerks);
+    console.log(selectedPerks);
+
+    const { perks, currencies, categories } = this.props;
   
     return (
       <FormBox>
@@ -141,6 +153,25 @@ class CardForm extends Component {
               onChange={this.handleChange}
             />
           </Form.Group>
+          <h4>Currency</h4>
+          <Form.Group>
+            {currencies.map(currency => (
+              <Form.Radio
+                key={currency._id}
+                label={currency.name}
+                value={currency._id}
+                checked={currency._id === selectedCurrency}
+                onChange={() => this.setState({selectedCurrency: currency._id})}
+              />
+            ))}
+          </Form.Group>
+          <h4>Bonus Categories</h4>
+          <AddCategory
+            categories={categories}
+            categoryFunc={(category, returnAmt) => this.categoryAdded(category, returnAmt)}
+          />
+          <BonusCategoryList categories={bonusCategories} />
+          <h4>Perks</h4>
           <Form.Group>
             {perks.map(perk => (
               <Form.Checkbox
@@ -152,17 +183,6 @@ class CardForm extends Component {
                   ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perk._id]}) })
                   : this.setState({ selectedPerks: update(selectedPerks, {$add: [perk._id]}) })
                 }}
-              />
-            ))}
-          </Form.Group>
-          <Form.Group>
-            {currencies.map(currency => (
-              <Form.Radio
-                key={currency._id}
-                label={currency.name}
-                value={currency._id}
-                checked={currency._id === selectedCurrency}
-                onChange={() => this.setState({selectedCurrency: currency._id})}
               />
             ))}
           </Form.Group>

@@ -10,7 +10,7 @@ import Playground from './Components/Playground';
 import Transactions from './Components/Transactions';
 import Register from './Components/User/Register';
 import Login from './Components/User/Login';
-import CardForm from './Components/Forms/CardForm';
+import CardForm from './Components/CardForm/CardForm';
 import PerkForm from './Components/Forms/PerkForm';
 import CurrencyForm from './Components/Forms/CurrencyForm';
 
@@ -20,7 +20,8 @@ class App extends Component {
 
     this.state = {
       cardPerks: [],
-      currencies: []
+      currencies: [],
+      rewardCategories: []
     };
   }
 
@@ -31,13 +32,21 @@ class App extends Component {
     response = await fetch("http://localhost:8080/currencies");
     const currencyData = await response.json();
 
+    response = await fetch("http://localhost:8080/rewardcategories");
+    const categoryData = await response.json();
+
     this.setState({
       cardPerks: perkData.perks,
-      currencies: currencyData.currencies
+      currencies: currencyData.currencies,
+      rewardCategories: categoryData.categories
     });
   }
 
   render() {
+    const { cardPerks, currencies, rewardCategories } = this.state;
+
+    console.log(rewardCategories);
+
     return (
       <BrowserRouter>
         <div className="App">
@@ -52,7 +61,13 @@ class App extends Component {
               <Route path="/transactions" component={Transactions} />
               <Route 
                 path="/cards/new" 
-                render={() => <CardForm perks={this.state.cardPerks} currencies={this.state.currencies} />} 
+                render={() => (
+                  <CardForm 
+                    perks={cardPerks}
+                    currencies={currencies}
+                    categories={rewardCategories}
+                  />
+                )} 
               />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
