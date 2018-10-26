@@ -3,15 +3,15 @@ import { List } from 'semantic-ui-react'
 import _ from 'underscore';
 
 const BonusCategoryList = ({categories}) => {
-  const sortedCategories = _.keys(categories).sort();
+  const categoryList = _.flatten(_.values(categories));
 
   return (
     <List>
-      {sortedCategories.map(categoryName => {
+      {categoryList.map(category => {
         return (
-          <List.Item key={categoryName}>
-            <List.Header>{categoryName}</List.Header>
-            {categories[categoryName]}x
+          <List.Item key={category.name}>
+            <List.Header>{category.name}</List.Header>
+            {category.amount}x
           </List.Item>
         );
       })}

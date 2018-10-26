@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, Select, Input } from 'semantic-ui-react';
+import _ from 'underscore';
 
 import { categoryTypeOptions } from './constants';
 
@@ -18,6 +19,12 @@ class AddCategory extends Component {
 
   reset = () => {
     this.setState(this.defaultState);
+  }
+
+  validationPass = () => {
+    const { categoryType, category, returnAmt } = this.state;
+    const alreadyAdded = _.pluck(this.props.categories[categoryType], 'name').includes(category);
+    return (categoryType && category && returnAmt > 1 && !alreadyAdded);
   }
 
   onAdd = () => {
@@ -92,7 +99,7 @@ class AddCategory extends Component {
           placeholder="1.5% or higher"
           onChange={this.handleChange}
         />
-        <Button type='button' onClick={this.onAdd}>Add</Button>
+        <Button type='button' onClick={this.onAdd} disabled={!this.validationPass()}>Add</Button>
       </Form.Group>
     );
   }

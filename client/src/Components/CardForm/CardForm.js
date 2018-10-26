@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import AddCategory from './AddCategory';
 import BonusCategoryList from './BonusCategoryList';
 import SignupBonus from './SignupBonus';
-import { processorOptions, trueFalse } from './constants';
+import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
 
 const FormBox = styled.div`
   max-width: 50em;
@@ -20,6 +20,11 @@ class CardForm extends Component {
   constructor(props) {
     super(props);
 
+    let defaultCategoryArrays = {};
+    categoryTypeOptions.forEach(categoryType => {
+      defaultCategoryArrays[categoryType.value] = [];
+    });
+
     this.defaultState = {
       issuer: '',
       name: '',
@@ -29,7 +34,8 @@ class CardForm extends Component {
       annualFee: 0,
       ftf: false,
       waivedFirstYear: false,
-      bonusCategories: {},
+      bonusCategories: defaultCategoryArrays,
+      signupBonusActive: true,
       signupBonus: {
         months: 3,
         minSpend: 2000,
@@ -50,8 +56,12 @@ class CardForm extends Component {
     const url = "http://localhost:8080/cards";
     console.log(this.state);
 
+    // Some cleanup of the body data
     let formObj = this.state;
     formObj.selectedPerks = Array.from(formObj.selectedPerks);
+    if (!formObj.signupBonusActive) {
+      formObj.signupBonus = null;
+    } 
   
     const response = await fetch(url, {
       method: 'POST',
@@ -68,13 +78,16 @@ class CardForm extends Component {
 
   categoryAdded = (categoryType, category, returnAmt) => {
     this.setState({bonusCategories: update(
-      this.state.bonusCategories, {$merge: {
-        [categoryType]: {[category]: returnAmt}
-      }}
+      this.state.bonusCategories, {
+        [categoryType]: {$push: 
+          [{
+            name: category,
+            amount: returnAmt
+          }]
+        }
+      }
     )});
   }
-
-  signup
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
@@ -89,6 +102,7 @@ class CardForm extends Component {
       ftf,
       waivedFirstYear,
       bonusCategories,
+      signupBonusActive,
       signupBonus,
       selectedPerks
     } = this.state;
@@ -178,13 +192,25 @@ class CardForm extends Component {
             categoryFunc={(categoryType, category, returnAmt) => this.categoryAdded(categoryType, category, returnAmt)}
           />
           <BonusCategoryList categories={bonusCategories} />
-          <h4>Signup Bonus</h4>
+          <div>
+            <Form.Checkbox
+              label="Signup Bonus"
+              checked={signupBonusActive}
+              onChange={() => this.setState(prevState => {
+                return {signupBonusActive: !prevState.signupBonusActive}
+              })}
+            />
+          </div>
+          
           <SignupBonus
+            active={signupBonusActive}
             currencies={currencies}
             signupBonus={signupBonus}
             signupBonusFunc={(name, value) =>
               this.setState({
-                signupBonus: {$merge: {[name]: value}}
+                signupBonus: update(this.state.signupBonus,
+                  {[name]: {$set: value}}
+                )
               })
             }
           />
