@@ -5,6 +5,12 @@ export const processorOptions = [
   { key: 'v', text: 'Visa', value: 'visa' }
 ];
 
+export const categoryTypeOptions = [
+  { key: 'p', text: 'Products', value: 'products' },
+  { key: 'd', text: 'Delivery Method', value: 'delivery'},
+  { key: 'm', text: 'Merchant', value: 'merchant'},
+];
+
 export const trueFalse = [
   { key: 'y', text: 'Yes', value: true },
   { key: 'n', text: 'No', value: false },

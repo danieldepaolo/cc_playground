@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import AddCategory from './AddCategory';
 import BonusCategoryList from './BonusCategoryList';
+import SignupBonus from './SignupBonus';
 import { processorOptions, trueFalse } from './constants';
 
 const FormBox = styled.div`
@@ -29,6 +30,12 @@ class CardForm extends Component {
       ftf: false,
       waivedFirstYear: false,
       bonusCategories: {},
+      signupBonus: {
+        months: 3,
+        minSpend: 2000,
+        selectedCurrency: null,
+        amount: 30000
+      },
       selectedPerks: new Set()
     };
 
@@ -59,13 +66,15 @@ class CardForm extends Component {
     console.log(data);
   }
 
-  categoryAdded = (category, returnAmt) => {
+  categoryAdded = (categoryType, category, returnAmt) => {
     this.setState({bonusCategories: update(
-      this.state.bonusCategories, {
-        $merge: {[category]: returnAmt}
-      }
+      this.state.bonusCategories, {$merge: {
+        [categoryType]: {[category]: returnAmt}
+      }}
     )});
   }
+
+  signup
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
@@ -80,11 +89,9 @@ class CardForm extends Component {
       ftf,
       waivedFirstYear,
       bonusCategories,
+      signupBonus,
       selectedPerks
     } = this.state;
-
-    console.log(typeof selectedPerks);
-    console.log(selectedPerks);
 
     const { perks, currencies, categories } = this.props;
   
@@ -168,9 +175,19 @@ class CardForm extends Component {
           <h4>Bonus Categories</h4>
           <AddCategory
             categories={categories}
-            categoryFunc={(category, returnAmt) => this.categoryAdded(category, returnAmt)}
+            categoryFunc={(categoryType, category, returnAmt) => this.categoryAdded(categoryType, category, returnAmt)}
           />
           <BonusCategoryList categories={bonusCategories} />
+          <h4>Signup Bonus</h4>
+          <SignupBonus
+            currencies={currencies}
+            signupBonus={signupBonus}
+            signupBonusFunc={(name, value) =>
+              this.setState({
+                signupBonus: {$merge: {[name]: value}}
+              })
+            }
+          />
           <h4>Perks</h4>
           <Form.Group>
             {perks.map(perk => (
@@ -179,7 +196,7 @@ class CardForm extends Component {
                 label={perk.name}
                 value={perk._id}
                 checked={ selectedPerks.has(perk._id) }
-                onChange={() => {selectedPerks.has(perk._id) 
+                onChange={() => {selectedPerks.has(perk._id)
                   ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perk._id]}) })
                   : this.setState({ selectedPerks: update(selectedPerks, {$add: [perk._id]}) })
                 }}

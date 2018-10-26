@@ -33,9 +33,9 @@ const cardSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Currency"
       },
-      amountMin: Number, // Lowest signup bonus seen
-      amountMax: Number, // Highest signup bonus seen
-      minSpend: Number // requirement for earning signup bonus
+      months: Number, // # of months to reach min spend
+      minSpend: Number, // Current min spend requirement
+      amount: Number, // Current signup bonus
     },
     special: [{
       // Describes the requirement for earning this special bonus

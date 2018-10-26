@@ -21,7 +21,10 @@ class App extends Component {
     this.state = {
       cardPerks: [],
       currencies: [],
-      rewardCategories: []
+      rewardCategories: {
+        deliveryCategories: [],
+        productCategories: []
+      }
     };
   }
 
@@ -38,13 +41,15 @@ class App extends Component {
     this.setState({
       cardPerks: perkData.perks,
       currencies: currencyData.currencies,
-      rewardCategories: categoryData.categories
+      rewardCategories: categoryData
     });
   }
 
   render() {
     const { cardPerks, currencies, rewardCategories } = this.state;
 
+    console.log(cardPerks);
+    console.log(currencies);
     console.log(rewardCategories);
 
     return (
