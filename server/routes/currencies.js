@@ -4,15 +4,10 @@ const router = express.Router();
 const Currency = require("../models/currency");
 
 router.get("/currencies", (req, res) => {
-  let responseErr = null;
-
   Currency.find({}, (err, allCurrencies) => {
-    if (err) {
-      responseErr = err;
-    }
-
     res.json({
-      err: responseErr,
+      err: err || null,
+      message: err ? "Could not find currency" : "Successfully found currency",
       currencies: allCurrencies
     });
   });
@@ -21,18 +16,11 @@ router.get("/currencies", (req, res) => {
 router.post("/currencies", (req, res) => {
   const { currency } = req.body;
 
-  let responseMsg = "Successfully added currency";
-  let responseErr = null;
-
   Currency.create(currency, (err, newCurrency) => {
-    if (err) {
-      responseMsg = "Error creating currency";
-      responseErr = err;
-    }
     res.json({
       currency: newCurrency,
-      message: responseMsg,
-      err: responseErr
+      message: err ? "Error creating currency" : "Successfully added currency",
+      err: err || null
     });
   });
 });

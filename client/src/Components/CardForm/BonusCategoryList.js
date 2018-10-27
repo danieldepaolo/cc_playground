@@ -11,7 +11,7 @@ const BonusCategoryList = ({categories}) => {
         return (
           <List.Item key={category.name}>
             <List.Header>{category.name}</List.Header>
-            {category.amount}x
+            {category.bonusReturn}x
           </List.Item>
         );
       })}

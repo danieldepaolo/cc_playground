@@ -1,12 +1,13 @@
-const mongoose = require("mongoose");
-passportLocalMongoose = require("passport-local-mongoose");
+const mongoose = require("mongoose"),
+      passportLocalMongoose = require("passport-local-mongoose"),
+      uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new mongoose.Schema({
   username: String,
-  email: String,
+  email: {type: String, required: true, unique: true},
   password: String,
   // Whether or not use wants to use their own perk/currency values or default
-  useDefaultValues: Boolean,
+  useDefaultValues: {type: Boolean, default: true},
   
   // User's favorite cards!
   favoriteCards: [{
@@ -32,5 +33,6 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", userSchema);

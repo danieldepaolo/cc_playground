@@ -18,9 +18,10 @@ class SignupBonus extends Component {
       <Form.Group widths='equal'>
         <Form.Field
           control={Select}
+          required={active}
           label="Currency"
-          name='selectedCurrency'
-          value={signupBonus.selectedCurrency}
+          name='currency'
+          value={signupBonus.currency}
           options={currencyOptions}
           disabled={!active}
           placeholder="Default: $"
@@ -28,6 +29,7 @@ class SignupBonus extends Component {
         />
         <Form.Field
           control={Input}
+          required={active}
           label="Time Period (months)"
           name='months'
           type='number'
@@ -39,6 +41,7 @@ class SignupBonus extends Component {
         />
         <Form.Field
           control={Input}
+          required={active}
           label="Min Spend ($)"
           name='minSpend'
           type='number'
@@ -50,6 +53,7 @@ class SignupBonus extends Component {
         />
         <Form.Field
           control={Input}
+          required={active}
           label="Reward Amount"
           name='amount'
           type='number'

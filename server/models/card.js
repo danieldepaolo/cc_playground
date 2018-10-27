@@ -1,33 +1,36 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"),
+      uniqueValidator = require("mongoose-unique-validator");
 
 const cardSchema = new mongoose.Schema({
-  issuer: String, // Chase, Citi, Bank Of America, ...
-  processor: String, // Mastercard, Visa, ...
-  name: String,
-  image: Buffer,
-  defaultReturn: Number, // Generally 1-3 cents/points/miles per $
+  name: {type: String, required: true, unique: true},
+  processor: {type: String, required: true}, // Mastercard, Visa, ...
+  imageUrl: String,
+  defaultReturn: {type: Number, required: true}, // Generally 1-3 cents/points/miles per $
   rewardCurrency: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Currency"
+    ref: "Currency",
+    required: true
   },
   fees: {
-    annual: Number,
+    annual: {type: Number, required: true},
     foreign: Boolean, // charges foreign transaction fees or not?
     waivedFirstYear: Boolean // Common for cards to waive their annual fee in first year
   },
   bonusReward: { // Information relating to getting more value than default
-    merchant: [{
-      name: String,
-      bonusReturn: Number
-    }],
-    product: [{
-      category: String,
-      bonusReturn: Number
-    }],
-    delivery: [{
-      method: String, // Chase Pay, Apple Pay, etc.
-      bonusReturn: Number
-    }],
+    categories: {
+      merchant: [{
+        name: String,
+        bonusReturn: Number
+      }],
+      products: [{
+        name: String,
+        bonusReturn: Number
+      }],
+      delivery: [{
+        name: String, // Chase Pay, Apple Pay, etc.
+        bonusReturn: Number
+      }]
+    },
     signup: {
       currency: {
         type: mongoose.Schema.Types.ObjectId,
@@ -56,5 +59,7 @@ const cardSchema = new mongoose.Schema({
     ref: "Perk"
   }]
 });
+
+cardSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("Card", cardSchema);

@@ -48,10 +48,6 @@ class App extends Component {
   render() {
     const { cardPerks, currencies, rewardCategories } = this.state;
 
-    console.log(cardPerks);
-    console.log(currencies);
-    console.log(rewardCategories);
-
     return (
       <BrowserRouter>
         <div className="App">

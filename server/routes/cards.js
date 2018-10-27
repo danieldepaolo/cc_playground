@@ -4,7 +4,8 @@ const router = express.Router();
 const testData = require("../test_data");
 const _ = require('underscore');
 
-const Perk = require("../models/perk");
+const Perk = require("../models/perk"),
+      Card = require("../models/card");
 
 // Types of annual bonus:
 // 1. Reaching spend threshold
@@ -30,12 +31,14 @@ router.get("/cards/:id", (req, res) => {
 // add a new card to database
 router.post("/cards", (req, res) => {
   console.log(req.body);
-  //const { card } = req.body;
-  //card.id = testData.testCards.length;
-  //testData.testCards.push(card);
+  const { card } = req.body;
 
-  res.json({
-    message: `Successfully added card!`
+  Card.create(card, (err, addedCard) => {
+    res.json({
+      card: addedCard,
+      err: err || null,
+      message: err ? "Unable to add card" : "Successfully added card!"
+    });
   });
 });
 

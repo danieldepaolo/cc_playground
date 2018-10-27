@@ -9,7 +9,7 @@ import SignupBonus from './SignupBonus';
 import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
 
 const FormBox = styled.div`
-  max-width: 50em;
+  max-width: 55em;
   margin: 0 auto;
   .ui.selection.dropdown {
     min-width: 8em;
@@ -26,7 +26,6 @@ class CardForm extends Component {
     });
 
     this.defaultState = {
-      issuer: '',
       name: '',
       processor: '',
       selectedCurrency: null,
@@ -39,7 +38,7 @@ class CardForm extends Component {
       signupBonus: {
         months: 3,
         minSpend: 2000,
-        selectedCurrency: null,
+        currency: null,
         amount: 30000
       },
       selectedPerks: new Set()
@@ -54,14 +53,15 @@ class CardForm extends Component {
 
   handleFormSubmit = async () => {
     const url = "http://localhost:8080/cards";
-    console.log(this.state);
 
     // Some cleanup of the body data
     let formObj = this.state;
     formObj.selectedPerks = Array.from(formObj.selectedPerks);
     if (!formObj.signupBonusActive) {
       formObj.signupBonus = null;
-    } 
+    }
+
+    console.log(formObj);
   
     const response = await fetch(url, {
       method: 'POST',
@@ -82,7 +82,7 @@ class CardForm extends Component {
         [categoryType]: {$push: 
           [{
             name: category,
-            amount: returnAmt
+            bonusReturn: returnAmt
           }]
         }
       }
@@ -93,7 +93,6 @@ class CardForm extends Component {
 
   render() {
     const {
-      issuer,
       name,
       processor,
       selectedCurrency,
@@ -115,14 +114,7 @@ class CardForm extends Component {
           <Form.Group widths='equal'>
             <Form.Field
               control={Input}
-              label="Issuer"
-              name='issuer'
-              value={issuer}
-              placeholder="Chase, Citi, etc."
-              onChange={this.handleChange}
-            />
-            <Form.Field
-              control={Input}
+              required={true}
               label="Name"
               name='name'
               value={name}
@@ -131,6 +123,7 @@ class CardForm extends Component {
             />
             <Form.Field
               control={Select}
+              required={true}
               label="Processor"
               name='processor'
               value={processor}
@@ -141,6 +134,7 @@ class CardForm extends Component {
           <Form.Group widths='equal'>
             <Form.Field
               control={Input}
+              required={true}
               label="Default Return"
               name='defaultReturn'
               type='number'
@@ -150,6 +144,7 @@ class CardForm extends Component {
             />
             <Form.Field
               control={Input}
+              required={true}
               label='Annual Fee'
               name='annualFee'
               type='number'
@@ -221,7 +216,7 @@ class CardForm extends Component {
                 key={perk._id}
                 label={perk.name}
                 value={perk._id}
-                checked={ selectedPerks.has(perk._id) }
+                checked={selectedPerks.has(perk._id)}
                 onChange={() => {selectedPerks.has(perk._id)
                   ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perk._id]}) })
                   : this.setState({ selectedPerks: update(selectedPerks, {$add: [perk._id]}) })
