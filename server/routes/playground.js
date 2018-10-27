@@ -17,11 +17,10 @@ const testData = require("../test_data");
     }]
   }
 */
-router.get("/playground", (req, res) => {
-  res.json({
-    cards: testData.testCards
-  });
-});
+// router.get("/playground", (req, res) => {
+  
+  
+// });
 
 router.get("/playground/calcbonus", (req, res) => {
   // get cards from the query string

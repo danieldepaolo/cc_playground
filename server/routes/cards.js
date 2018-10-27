@@ -20,20 +20,34 @@ const Perk = require("../models/perk"),
 
 // get all cards
 router.get("/cards", (req, res) => {
-  res.json(testData.testCards);
+  Card.find({}, (err, allCards) => {
+    res.json({
+      err: err || null,
+      message: err ? "Unable to retrieve cards" : "Retrieved all cards",
+      cards: allCards
+    });
+  });
 });
 
 // get one card by id
 router.get("/cards/:id", (req, res) => {
-  res.json(_.findWhere(testData.testCards, {id: req.params.id}));
+  const { id } = req.params;
+
+  Card.findById(id, (err, foundCard) => {
+    res.json({
+      err: err || null,
+      message: err ? "Unable to retrieve card" : "Retrieved card!",
+      card: foundCard
+    });
+  });
 });
 
 // add a new card to database
 router.post("/cards", (req, res) => {
-  console.log(req.body);
   const { card } = req.body;
+  const cardDbObj = formCardToDbCard(card);
 
-  Card.create(card, (err, addedCard) => {
+  Card.create(cardDbObj, (err, addedCard) => {
     res.json({
       card: addedCard,
       err: err || null,
@@ -44,19 +58,49 @@ router.post("/cards", (req, res) => {
 
 // modify a particular card in database
 router.put("/cards/:id", (req, res) => {
-  const { card } = req.body; // shorthand for if we send via form with special names
-  testData.testCards[card.id] = card;
+  const { id } = req.params;
+  const { card } = req.body;
+  const cardDbObj = formCardToDbCard(card);
 
-  res.json({
-    message: "Successfully modified card!"
+  Card.replaceOne({_id: id}, cardDbObj, (err, updatedCard) => {
+    res.json({
+      err: err || null,
+      message: err ? "Unable to update card" : "Updated card!",
+      card: updatedCard
+    });
   });
 });
 
 // delete one card
 router.delete("/cards/:id", (req, res) => {
-  res.json({
-    message: "Reached Cards destroy route"
+  const { id } = req.params;
+
+  Card.findOneAndDelete({_id: id}, err => {
+    res.json({
+      err: err || null,
+      message: err ? "Unable to delete card" : "Deleted card"
+    });
   });
 });
+
+function formCardToDbCard(formCard) {
+  return {
+    name: formCard.name, // same
+    processor: formCard.processor, // same
+    defaultReturn: formCard.defaultReturn, // same
+    rewardCurrency: formCard.selectedCurrency, // different
+    fees: { // different
+      annual: formCard.annualFee, // different
+      foreign: formCard.ftf, // different
+      waivedFirstYear: formCard.waivedFirstYear // same
+    },
+    bonusReward: {
+      categories: formCard.bonusCategories, // different
+      signup: formCard.signupBonusActive ? formCard.signupBonus : undefined // different
+      //special: $TODO
+    },
+    perks: formCard.selectedPerks // different
+  }
+}
 
 module.exports = router;

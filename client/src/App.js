@@ -10,9 +10,11 @@ import Playground from './Components/Playground';
 import Transactions from './Components/Transactions';
 import Register from './Components/User/Register';
 import Login from './Components/User/Login';
-import CardForm from './Components/CardForm/CardForm';
+import CardNewForm from './Components/CardForm/CardNewForm';
+import CardEditForm from './Components/CardForm/CardEditForm';
 import PerkForm from './Components/Forms/PerkForm';
 import CurrencyForm from './Components/Forms/CurrencyForm';
+import ShowCard from './Components/Cards/ShowCard';
 
 class App extends Component {
   constructor(props) {
@@ -60,16 +62,28 @@ class App extends Component {
               <Route path="/currencies/edit" component={TestArea} />
               <Route path="/currencies/new" component={CurrencyForm} />
               <Route path="/transactions" component={Transactions} />
-              <Route 
-                path="/cards/new" 
+              <Route
+                path="/cards/new"
                 render={() => (
-                  <CardForm 
+                  <CardNewForm
                     perks={cardPerks}
                     currencies={currencies}
                     categories={rewardCategories}
                   />
-                )} 
+                )}
               />
+              <Route
+                path="/cards/:id/edit"
+                render={props => (
+                  <CardEditForm
+                    {...props}
+                    perks={cardPerks}
+                    currencies={currencies}
+                    categories={rewardCategories}
+                  />
+                )}
+              />
+              <Route path="/cards/:id" component={ShowCard} />
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />
             </Switch>

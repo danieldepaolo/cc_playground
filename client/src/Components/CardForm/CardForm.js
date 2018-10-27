@@ -8,6 +8,7 @@ import BonusCategoryList from './BonusCategoryList';
 import SignupBonus from './SignupBonus';
 import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
 
+
 const FormBox = styled.div`
   max-width: 55em;
   margin: 0 auto;
@@ -44,36 +45,12 @@ class CardForm extends Component {
       selectedPerks: new Set()
     };
 
-    this.state = this.defaultState;
+    this.state = this.props.initialState ? this.props.initialState : this.defaultState;
+    console.log(this.state);
   }
 
   reset = () => {
-    this.setState(this.defaultState);
-  }
-
-  handleFormSubmit = async () => {
-    const url = "http://localhost:8080/cards";
-
-    // Some cleanup of the body data
-    let formObj = this.state;
-    formObj.selectedPerks = Array.from(formObj.selectedPerks);
-    if (!formObj.signupBonusActive) {
-      formObj.signupBonus = null;
-    }
-
-    console.log(formObj);
-  
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({card: formObj})
-    });
-
-    const data = await response.json();
-    this.reset();
-    console.log(data);
+    this.setState(this.props.initialState ? this.props.initialState : this.defaultState);
   }
 
   categoryAdded = (categoryType, category, returnAmt) => {
@@ -110,7 +87,7 @@ class CardForm extends Component {
   
     return (
       <FormBox>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form onSubmit={() => this.props.onHandleSubmit(this.state)}>
           <Form.Group widths='equal'>
             <Form.Field
               control={Input}

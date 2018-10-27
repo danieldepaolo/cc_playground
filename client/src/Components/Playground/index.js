@@ -48,18 +48,18 @@ class Playground extends Component {
 
   fetchData = async () => {
     let response = await fetch('http://localhost:8080/cards');
-    const cards = await response.json();
+    const cardData = await response.json();
 
     response = await fetch('http://localhost:8080/transactions');
     const transactions = await response.json();
 
     const cardStatus = {};
-    cards.forEach( (card) => {
+    cardData.cards.forEach( (card) => {
       cardStatus[card.id] = false;
     });
     this.setState({
       cardSelectStatus: cardStatus,
-      cards: cards,
+      cards: cardData.cards,
       transactions: transactions
     });
   }
