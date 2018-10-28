@@ -8,6 +8,7 @@ import AddCategory from './AddCategory';
 import BonusCategoryList from './BonusCategoryList';
 import SignupBonus from './SignupBonus';
 import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
+import axios from 'axios';
 
 
 const FormBox = styled.div`
@@ -72,20 +73,15 @@ class CardForm extends Component {
     ));
   }
 
-  componentDidMount = async () => {
-    let response = await fetch("http://localhost:8080/perks");
-    const perkData = await response.json();
-
-    response = await fetch("http://localhost:8080/currencies");
-    const currencyData = await response.json();
-
-    response = await fetch("http://localhost:8080/rewardcategories");
-    const categoryData = await response.json();
+  componentDidMount = async () => {  
+    const perkResponse = await axios.get("http://localhost:8080/perks");
+    const currencyResponse = await axios.get("http://localhost:8080/currencies");
+    const categoriesResponse = await axios.get("http://localhost:8080/rewardcategories");
 
     this.setState({
-      cardPerks: perkData.perks,
-      currencies: currencyData.currencies,
-      rewardCategories: categoryData
+      cardPerks: perkResponse.data.perks,
+      currencies: currencyResponse.data.currencies,
+      rewardCategories: categoriesResponse.data
     });
 
     console.log(this.state);

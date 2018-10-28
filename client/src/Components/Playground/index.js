@@ -1,27 +1,9 @@
 import React, { Component } from 'react';
-import ReactTable from "react-table";
 import _ from 'underscore';
+import axios from 'axios';
 
 import CardGridView from './CardGridView';
 import BonusBox from './BonusBox';
-
-const columns = [{
-  Header: 'Date',
-  accessor: 'date',
-  width: 100
-}, {
-  Header: 'Merchant',
-  accessor: 'merchant',
-  filterable: true
-}, {
-  Header: 'Product Type',
-  accessor: 'productType',
-  filterable: true
-}, {
-  Header: 'Amount',
-  accessor: 'amount',
-  width: 80
-}];
 
 class Playground extends Component {
   constructor(props) {
@@ -29,7 +11,6 @@ class Playground extends Component {
 
     this.state = {
       cards: [],
-      transactions: [],
       bonus: '$0.00',
       cardSelectStatus: {},
       bonusLoading: false
@@ -47,20 +28,15 @@ class Playground extends Component {
   }
 
   fetchData = async () => {
-    let response = await fetch('http://localhost:8080/cards');
-    const cardData = await response.json();
-
-    response = await fetch('http://localhost:8080/transactions');
-    const transactions = await response.json();
+    let response = await axios('http://localhost:8080/cards');
 
     const cardStatus = {};
-    cardData.cards.forEach( (card) => {
+    response.data.cards.forEach(card => {
       cardStatus[card.id] = false;
     });
     this.setState({
       cardSelectStatus: cardStatus,
-      cards: cardData.cards,
-      transactions: transactions
+      cards: response.data.cards
     });
   }
 
@@ -77,12 +53,10 @@ class Playground extends Component {
 
     this.setState({bonusLoading: true});
 
-    let response = await fetch(url);
-    // $TODO also return bonus for each transaction or similar
-    let data = await response.json();
+    let response = await axios(url);
 
     this.setState({
-      bonus: data.bonus,
+      bonus: response.data.bonus,
       bonusLoading: false
     });
   };
@@ -97,8 +71,7 @@ class Playground extends Component {
   };
   
   render() {
-    const { cards, cardSelectStatus, 
-      transactions, bonus } = this.state;
+    const { cards, cardSelectStatus, bonus } = this.state;
 
     return (
       <div>
@@ -112,13 +85,6 @@ class Playground extends Component {
             cardSelectStatus={cardSelectStatus}
             onSelectChange={this.handleSelectChange}
           />
-          <div className="tableContainer">
-            <ReactTable
-              columns={columns}
-              data={transactions}
-              defaultPageSize={20}
-            />
-          </div>
         </div>
       </div>
     );

@@ -5,6 +5,7 @@
   "private": true,
   "repository": "github:danieldepaolo/cc_playground",
   "dependencies": {
+    "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "immutability-helper": "^2.8.1",
     "node-sass-chokidar": "^1.3.3",

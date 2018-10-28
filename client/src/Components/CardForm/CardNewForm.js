@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
 import CardForm from './CardForm';
+import axios from 'axios';
 
 class CardNewForm extends Component {
   handleFormSubmit = async (formObj) => {
-    const url = "http://localhost:8080/cards";
-
     // Some cleanup of the body data
     formObj.selectedPerks = Array.from(formObj.selectedPerks);
     if (!formObj.signupBonusActive) {
@@ -14,16 +13,10 @@ class CardNewForm extends Component {
 
     console.log(formObj);
   
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({card: formObj})
-    });
+    const url = "http://localhost:8080/cards";
+    const response = await axios.post(url, {card: formObj});
 
-    const data = await response.json();
-    console.log(data);
+    console.log(response);
   }
 
   render() {

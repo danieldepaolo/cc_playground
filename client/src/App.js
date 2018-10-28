@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'react-table/react-table.css'
 import './Styles/App.css';
 
-import TestArea from './Components/TestArea';
 import Navigation from './Components/Navigation';
 import Playground from './Components/Playground';
 import Transactions from './Components/Transactions';
@@ -16,6 +15,9 @@ import PerkForm from './Components/Forms/PerkForm';
 import CurrencyForm from './Components/Forms/CurrencyForm';
 import ShowCard from './Components/Cards/ShowCard';
 
+// $TODO
+// 1. Create components for perks/edit and currencies/edit
+
 class App extends Component {
   render() {
     return (
@@ -26,8 +28,8 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Playground} />
               <Route path="/perks/new" component={PerkForm} />
-              <Route path="/perks/edit" component={TestArea} />
-              <Route path="/currencies/edit" component={TestArea} />
+              <Route path="/perks/edit" component={Playground} />
+              <Route path="/currencies/edit" component={Playground} />
               <Route path="/currencies/new" component={CurrencyForm} />
               <Route path="/transactions" component={Transactions} />
               <Route path="/cards/new" component={CardNewForm} />

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 /*
   Show all details of one credit card on a page
@@ -18,9 +19,8 @@ class ShowCard extends Component {
   componentDidMount = async () => {
     const { match } = this.props;
 
-    const response = await fetch(`http://localhost:8080/cards/${match.params.id}`);
-    const cardData = await response.json();
-    this.setState({cardData: cardData.card});
+    const response = await axios.get(`http://localhost:8080/cards/${match.params.id}`);
+    this.setState({cardData: response.data.card});
   }
 
   render() {

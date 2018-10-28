@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Form, Input, TextArea } from 'semantic-ui-react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const FormBox = styled.div`
   max-width: 30em;
@@ -29,18 +30,12 @@ class PerkForm extends Component {
 
   handleFormSubmit = async () => {
     const url = "http://localhost:8080/perks";
-  
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({perk: this.state})
+    const response = await axios.post(url, {
+      perk: this.state
     });
 
-    const data = await response.json();
     this.resetState();
-    console.log(data);
+    console.log(response);
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import CardForm from './CardForm';
+import axios from 'axios';
 
 class CardEditForm extends Component {
   constructor(props) {
@@ -12,14 +13,11 @@ class CardEditForm extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await fetch(`http://localhost:8080/cards/${this.props.match.params.id}`);
-    const cardData = await response.json();
-    this.setState({cardData: cardData.card});
+    const response = await axios.get(`http://localhost:8080/cards/${this.props.match.params.id}`);
+    this.setState({cardData: response.data.card});
   }
 
   handleFormSubmit = async (formObj) => {
-    const url = `http://localhost:8080/cards/${this.props.match.params.id}`;
-
     // Some cleanup of the body data
     formObj.selectedPerks = Array.from(formObj.selectedPerks);
     if (!formObj.signupBonusActive) {
@@ -28,16 +26,10 @@ class CardEditForm extends Component {
 
     console.log(formObj);
   
-    const response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({card: formObj})
-    });
-
-    const data = await response.json();
-    console.log(data);
+    const url = `http://localhost:8080/cards/${this.props.match.params.id}`;
+    const response = await axios.put(url, {card: formObj});
+    
+    console.log(response);
   }
 
   getInitialState = () => {
