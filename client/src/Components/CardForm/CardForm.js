@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Input, Select } from 'semantic-ui-react';
 import update from 'immutability-helper';
 import styled from 'styled-components';
+import _ from 'underscore';
 
 import AddCategory from './AddCategory';
 import BonusCategoryList from './BonusCategoryList';
@@ -26,6 +27,15 @@ class CardForm extends Component {
       defaultCategoryArrays[categoryType.value] = [];
     });
 
+    this.optionsData = {
+      cardPerks: [],
+      currencies: [],
+      rewardCategories: {
+        deliveryCategories: [],
+        productCategories: []
+      }
+    };
+
     this.defaultState = {
       name: '',
       processor: '',
@@ -45,12 +55,40 @@ class CardForm extends Component {
       selectedPerks: new Set()
     };
 
-    this.state = this.props.initialState ? this.props.initialState : this.defaultState;
+    this.state = _.extend(
+      {},
+      this.optionsData,
+      this.props.initialState ? this.props.initialState : this.defaultState
+    );
+    
     console.log(this.state);
   }
 
   reset = () => {
-    this.setState(this.props.initialState ? this.props.initialState : this.defaultState);
+    this.setState(_.extend(
+      {},
+      this.optionsData,
+      this.props.initialState ? this.props.initialState : this.defaultState
+    ));
+  }
+
+  componentDidMount = async () => {
+    let response = await fetch("http://localhost:8080/perks");
+    const perkData = await response.json();
+
+    response = await fetch("http://localhost:8080/currencies");
+    const currencyData = await response.json();
+
+    response = await fetch("http://localhost:8080/rewardcategories");
+    const categoryData = await response.json();
+
+    this.setState({
+      cardPerks: perkData.perks,
+      currencies: currencyData.currencies,
+      rewardCategories: categoryData
+    });
+
+    console.log(this.state);
   }
 
   categoryAdded = (categoryType, category, returnAmt) => {
@@ -80,10 +118,13 @@ class CardForm extends Component {
       bonusCategories,
       signupBonusActive,
       signupBonus,
-      selectedPerks
-    } = this.state;
+      selectedPerks,
 
-    const { perks, currencies, categories } = this.props;
+      // options we need from other db collections
+      cardPerks,
+      currencies,
+      rewardCategories
+    } = this.state;
   
     return (
       <FormBox>
@@ -160,7 +201,7 @@ class CardForm extends Component {
           </Form.Group>
           <h4>Bonus Categories</h4>
           <AddCategory
-            categories={categories}
+            categories={rewardCategories}
             categoryFunc={(categoryType, category, returnAmt) => this.categoryAdded(categoryType, category, returnAmt)}
           />
           <BonusCategoryList categories={bonusCategories} />
@@ -188,7 +229,7 @@ class CardForm extends Component {
           />
           <h4>Perks</h4>
           <Form.Group>
-            {perks.map(perk => (
+            {cardPerks.map(perk => (
               <Form.Checkbox
                 key={perk._id}
                 label={perk.name}
