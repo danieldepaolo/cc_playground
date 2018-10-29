@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, Select } from 'semantic-ui-react';
+import { Button, Form } from 'semantic-ui-react';
 import update from 'immutability-helper';
 import styled from 'styled-components';
 import _ from 'underscore';
+import axios from 'axios';
 
 import AddCategory from './AddCategory';
 import BonusCategoryList from './BonusCategoryList';
 import SignupBonus from './SignupBonus';
+import CheckGroup from './CheckGroup';
 import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
-import axios from 'axios';
 
 
 const FormBox = styled.div`
@@ -73,7 +74,11 @@ class CardForm extends Component {
     ));
   }
 
-  componentDidMount = async () => {  
+  componentDidMount = async () => {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
     const perkResponse = await axios.get("http://localhost:8080/perks");
     const currencyResponse = await axios.get("http://localhost:8080/currencies");
     const categoriesResponse = await axios.get("http://localhost:8080/rewardcategories");
@@ -83,8 +88,6 @@ class CardForm extends Component {
       currencies: currencyResponse.data.currencies,
       rewardCategories: categoriesResponse.data
     });
-
-    console.log(this.state);
   }
 
   categoryAdded = (categoryType, category, returnAmt) => {
@@ -126,8 +129,7 @@ class CardForm extends Component {
       <FormBox>
         <Form onSubmit={() => this.props.onHandleSubmit(this.state)}>
           <Form.Group widths='equal'>
-            <Form.Field
-              control={Input}
+            <Form.Input
               required={true}
               label="Name"
               name='name'
@@ -135,8 +137,7 @@ class CardForm extends Component {
               placeholder="Card name"
               onChange={this.handleChange}
             />
-            <Form.Field
-              control={Select}
+            <Form.Select
               required={true}
               label="Processor"
               name='processor'
@@ -146,8 +147,7 @@ class CardForm extends Component {
             />
           </Form.Group>
           <Form.Group widths='equal'>
-            <Form.Field
-              control={Input}
+            <Form.Input
               required={true}
               label="Default Return"
               name='defaultReturn'
@@ -156,8 +156,7 @@ class CardForm extends Component {
               placeholder="1-3%"
               onChange={this.handleChange}
             />
-            <Form.Field
-              control={Input}
+            <Form.Input
               required={true}
               label='Annual Fee'
               name='annualFee'
@@ -166,16 +165,14 @@ class CardForm extends Component {
               placeholder="Annual Fee ($)"
               onChange={this.handleChange}
             />
-            <Form.Field
-              control={Select}
+            <Form.Select
               label="Foreign Transaction Fees"
               name='ftf'
               value={ftf}
               options={trueFalse}
               onChange={this.handleChange}
             />
-            <Form.Field
-              control={Select}
+            <Form.Select
               label="Fee Waived First Year"
               name='waivedFirstYear'
               value={waivedFirstYear}
@@ -183,34 +180,30 @@ class CardForm extends Component {
               onChange={this.handleChange}
             />
           </Form.Group>
-          <h4>Currency</h4>
-          <Form.Group>
-            {currencies.map(currency => (
-              <Form.Radio
-                key={currency._id}
-                label={currency.name}
-                value={currency._id}
-                checked={currency._id === selectedCurrency}
-                onChange={() => this.setState({selectedCurrency: currency._id})}
-              />
-            ))}
-          </Form.Group>
+
+          <CheckGroup
+            type='radio'
+            header="Currency"
+            items={currencies}
+            cols={3}
+            checkedFunc={(currencyId) => currencyId === selectedCurrency}
+            onChangeFunc={(currencyId) => this.setState({selectedCurrency: currencyId})}
+          />
+
           <h4>Bonus Categories</h4>
           <AddCategory
             categories={rewardCategories}
-            categoryFunc={(categoryType, category, returnAmt) => this.categoryAdded(categoryType, category, returnAmt)}
+            categoryFunc={this.categoryAdded}
           />
           <BonusCategoryList categories={bonusCategories} />
-          <div>
-            <Form.Checkbox
-              label="Signup Bonus"
-              checked={signupBonusActive}
-              onChange={() => this.setState(prevState => {
-                return {signupBonusActive: !prevState.signupBonusActive}
-              })}
-            />
-          </div>
-          
+
+          <Form.Checkbox
+            label="Signup Bonus"
+            checked={signupBonusActive}
+            onChange={() => this.setState(prevState => {
+              return {signupBonusActive: !prevState.signupBonusActive}
+            })}
+          />
           <SignupBonus
             active={signupBonusActive}
             currencies={currencies}
@@ -223,21 +216,19 @@ class CardForm extends Component {
               })
             }
           />
-          <h4>Perks</h4>
-          <Form.Group>
-            {cardPerks.map(perk => (
-              <Form.Checkbox
-                key={perk._id}
-                label={perk.name}
-                value={perk._id}
-                checked={selectedPerks.has(perk._id)}
-                onChange={() => {selectedPerks.has(perk._id)
-                  ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perk._id]}) })
-                  : this.setState({ selectedPerks: update(selectedPerks, {$add: [perk._id]}) })
-                }}
-              />
-            ))}
-          </Form.Group>
+
+          <CheckGroup
+            type='checkbox'
+            header="Perks"
+            items={cardPerks}
+            cols={3}
+            checkedFunc={(perkId) => selectedPerks.has(perkId)}
+            onChangeFunc={(perkId) => {selectedPerks.has(perkId)
+              ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perkId]}) })
+              : this.setState({ selectedPerks: update(selectedPerks, {$add: [perkId]}) })
+            }}
+          />
+
           <Button type='submit'>Submit</Button>
         </Form>
       </FormBox>
