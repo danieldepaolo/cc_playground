@@ -22,18 +22,23 @@ class Playground extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.cardSelectStatus !== this.state.cardSelectStatus) {
+    const prev = prevState.cardSelectStatus;
+    const current = this.state.cardSelectStatus;
+
+    if (!_.isEqual(prev, current)) {
       this.fetchBonusAmount();
     }
   }
 
   fetchData = async () => {
     let response = await axios('http://localhost:8080/cards');
+    console.log(response);
 
     const cardStatus = {};
     response.data.cards.forEach(card => {
-      cardStatus[card.id] = false;
+      cardStatus[card._id] = false;
     });
+    console.log(cardStatus);
     this.setState({
       cardSelectStatus: cardStatus,
       cards: response.data.cards
@@ -41,14 +46,14 @@ class Playground extends Component {
   }
 
   fetchBonusAmount = async () => {
-    let url = 'http://localhost:8080/playground/calcbonus?';
+    let url = 'http://localhost:8080/playground/calcbonus';
 
     let cardIdsToGet = _.filter(
       _.keys(this.state.cardSelectStatus),
       cardId => this.state.cardSelectStatus[cardId] === true
     );
     let args = cardIdsToGet.map(cardId => `card_id=${cardId}`);
-    url += args.join('&');
+    url += args.length > 0 ? '?' + args.join('&') : '';
     console.log(url);
 
     this.setState({bonusLoading: true});

@@ -12,17 +12,17 @@ function getReturnForTransaction(card, transaction) {
     product: 0
   };
 
-  const { categories } = card.bonus;
-  if (categories.hasOwnProperty('merchants')) {
+  const { categories } = card.bonusReward;
+  if (categories.hasOwnProperty('merchant')) {
     const bonusCategory = _.findWhere(categories.merchant, {category: transaction.merchant});
     if (bonusCategory) {
-      bonuses.merchant = bonusCategory.bonus;
+      returns.merchant = bonusCategory.bonusReturn;
     }
   }
   if (categories.hasOwnProperty('product')) {
     const bonusCategory = _.findWhere(categories.product, {category: transaction.productType});
     if (bonusCategory) {
-      bonuses.product = bonusCategory.bonus;
+      returns.product = bonusCategory.bonusReturn;
     }
   }
 
@@ -45,7 +45,7 @@ function getBonusWithCards(cards, transactions) {
       const returnWithCard = getReturnForTransaction(card, transaction);
 
       // 0.01 at the end converts back down to cents, since card point value is in cents
-      const bonusValue = transaction.amount * returnWithCard * card.ptValue * 0.01;
+      const bonusValue = transaction.amount * returnWithCard * card.rewardCurrency.defaultValue * 0.01;
       if (bonusValue > bestBonus) {
         bestBonus = bonusValue;
         optimalCard = card;

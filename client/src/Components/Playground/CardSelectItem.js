@@ -3,7 +3,7 @@ import CardItem from './CardItem';
 
 class CardSelectItem extends Component {
   handleChange = (event) => {
-    this.props.notifySelectChange(this.props.cardInfo.id);
+    this.props.notifySelectChange(this.props.cardInfo._id);
   }
 
   render() {

@@ -11,7 +11,7 @@ class CardGridView extends Component {
           <CardSelectItem
             cardInfo={card}
             key={card.name}
-            isSelected={this.props.cardSelectStatus[card.id]}
+            isSelected={this.props.cardSelectStatus[card._id]}
             notifySelectChange={this.props.onSelectChange}
           />
         ))}

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const testData = require("../test_data");
 const _ = require('underscore');
 
 const Perk = require("../models/perk"),
