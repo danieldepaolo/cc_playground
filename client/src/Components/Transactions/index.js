@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
+import csvtojson from 'csvtojson';
 import { Button } from 'semantic-ui-react';
 import axios from 'axios';
 
@@ -26,35 +27,37 @@ class Transaction extends Component {
   reset = () => {
     this.setState({
       file: '',
-      fileContents: '',
+      fileContents: ''
     });
   }
 
   componentDidMount = async () => {
+    this.fetchTransactions();
+  }
+
+  fetchTransactions = async () => {
     const response = await axios('http://localhost:8080/transactions');
-    this.setState({transactions: response.data});
+    this.setState({transactions: response.data.transactions});
   }
 
   handleFileSelected = (event, file) => {
     console.log(event);
     this.setState({
       file: file,
-      fileContents: event.target.result,
+      fileContents: event.target.result
     });
   };
 
-  handleCsvSubmit = async (event) => {
-    console.log("Submitted file: ", this.state.file.name);
-    console.log("File contents: ", this.state.fileContents);
+  handleSubmit = async (event) => {
+    const { fileContents } = this.state;
+    const jsonData = await csvtojson().fromString(fileContents);
 
-    const url = `http://localhost:8000/cardmanager/transaction/addcsv/`;
-    console.log(url);
-
-    // $TODO Capture response and do something
+    const url = `http://localhost:8080/transactions`;
     const response = await axios.post(url, {
-      csv_transactions: this.state.fileContents
+      transactions: jsonData
     });
 
+    this.fetchTransactions();
     this.reset();
     console.log(response);
   };
@@ -69,7 +72,7 @@ class Transaction extends Component {
             readAs="text"
             onLoad={(e, file) => this.handleFileSelected(e, file)}
           />
-          <Button onClick={(e) => this.handleCsvSubmit(e)}>
+          <Button onClick={(e) => this.handleSubmit(e)}>
             Submit
           </Button>
         </div>

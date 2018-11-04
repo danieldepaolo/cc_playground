@@ -21,7 +21,7 @@ const Perk = require("../models/perk"),
 router.get("/cards", (req, res) => {
   Card.find({}, (err, allCards) => {
     res.json({
-      err: err || null,
+      error: err || null,
       message: err ? "Unable to retrieve cards" : "Retrieved all cards",
       cards: allCards
     });
@@ -34,7 +34,7 @@ router.get("/cards/:id", (req, res) => {
 
   Card.findById(id, (err, foundCard) => {
     res.json({
-      err: err || null,
+      error: err || null,
       message: err ? "Unable to retrieve card" : "Retrieved card!",
       card: foundCard
     });
@@ -49,7 +49,7 @@ router.post("/cards", (req, res) => {
   Card.create(cardDbObj, (err, addedCard) => {
     res.json({
       card: addedCard,
-      err: err || null,
+      error: err || null,
       message: err ? "Unable to add card" : "Successfully added card!"
     });
   });
@@ -63,7 +63,7 @@ router.put("/cards/:id", (req, res) => {
 
   Card.replaceOne({_id: id}, cardDbObj, (err, updatedCard) => {
     res.json({
-      err: err || null,
+      error: err || null,
       message: err ? "Unable to update card" : "Updated card!",
       card: updatedCard
     });
@@ -76,7 +76,7 @@ router.delete("/cards/:id", (req, res) => {
 
   Card.findOneAndDelete({_id: id}, err => {
     res.json({
-      err: err || null,
+      error: err || null,
       message: err ? "Unable to delete card" : "Deleted card"
     });
   });

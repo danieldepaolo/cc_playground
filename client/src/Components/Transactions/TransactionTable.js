@@ -10,8 +10,8 @@ const columns = [{
   accessor: 'merchant',
   filterable: true
 }, {
-  Header: 'Product Type',
-  accessor: 'productType',
+  Header: 'Category',
+  accessor: 'category',
   filterable: true
 }, {
   Header: 'Amount',

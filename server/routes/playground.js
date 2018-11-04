@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const calc = require('../calculations');
-const testData = require('../test_data');
-const Card = require('../models/card');
+const calc = require('../businessLogic/calculations');
+
+// models
+const Card        = require('../models/card'),
+      Transaction = require('../models/transaction');
 
 // Used to calculate the bonus value
 // Response has overall bonus and FUTURE FEATURE bonus per transaction
@@ -18,10 +20,6 @@ const Card = require('../models/card');
     }]
   }
 */
-// router.get("/playground", (req, res) => {
-  
-  
-// });
 
 router.get("/playground/calcbonus", (req, res) => {
   // get cards from the query string
@@ -36,10 +34,12 @@ router.get("/playground/calcbonus", (req, res) => {
         errors.push("Unable to find card in DB: " + cardId);
         console.error(err);
       } else {
-        const bonus = calc.getBonusWithCards(foundCards, testData.testTransactions);
-        res.json({
-          error: err,
-          bonus: bonus
+        Transaction.find({}, (err, transactions) => {
+          const bonus = calc.getBonusWithCards(foundCards, transactions);
+          res.json({
+            error: err,
+            bonus: bonus
+          });
         });
       }
     });
