@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, TextArea } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { Container, Button, Form, Input, TextArea } from 'semantic-ui-react';
 import axios from 'axios';
-
-const FormBox = styled.div`
-  max-width: 30em;
-  margin: 0 auto;
-  .ui.selection.dropdown {
-    min-width: 8em;
-  }
-`;
 
 class PerkForm extends Component {
   constructor(props) {
@@ -48,24 +39,28 @@ class PerkForm extends Component {
     } = this.state;
   
     return (
-      <FormBox>
+      <Container text>
         <Form onSubmit={this.handleFormSubmit}>
-          <Form.Group widths='equal'>
+          <Form.Group>
             <Form.Field
               control={Input}
+              required={true}
               label="Name"
               name='name'
               value={name}
               placeholder="Perk name"
+              width={11}
               onChange={this.handleChange}
             />
             <Form.Field
               control={Input}
+              required={true}
               label="Default Value ($)"
               name='defaultValue'
               type='number'
               min={0}
               value={defaultValue}
+              width={5}
               onChange={this.handleChange}
             />
           </Form.Group>
@@ -75,11 +70,12 @@ class PerkForm extends Component {
             name='description'
             value={description}
             placeholder="Description of perk benefits"
+            width={16}
             onChange={this.handleChange}
           />
           <Button type='submit'>Submit</Button>
         </Form>
-      </FormBox>     
+      </Container>     
     );
   }
 }

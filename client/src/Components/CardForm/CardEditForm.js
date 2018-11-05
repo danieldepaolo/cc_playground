@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Container } from 'semantic-ui-react';
 
-import CardForm from './CardForm';
+import CardForm from '.';
 import axios from 'axios';
 
 class CardEditForm extends Component {
@@ -40,15 +41,15 @@ class CardEditForm extends Component {
     return cardData ? {
       name: cardData.name,
       processor: cardData.processor,
-      selectedCurrency: cardData.rewardCurrency,
+      selectedCurrency: cardData.rewardCurrency._id,
       defaultReturn: cardData.defaultReturn,
       annualFee: cardData.fees.annual,
       ftf: cardData.fees.foreign,
       waivedFirstYear: cardData.fees.waivedFirstYear,
-      bonusCategories: cardData.bonusReward.categories,
+      addedCategories: cardData.bonusReward.categories,
       signupBonusActive: (cardData.bonusReward.signup !== undefined),
       signupBonus: cardData.bonusReward.signup,
-      selectedPerks: new Set(cardData.perks)
+      selectedPerks: new Set(cardData.perks.map(perk => perk._id))
     } : null;
   }
 
@@ -57,14 +58,14 @@ class CardEditForm extends Component {
     console.log(initialState);
 
     return initialState ? (
-      <div>
+      <Container>
         <h3>Edit {initialState.name}</h3>
         <CardForm
           {...this.props}
           initialState={initialState}
           onHandleSubmit={(formObj) => this.handleFormSubmit(formObj)}
         />
-      </div>
+      </Container>
     ) : null;
   }
 }

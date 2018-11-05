@@ -1,43 +1,45 @@
+// Font Awesome icons
+
 const rewardCategories = {
-  product: new Set([
+  product: [
     // Food/Dining
-    "Restaurants",
-    "Groceries",
-    "Coffee Shops",
+    {label: "Restaurants", icon: "utensils"},
+    {label: "Groceries", icon: "shopping-basket"},
+    {label: "Coffee Shops", icon: "coffee"},
 
     // Travel category
-    "Travel",
-    "Air Travel",
-    "Hotel",
-    "Vacation Rental",
-    "Rental Car & Taxi",
-    "Public Transportation",
-    "Parking",
-    "Cruise", // New Citi Prestige has this category (End 2018)
+    {label: "Travel", icon: "suitcase"},
+    {label: "Air Travel", icon: "plane"},
+    {label: "Hotel", icon: "hotel"},
+    {label: "Vacation Rental", icon: "home"},
+    {label: "Rental Car & Taxi", icon: "taxi"},
+    {label: "Public Transportation", icon: "subway"},
+    {label: "Parking", icon: "parking"},
+    {label: "Cruise", icon: "ship"}, // New Citi Prestige has this category (2018)
 
     // Entertainment category
-    "Entertainment",
-    "Movies & DVDs",
-    "Music",
-    "Arts",
+    {label: "Entertainment", icon: "film"},
+    {label: "Movies & DVDs", icon: "film"},
+    {label: "Music", icon: "drum"},
+    {label: "Arts", icon: "theater-masks"},
 
     // Health/Services
-    "Gym",
-    "Pharmacy",
-    "Home Phone",
-    "Mobile Phone",
-    "Internet",
-    "Television",
+    {label: "Gym", icon: "dumbbell"},
+    {label: "Pharmacy", icon: "prescription"},
+    {label: "Home Phone", icon: "phone"},
+    {label: "Mobile Phone", icon: "mobile-alt"},
+    {label: "Internet", icon: "network-wired"},
+    {label: "Television", icon: "tv"},
 
     // Other
-    "Gas & Fuel",
-    "Department Stores"
-  ]),
+    {label: "Gas & Fuel", icon: "gas-pump"},
+    {label: "Department Stores", icon: "tshirt"}
+  ],
   delivery: [
-    "Apple Pay",
-    "Samsung Pay",
-    "Google Pay",
-    "Chase Pay"
+    {label: "Apple Pay", icon: "apple"},
+    {label: "Samsung Pay", icon: "mobile-alt"},
+    {label: "Google Pay", icon: "google"},
+    {label: "Chase Pay", icon: "piggy-bank"}
   ]
 };
 

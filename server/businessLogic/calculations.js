@@ -13,14 +13,14 @@ function getReturnForTransaction(card, transaction) {
   };
 
   const { categories } = card.bonusReward;
-  if (categories.hasOwnProperty('merchant')) {
+  if ('merchant' in categories) {
     const bonusCategory = _.findWhere(categories.merchant, {category: transaction.merchant});
     if (bonusCategory) {
       returns.merchant = bonusCategory.bonusReturn;
     }
   }
-  if (categories.hasOwnProperty('product')) {
-    const bonusCategory = _.findWhere(categories.product, {category: transaction.productType});
+  if ('product' in categories) {
+    const bonusCategory = _.findWhere(categories.product, {category: transaction.category});
     if (bonusCategory) {
       returns.product = bonusCategory.bonusReturn;
     }
@@ -35,7 +35,15 @@ function getReturnForTransaction(card, transaction) {
 // 2. Keep track and return [{transaction id, bestCard, bestBonus}...]
 // 3. Normalize to one year?
 function getBonusWithCards(cards, transactions) {
-  let totalBonus = 0;
+  // Start our bonus by subtracting fees and adding perk values
+  let totalBonus = cards.reduce( (bonus, card) => {
+    bonus -= card.fees.annual;
+    bonus += card.perks.reduce( (bonus, perk) => {
+      return bonus + perk.defaultValue;
+    }, 0);
+    return bonus;
+  }, 0);
+  console.log(totalBonus);
 
   // calculate bonus
   transactions.forEach(transaction => {

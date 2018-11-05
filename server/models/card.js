@@ -22,7 +22,7 @@ const cardSchema = new mongoose.Schema({
         name: String,
         bonusReturn: Number
       }],
-      products: [{
+      product: [{
         name: String,
         bonusReturn: Number
       }],
@@ -32,10 +32,6 @@ const cardSchema = new mongoose.Schema({
       }]
     },
     signup: {
-      currency: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Currency"
-      },
       months: Number, // # of months to reach min spend
       minSpend: Number, // Current min spend requirement
       amount: Number, // Current signup bonus

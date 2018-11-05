@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, Select, Input } from 'semantic-ui-react';
 import _ from 'underscore';
 
-import { categoryTypeOptions } from './constants';
+import { categoryTypeOptions } from '../constants';
 
 class AddCategory extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class AddCategory extends Component {
     this.defaultState = {
       categoryType: '',
       category: '',
-      returnAmt: 1.5
+      returnAmt: 2
     };
 
     this.state = this.defaultState;
@@ -21,18 +21,31 @@ class AddCategory extends Component {
     this.setState(this.defaultState);
   }
 
-  validationPass = () => {
+  validationForAdd = () => {
     const { categoryType, category, returnAmt } = this.state;
-    const alreadyAdded = _.pluck(this.props.categories[categoryType], 'name').includes(category);
+    const alreadyAdded = _.pluck(this.props.categories[categoryType], 'item').includes(category);
     return (categoryType && category && returnAmt > 1 && !alreadyAdded);
   }
 
+  getIconForName = categoryName => {
+    console.log(this.props.categories);
+    console.log(this.state.categoryType);
+    const category = _.findWhere(
+      this.props.categories[this.state.categoryType],
+      {label: categoryName}
+    );
+
+    return category.icon;
+  }
+
   onAdd = () => {
+    const { categoryType, category, returnAmt } = this.state;
     this.reset();
     this.props.categoryFunc(
-      this.state.categoryType,
-      this.state.category,
-      this.state.returnAmt
+      categoryType,
+      category,
+      this.getIconForName(category),
+      returnAmt
     );
   }
 
@@ -42,17 +55,18 @@ class AddCategory extends Component {
     const { categories } = this.props;
     const { categoryType, category, returnAmt } = this.state;
 
-    const productCategoryOptions = categories.productCategories.map(category => {
+    console.log(categories);
+    const productCategoryOptions = categories.product.map(category => {
       return {
-        text: category,
-        value: category
+        text: category.label,
+        value: category.label
       };
     });
 
-    const deliveryOptions = categories.deliveryCategories.map(deliveryCategory => {
+    const deliveryOptions = categories.delivery.map(deliveryCategory => {
       return {
-        text: deliveryCategory,
-        value: deliveryCategory
+        text: deliveryCategory.label,
+        value: deliveryCategory.label
       };
     });
 
@@ -67,14 +81,14 @@ class AddCategory extends Component {
           onChange={this.handleChange}
         />
         {
-          categoryType === 'products' || categoryType === 'delivery'
+          categoryType === 'product' || categoryType === 'delivery'
           ? (
             <Form.Field
               control={Select}
               label="Category"
               name='category'
-              value={category}
-              options={categoryType === 'products' ? productCategoryOptions : deliveryOptions}
+              value={category.label}
+              options={categoryType === 'product' ? productCategoryOptions : deliveryOptions}
               onChange={this.handleChange}
             />
           ) : (
@@ -83,7 +97,7 @@ class AddCategory extends Component {
               label="Category"
               name='category'
               type="text"
-              value={category}
+              value={category.label}
               onChange={this.handleChange}
             />
           )
@@ -99,7 +113,7 @@ class AddCategory extends Component {
           placeholder="1.5% or higher"
           onChange={this.handleChange}
         />
-        <Button type='button' onClick={this.onAdd} disabled={!this.validationPass()}>Add</Button>
+        <Button type='button' onClick={this.onAdd} disabled={!this.validationForAdd()}>Add</Button>
       </Form.Group>
     );
   }

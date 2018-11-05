@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import csvtojson from 'csvtojson';
-import { Button } from 'semantic-ui-react';
+import { Button, Container } from 'semantic-ui-react';
 import axios from 'axios';
 
 import TransactionTable from './TransactionTable';
@@ -66,7 +66,7 @@ class Transaction extends Component {
     const { transactions } = this.state;
 
     return (
-      <section>
+      <Container>
         <div className="spaciousBox">
           <FileInput
             readAs="text"
@@ -77,7 +77,7 @@ class Transaction extends Component {
           </Button>
         </div>
         <TransactionTable transactions={transactions} />
-      </section>
+      </Container>
     );
   }
 };

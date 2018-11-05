@@ -3,6 +3,7 @@ const router = express.Router();
 
 const _ = require('underscore');
 
+const rewardCategories = require('../constants/rewardCategories');
 const Perk = require("../models/perk"),
       Card = require("../models/card");
 
@@ -32,7 +33,7 @@ router.get("/cards", (req, res) => {
 router.get("/cards/:id", (req, res) => {
   const { id } = req.params;
 
-  Card.findById(id, (err, foundCard) => {
+  Card.findById(id).populate('rewardCurrency').populate('perks').exec( (err, foundCard) => {
     res.json({
       error: err || null,
       message: err ? "Unable to retrieve card" : "Retrieved card!",
@@ -94,7 +95,7 @@ function formCardToDbCard(formCard) {
       waivedFirstYear: formCard.waivedFirstYear // same
     },
     bonusReward: {
-      categories: formCard.bonusCategories, // different
+      categories: formCard.addedCategories, // same
       signup: formCard.signupBonusActive ? formCard.signupBonus : undefined // different
       //special: $TODO
     },

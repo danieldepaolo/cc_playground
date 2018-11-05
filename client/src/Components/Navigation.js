@@ -2,32 +2,7 @@ import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-const items = {
-  loggedIn: {
-    left: [
-      {name: "Playground", path: "/"},
-      {name: "Transactions", path: "/transactions"}
-    ],
-    right: [
-      {name: "Perk Values", path: "/perks/edit"},
-      {name: "Currency Values", path: "/currencies/edit"},
-      {name: "Logout", path: "/"}
-    ]
-  },
-  loggedOut: {
-    left: [
-      {name: "Playground", path: "/"},
-      {name: "Transactions", path: "/transactions"}
-    ],
-    right: [
-      {name: "Add Card", path: "/cards/new"},
-      {name: "Add Perk", path: "/perks/new"},
-      {name: "Add Currency", path: "/currencies/new"},
-      {name: "Login", path: "/login"},
-      {name: "Register", path: "/register"}
-    ]
-  }
-};
+import { navItems } from '../constants';
 
 class Navigation extends Component {
   constructor(props) {
@@ -42,7 +17,7 @@ class Navigation extends Component {
           <Link to="/">CC Playground</Link>
         </Menu.Header>
         <Menu.Menu position='left'>
-          {items.loggedOut.left.map(item => (
+          {navItems.loggedOut.left.map(item => (
             <Link 
               key={item.name} 
               to={item.path} 
@@ -53,7 +28,7 @@ class Navigation extends Component {
           ))}
         </Menu.Menu>
         <Menu.Menu position='right'>
-          {items.loggedOut.right.map(item => (
+          {navItems.loggedOut.right.map(item => (
             <Link 
               key={item.name} 
               to={item.path} 

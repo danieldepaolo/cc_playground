@@ -29,19 +29,22 @@ router.get("/playground/calcbonus", (req, res) => {
   }
 
   if (card_id) {
-    Card.find({ _id: {$in: card_id} }).populate('rewardCurrency').exec( (err, foundCards) => {
-      if (err) {
-        errors.push("Unable to find card in DB: " + cardId);
-        console.error(err);
-      } else {
-        Transaction.find({}, (err, transactions) => {
-          const bonus = calc.getBonusWithCards(foundCards, transactions);
-          res.json({
-            error: err,
-            bonus: bonus
+    Card.find({ _id: {$in: card_id} })
+      .populate('rewardCurrency')
+      .populate('perks')
+      .exec( (err, foundCards) => {
+        if (err) {
+          errors.push("Unable to find card in DB: " + cardId);
+          console.error(err);
+        } else {
+          Transaction.find({}, (err, transactions) => {
+            const bonus = calc.getBonusWithCards(foundCards, transactions);
+            res.json({
+              error: err,
+              bonus: bonus
+            });
           });
-        });
-      }
+        }
     });
   }
 });

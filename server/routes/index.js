@@ -49,10 +49,13 @@ router.get('/logout', (req, res) => {
 // OTHER
 
 router.get('/rewardcategories', (req, res) => {
-  const sortedProductCategories = Array.from(rewardCategories.product).sort();
+  const sortedProductCategories = rewardCategories.product.sort( (a,b) => {
+    return +(a.label > b.label) || -(a.label < b.label);
+  });
+
   res.json({
-    deliveryCategories: rewardCategories.delivery,
-    productCategories: sortedProductCategories
+    delivery: rewardCategories.delivery,
+    product: sortedProductCategories
   });
 });
 

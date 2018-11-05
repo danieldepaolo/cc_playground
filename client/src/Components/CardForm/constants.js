@@ -6,7 +6,7 @@ export const processorOptions = [
 ];
 
 export const categoryTypeOptions = [
-  { key: 'p', text: 'Products', value: 'products' },
+  { key: 'p', text: 'Products', value: 'product' },
   { key: 'd', text: 'Delivery Method', value: 'delivery'},
   { key: 'm', text: 'Merchant', value: 'merchant'},
 ];

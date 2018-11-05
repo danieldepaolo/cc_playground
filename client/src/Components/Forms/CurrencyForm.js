@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, Input, TextArea } from 'semantic-ui-react';
-import styled from 'styled-components';
+import { Container, Button, Form, Input, TextArea } from 'semantic-ui-react';
 import axios from 'axios';
-
-const FormBox = styled.div`
-  max-width: 30em;
-  margin: 0 auto;
-  .ui.selection.dropdown {
-    min-width: 8em;
-  }
-`;
 
 class CurrencyForm extends Component {
   constructor(props) {
@@ -48,25 +39,29 @@ class CurrencyForm extends Component {
     } = this.state;
   
     return (
-      <FormBox>
+      <Container text>
         <Form onSubmit={this.handleFormSubmit}>
-          <Form.Group widths='equal'>
+          <Form.Group>
             <Form.Field
               control={Input}
+              required={true}
               label="Name"
               name='name'
               value={name}
               placeholder="Currency name"
+              width={11}
               onChange={this.handleChange}
             />
             <Form.Field
               control={Input}
+              required={true}
               label="Default Value (cents)"
               name='defaultValue'
               type='number'
               min={0}
               step={0.1}
               value={defaultValue}
+              width={5}
               onChange={this.handleChange}
             />
           </Form.Group>
@@ -76,11 +71,12 @@ class CurrencyForm extends Component {
             name='description'
             value={description}
             placeholder="Description of currency"
+            width={16}
             onChange={this.handleChange}
           />
           <Button type='submit'>Submit</Button>
         </Form>
-      </FormBox>     
+      </Container>     
     );
   }
 }

@@ -1,18 +1,13 @@
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
-import styled from 'styled-components';
+
+import { FormBorderBox } from './styled';
 
 /*
   Displays a group of checkboxes or radio buttons with a header
   We can specify how to lay out the items using cols prop
   Items must have _id and name properties
 */
-
-const BorderBox = styled.div`
-  border: 1px solid rgba(0,0,0,0.3);
-  border-radius: 5px;
-  padding: 1em;
-`;
 
 class CheckGroup extends Component {
   getGroupedInputs = () => {
@@ -48,14 +43,14 @@ class CheckGroup extends Component {
     const groupedInputs = this.getGroupedInputs();
 
     return (
-      <BorderBox>
+      <FormBorderBox>
         <h4>{header}</h4>
         {groupedInputs.map( (group, i) => (
           <Form.Group key={i} widths='equal'>
             {group.map(input => input)}
           </Form.Group>
         ))}
-      </BorderBox>
+      </FormBorderBox>
     );
   }
 };

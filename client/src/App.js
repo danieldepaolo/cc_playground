@@ -4,6 +4,17 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'react-table/react-table.css'
 import './Styles/App.css';
 
+import {
+  pNewCard,
+  pShowCard,
+  pEditCard,
+  pNewCurrency,
+  pNewPerk,
+  pLogin,
+  pRegister,
+  pTransactions
+} from './constants';
+
 import Navigation from './Components/Navigation';
 import Playground from './Components/Playground';
 import Transactions from './Components/Transactions';
@@ -13,7 +24,7 @@ import CardNewForm from './Components/CardForm/CardNewForm';
 import CardEditForm from './Components/CardForm/CardEditForm';
 import PerkForm from './Components/Forms/PerkForm';
 import CurrencyForm from './Components/Forms/CurrencyForm';
-import ShowCard from './Components/Cards/ShowCard';
+import ShowCard from './Components/Cards/show';
 
 // $TODO
 // 1. Create components for perks/edit and currencies/edit
@@ -27,19 +38,17 @@ class App extends Component {
           <div id="mainArea">
             <Switch>
               <Route exact path="/" component={Playground} />
-              <Route path="/perks/new" component={PerkForm} />
-              <Route path="/perks/edit" component={Playground} />
-              <Route path="/currencies/edit" component={Playground} />
-              <Route path="/currencies/new" component={CurrencyForm} />
-              <Route path="/transactions" component={Transactions} />
-              <Route path="/cards/new" component={CardNewForm} />
+              <Route path={pNewPerk} component={PerkForm} />
+              <Route path={pNewCurrency} component={CurrencyForm} />
+              <Route path={pTransactions} component={Transactions} />
+              <Route path={pNewCard} component={CardNewForm} />
               <Route
-                path="/cards/:id/edit"
+                path={pEditCard}
                 render={props => <CardEditForm {...props} />}
               />
-              <Route path="/cards/:id" component={ShowCard} />
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
+              <Route path={pShowCard} component={ShowCard} />
+              <Route path={pLogin} component={Login} />
+              <Route path={pRegister} component={Register} />
             </Switch>
           </div>
         </div>

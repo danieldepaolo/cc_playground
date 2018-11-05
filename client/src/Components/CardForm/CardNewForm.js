@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Container } from 'semantic-ui-react';
 
-import CardForm from './CardForm';
+import CardForm from '.';
 import axios from 'axios';
 
 class CardNewForm extends Component {
@@ -21,13 +22,13 @@ class CardNewForm extends Component {
 
   render() {
     return (
-      <div>
+      <Container>
         <h3>Create New Card</h3>
         <CardForm
           {...this.props}
           onHandleSubmit={(formObj) => this.handleFormSubmit(formObj)}
         />
-      </div>
+      </Container>
     );
   }
 }
