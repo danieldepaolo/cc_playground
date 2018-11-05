@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Button, Label, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import styled from 'styled-components';
 
 import CurrencyView from './currencyView';
 import BonusCategoryList from '../../CardForm/bonusCategories/BonusCategoryList';
@@ -10,6 +11,11 @@ import { processorLookup } from './constants';
 /*
   Show all details of one credit card on a page
 */
+
+const SmallImage = styled.img`
+  display: block;
+  max-width: 350px;
+`;
 
 class ShowCard extends Component {
   constructor(props) {
@@ -55,6 +61,7 @@ class ShowCard extends Component {
     return (
       <Container text>
         <h3>{cardData.name}</h3>
+        <SmallImage src={cardData.imageUrl} alt={cardData.name} />
         <Label>Processor</Label> {processor}
         <CurrencyView rewardCurrency={cardData.rewardCurrency} />
         <Label>Fees</Label>

@@ -87,6 +87,7 @@ function formCardToDbCard(formCard) {
   return {
     name: formCard.name, // same
     processor: formCard.processor, // same
+    imageUrl: formCard.imageUrl, // same
     defaultReturn: formCard.defaultReturn, // same
     rewardCurrency: formCard.selectedCurrency, // different
     fees: { // different

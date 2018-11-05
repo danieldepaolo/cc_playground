@@ -30,6 +30,7 @@ class CardForm extends Component {
     this.defaultState = {
       name: '',
       processor: '',
+      imageUrl: '',
       selectedCurrency: null,
       defaultReturn: 1,
       annualFee: 0,
@@ -99,6 +100,7 @@ class CardForm extends Component {
     const {
       name,
       processor,
+      imageUrl,
       selectedCurrency,
       defaultReturn,
       annualFee,
@@ -117,13 +119,22 @@ class CardForm extends Component {
   
     return (
       <Form onSubmit={() => this.props.onHandleSubmit(this.state)}>
-        <Form.Group widths='equal'>
+        <Form.Group>
           <Form.Input
             required={true}
             label="Name"
             name='name'
             value={name}
             placeholder="Card name"
+            width={5}
+            onChange={this.handleChange}
+          />
+          <Form.Input
+            label="Image URL"
+            name='imageUrl'
+            value={imageUrl}
+            placeholder="Card image URL"
+            width={7}
             onChange={this.handleChange}
           />
           <Form.Select
@@ -132,6 +143,7 @@ class CardForm extends Component {
             name='processor'
             value={processor}
             options={processorOptions}
+            width={4}
             onChange={this.handleChange}
           />
         </Form.Group>

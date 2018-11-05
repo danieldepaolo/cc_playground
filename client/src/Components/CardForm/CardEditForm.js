@@ -41,6 +41,7 @@ class CardEditForm extends Component {
     return cardData ? {
       name: cardData.name,
       processor: cardData.processor,
+      imageUrl: cardData.imageUrl,
       selectedCurrency: cardData.rewardCurrency._id,
       defaultReturn: cardData.defaultReturn,
       annualFee: cardData.fees.annual,
