@@ -13,9 +13,7 @@ class CardNewForm extends Component {
     }
 
     console.log(formObj);
-  
-    const url = "http://localhost:8080/cards";
-    const response = await axios.post(url, {card: formObj});
+    const response = await axios.post("/cards", {card: formObj});
 
     console.log(response);
   }

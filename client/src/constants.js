@@ -3,6 +3,8 @@ export const pShowCard = "/cards/:id";
 export const pEditCard = "/cards/:id/edit";
 export const pNewCurrency = "/currencies/new";
 export const pNewPerk = "/perks/new";
+export const pPerks = "/perks";
+export const pCurrencies = "/currencies";
 export const pLogin = "/login";
 export const pRegister = "/register";
 export const pTransactions = "/transactions";
@@ -11,7 +13,9 @@ export const navItems = {
   loggedIn: {
     left: [
       {name: "Playground", path: "/"},
-      {name: "Transactions", path: pTransactions}
+      {name: "Transactions", path: pTransactions},
+      {name: "Perks", path: pPerks},
+      {name: "Currencies", path: pCurrencies}
     ],
     right: [
       {name: "Logout", path: "/"}
@@ -20,7 +24,9 @@ export const navItems = {
   loggedOut: {
     left: [
       {name: "Playground", path: "/"},
-      {name: "Transactions", path: pTransactions}
+      {name: "Transactions", path: pTransactions},
+      {name: "Perks", path: pPerks},
+      {name: "Currencies", path: pCurrencies}
     ],
     right: [
       {name: "Add Card", path: pNewCard},

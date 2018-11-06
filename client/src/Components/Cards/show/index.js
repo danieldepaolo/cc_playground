@@ -38,15 +38,13 @@ class ShowCard extends Component {
 
   componentDidMount = async () => {
     const { match } = this.props;
-
-    const response = await axios.get(`http://localhost:8080/cards/${match.params.id}`);
+    const response = await axios(`/cards/${match.params.id}`);
     this.setState({cardData: response.data.card});
   }
 
   onDelete = async (e) => {
     const { match } = this.props;
-
-    const response = await axios.delete(`http://localhost:8080/cards/${match.params.id}`);
+    const response = await axios.delete(`/cards/${match.params.id}`);
     console.log(response);
   }
 
@@ -54,7 +52,6 @@ class ShowCard extends Component {
     const { cardData } = this.state;
     console.log(cardData);
     const cardId = this.props.match.params.id;
-    const editUrl = `/cards/${cardId}/edit`;
 
     const processor = cardData.processor && processorLookup[cardData.processor].label;
 
@@ -79,7 +76,7 @@ class ShowCard extends Component {
         
         <Label>Bonus Categories</Label>
         <BonusCategoryList categories={cardData.bonusReward.categories} />
-        <Link to={editUrl}>
+        <Link to={`/cards/${cardId}/edit`}>
           <Button>Edit</Button>
         </Link>
         <Button onClick={this.onDelete}>Delete</Button>

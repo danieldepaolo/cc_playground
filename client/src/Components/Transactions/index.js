@@ -36,7 +36,7 @@ class Transaction extends Component {
   }
 
   fetchTransactions = async () => {
-    const response = await axios('http://localhost:8080/transactions');
+    const response = await axios('/transactions');
     this.setState({transactions: response.data.transactions});
   }
 
@@ -52,8 +52,7 @@ class Transaction extends Component {
     const { fileContents } = this.state;
     const jsonData = await csvtojson().fromString(fileContents);
 
-    const url = `http://localhost:8080/transactions`;
-    const response = await axios.post(url, {
+    const response = await axios.post('/transactions', {
       transactions: jsonData
     });
 

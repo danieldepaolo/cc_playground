@@ -14,7 +14,7 @@ class CardEditForm extends Component {
   }
 
   componentDidMount = async () => {
-    const response = await axios.get(`http://localhost:8080/cards/${this.props.match.params.id}`);
+    const response = await axios(`/cards/${this.props.match.params.id}`);
     this.setState({cardData: response.data.card});
   }
 
@@ -27,7 +27,7 @@ class CardEditForm extends Component {
 
     console.log(formObj);
   
-    const url = `http://localhost:8080/cards/${this.props.match.params.id}`;
+    const url = `/cards/${this.props.match.params.id}`;
     const response = await axios.put(url, {card: formObj});
     
     console.log(response);

@@ -68,9 +68,9 @@ class CardForm extends Component {
   }
 
   fetchData = async () => {
-    const perkResponse = await axios.get("http://localhost:8080/perks");
-    const currencyResponse = await axios.get("http://localhost:8080/currencies");
-    const categoriesResponse = await axios.get("http://localhost:8080/rewardcategories");
+    const perkResponse = await axios("/perks");
+    const currencyResponse = await axios("/currencies");
+    const categoriesResponse = await axios("/rewardcategories");
 
     this.setState({
       cardPerks: perkResponse.data.perks,

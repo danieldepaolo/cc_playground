@@ -31,7 +31,7 @@ class Playground extends Component {
   }
 
   fetchData = async () => {
-    let response = await axios('http://localhost:8080/cards');
+    let response = await axios('/cards');
     console.log(response);
 
     const cardStatus = {};
@@ -46,7 +46,7 @@ class Playground extends Component {
   }
 
   fetchBonusAmount = async () => {
-    let url = 'http://localhost:8080/playground/calcbonus';
+    let url = '/playground/calcbonus';
 
     let cardIdsToGet = _.filter(
       _.keys(this.state.cardSelectStatus),
