@@ -3,6 +3,7 @@ export const pShowCard = "/cards/:id";
 export const pEditCard = "/cards/:id/edit";
 export const pNewCurrency = "/currencies/new";
 export const pNewPerk = "/perks/new";
+export const pEditPerk = "/perks/:id/edit";
 export const pPerks = "/perks";
 export const pCurrencies = "/currencies";
 export const pLogin = "/login";

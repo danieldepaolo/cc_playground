@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, List } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -19,8 +20,17 @@ class Perks extends Component {
   }
 
   componentDidMount = async () => {
+    this.refreshPerks();
+  }
+
+  refreshPerks = async () => {
     const response = await axios("/perks");
     this.setState({perks: response.data.perks});
+  }
+
+  onDelete = async (id) => {
+    const response = await axios.delete(`/perks/${id}`);
+    this.refreshPerks();
   }
 
   render() {
@@ -47,8 +57,10 @@ class Perks extends Component {
           <BorderedItem style={style.borderedItem} key={perk.name}>
             <List.Header>
               {perk.name}
-              <Button style={style.miniBtn}>Delete</Button>
-              <Button style={style.miniBtn}>Edit</Button>
+              <Button style={style.miniBtn} onClick={e => this.onDelete(perk._id)}>Delete</Button>
+              <Link to={`/perks/${perk._id}/edit`}>
+                <Button style={style.miniBtn}>Edit</Button>
+              </Link>
             </List.Header>
             <List.Content>
               <p>Value: ${perk.defaultValue}</p>

@@ -11,6 +11,7 @@ import {
   pNewCurrency,
   pCurrencies,
   pNewPerk,
+  pEditPerk,
   pPerks,
   pLogin,
   pRegister,
@@ -24,7 +25,8 @@ import Register from './Components/User/Register';
 import Login from './Components/User/Login';
 import CardNewForm from './Components/CardForm/CardNewForm';
 import CardEditForm from './Components/CardForm/CardEditForm';
-import PerkForm from './Components/Perks/PerkForm';
+import PerkNewForm from './Components/Perks/PerkNewForm';
+import PerkEditForm from './Components/Perks/PerkEditForm';
 import Perks from './Components/Perks';
 import CurrencyForm from './Components/Currencies/CurrencyForm';
 import Currencies from './Components/Currencies';
@@ -42,7 +44,11 @@ class App extends Component {
           <div id="mainArea">
             <Switch>
               <Route exact path="/" component={Playground} />
-              <Route path={pNewPerk} component={PerkForm} />
+              <Route path={pNewPerk} component={PerkNewForm} />
+              <Route
+                path={pEditPerk}
+                render={props => <PerkEditForm {...props} />}
+              />
               <Route path={pPerks} component={Perks} />
               <Route path={pNewCurrency} component={CurrencyForm} />
               <Route path={pCurrencies} component={Currencies} />

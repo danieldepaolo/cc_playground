@@ -58,16 +58,16 @@ class CardEditForm extends Component {
     const initialState = this.getInitialState();
     console.log(initialState);
 
-    return initialState ? (
+    return initialState && (
       <Container>
         <h3>Edit {initialState.name}</h3>
         <CardForm
           {...this.props}
           initialState={initialState}
-          onHandleSubmit={(formObj) => this.handleFormSubmit(formObj)}
+          onHandleSubmit={this.handleFormSubmit}
         />
       </Container>
-    ) : null;
+    );
   }
 }
 

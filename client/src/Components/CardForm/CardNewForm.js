@@ -12,9 +12,7 @@ class CardNewForm extends Component {
       formObj.signupBonus = null;
     }
 
-    console.log(formObj);
     const response = await axios.post("/cards", {card: formObj});
-
     console.log(response);
   }
 

@@ -43,9 +43,9 @@ function getBonusWithCards(cards, transactions) {
     }, 0);
     return bonus;
   }, 0);
-  console.log(totalBonus);
 
   // calculate bonus
+  let totalTransactionBonus = 0;
   transactions.forEach(transaction => {
     optimalCard = null;
     bestBonus = 0;
@@ -60,10 +60,14 @@ function getBonusWithCards(cards, transactions) {
       }
     });
 
-    totalBonus += bestBonus;
+    totalTransactionBonus += bestBonus;
   });
 
-  return totalBonus;
+  // Adjust transaction bonus to one year period to match the perks/fees
+  transactions.sort( (a,b) => a.date - b.date);
+  const monthSpan = _.last(transactions).date.getMonth() - transactions[0].date.getMonth();
+  const adjustedTransactionBonus = totalTransactionBonus / (monthSpan / 12);
+  return totalBonus + adjustedTransactionBonus;
 }
 
 module.exports = {

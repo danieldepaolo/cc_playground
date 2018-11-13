@@ -19,6 +19,17 @@ router.get("/perks", (req, res) => {
   });
 });
 
+router.get("/perks/:id", (req, res) => {
+  const { id } = req.params;
+
+  Perk.findById(id, (err, foundPerk) => {
+    res.json({
+      message: err ? err : "Retrieved card!",
+      perk: foundPerk
+    });
+  });
+});
+
 router.post("/perks", (req, res) => {
   const { perk } = req.body;
 
@@ -34,6 +45,28 @@ router.post("/perks", (req, res) => {
       perk: newPerk,
       message: responseMsg,
       err: responseErr
+    });
+  });
+});
+
+router.put("/perks/:id", (req, res) => {
+  const { id } = req.params;
+  const { perk } = req.body;
+
+  Perk.replaceOne({_id: id}, perk, (err, updatedPerk) => {
+    res.json({
+      message: err ? err : "Updated card!",
+      card: updatedPerk
+    });
+  });
+});
+
+router.delete("/perks/:id", (req, res) => {
+  const { id } = req.params;
+
+  Perk.deleteOne({_id: id}, err => {
+    res.json({
+      message: err ? err : "Successfully deleted perk!"
     });
   });
 });

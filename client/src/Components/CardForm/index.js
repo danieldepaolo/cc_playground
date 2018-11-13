@@ -49,7 +49,7 @@ class CardForm extends Component {
     this.state = _.extend(
       {},
       this.optionsData,
-      this.props.initialState ? this.props.initialState : this.defaultState
+      props.initialState || this.defaultState
     );
     
     console.log(this.state);
@@ -59,7 +59,7 @@ class CardForm extends Component {
     this.setState(_.extend(
       {},
       this.optionsData,
-      this.props.initialState ? this.props.initialState : this.defaultState
+      this.props.initialState || this.defaultState
     ));
   }
 
