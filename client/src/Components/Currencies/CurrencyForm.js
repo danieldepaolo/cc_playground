@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Button, Form, Input, TextArea } from 'semantic-ui-react';
-import axios from 'axios';
 
 class CurrencyForm extends Component {
   constructor(props) {
@@ -12,21 +11,17 @@ class CurrencyForm extends Component {
       defaultValue: 1
     };
 
-    this.state = this.defaultState;
+    this.state = props.initialState || this.defaultState;
+    console.log(this.state);
   }
 
   resetState = () => {
     this.setState(this.defaultState);
   }
 
-  handleFormSubmit = async () => {
-    const url = "http://localhost:8080/currencies";
-    const response = await axios.post(url, {
-      currency: this.state
-    });
-
+  handleFormSubmit = () => {
+    this.props.onHandleSubmit(this.state);
     this.resetState();
-    console.log(response);
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import PerkForm from './PerkForm';
+import CurrencyForm from './CurrencyForm';
 
-class PerkNewForm extends Component {
+class CurrencyNewForm extends Component {
 
   handleFormSubmit = async (body) => {
-    const response = await axios.post("/perks", {
-      perk: body
+    const response = await axios.post("/currencies", {
+      currency: body
     });
 
     console.log(response);
@@ -15,11 +15,11 @@ class PerkNewForm extends Component {
 
   render() {
     return(
-      <PerkForm 
+      <CurrencyForm 
         onHandleSubmit={this.handleFormSubmit}
       />
     );
   }
 };
 
-export default PerkNewForm;
+export default CurrencyNewForm;

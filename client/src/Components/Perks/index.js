@@ -30,6 +30,7 @@ class Perks extends Component {
 
   onDelete = async (id) => {
     const response = await axios.delete(`/perks/${id}`);
+    console.log(response);
     this.refreshPerks();
   }
 

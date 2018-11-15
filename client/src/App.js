@@ -9,6 +9,7 @@ import {
   pShowCard,
   pEditCard,
   pNewCurrency,
+  pEditCurrency,
   pCurrencies,
   pNewPerk,
   pEditPerk,
@@ -28,7 +29,8 @@ import CardEditForm from './Components/CardForm/CardEditForm';
 import PerkNewForm from './Components/Perks/PerkNewForm';
 import PerkEditForm from './Components/Perks/PerkEditForm';
 import Perks from './Components/Perks';
-import CurrencyForm from './Components/Currencies/CurrencyForm';
+import CurrencyNewForm from './Components/Currencies/NewForm';
+import CurrencyEditForm from './Components/Currencies/EditForm';
 import Currencies from './Components/Currencies';
 import ShowCard from './Components/Cards/show';
 
@@ -50,7 +52,11 @@ class App extends Component {
                 render={props => <PerkEditForm {...props} />}
               />
               <Route path={pPerks} component={Perks} />
-              <Route path={pNewCurrency} component={CurrencyForm} />
+              <Route path={pNewCurrency} component={CurrencyNewForm} />
+              <Route
+                path={pEditCurrency}
+                render={props => <CurrencyEditForm {...props} />}
+              />
               <Route path={pCurrencies} component={Currencies} />
               <Route path={pTransactions} component={Transactions} />
               <Route path={pNewCard} component={CardNewForm} />

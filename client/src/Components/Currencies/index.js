@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, List } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -21,6 +22,11 @@ class Currencies extends Component {
   componentDidMount = async () => {
     const response = await axios("/currencies");
     this.setState({currencies: response.data.currencies});
+  }
+
+  onDelete = async id => {
+    const response = await axios.delete(`/currencies/${id}`);
+    console.log(response);
   }
 
   render() {
@@ -47,8 +53,10 @@ class Currencies extends Component {
           <BorderedItem style={style.borderedItem} key={currency.name}>
             <List.Header>
               {currency.name}
-              <Button style={style.miniBtn}>Delete</Button>
-              <Button style={style.miniBtn}>Edit</Button>
+              <Button style={style.miniBtn} onClick={() => this.onDelete(currency._id)}>Delete</Button>
+              <Link to={`/currencies/${currency._id}/edit`}>
+                <Button style={style.miniBtn}>Edit</Button>
+              </Link>
             </List.Header>
             <List.Content>
               <p>Value: {currency.defaultValue}c</p>

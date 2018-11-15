@@ -13,6 +13,17 @@ router.get("/currencies", (req, res) => {
   });
 });
 
+router.get("/currencies/:id", (req, res) => {
+  const { id } = req.params;
+
+  Currency.findById(id, (err, foundCurrency) => {
+    res.json({
+      message: err ? err : "Retrieved currency!",
+      currency: foundCurrency
+    });
+  });
+});
+
 router.post("/currencies", (req, res) => {
   const { currency } = req.body;
 
@@ -21,6 +32,28 @@ router.post("/currencies", (req, res) => {
       currency: newCurrency,
       message: err ? "Error creating currency" : "Successfully added currency",
       err: err || null
+    });
+  });
+});
+
+router.put("/currencies/:id", (req, res) => {
+  const { id } = req.params;
+  const { currency } = req.body;
+
+  Currency.replaceOne({_id: id}, currency, (err, updatedCurrency) => {
+    res.json({
+      message: err ? err : "Updated currency!",
+      currency: updatedCurrency
+    });
+  });
+});
+
+router.delete("/currencies/:id", (req, res) => {
+  const { id } = req.params;
+
+  Currency.deleteOne({_id: id}, err => {
+    res.json({
+      message: err ? err : "Successfully deleted currency!"
     });
   });
 });

@@ -56,7 +56,7 @@ router.put("/perks/:id", (req, res) => {
   Perk.replaceOne({_id: id}, perk, (err, updatedPerk) => {
     res.json({
       message: err ? err : "Updated card!",
-      card: updatedPerk
+      perk: updatedPerk
     });
   });
 });

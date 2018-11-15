@@ -16,7 +16,7 @@ class PerkForm extends Component {
   }
 
   resetState = () => {
-    this.setState(this.props.initialState || this.defaultState);
+    this.setState(this.defaultState);
   }
 
   handleFormSubmit = () => {
