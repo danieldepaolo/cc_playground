@@ -12,7 +12,6 @@ class PerkForm extends Component {
     };
 
     this.state = props.initialState || this.defaultState;
-    console.log(this.state);
   }
 
   resetState = () => {

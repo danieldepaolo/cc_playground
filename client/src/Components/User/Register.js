@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'semantic-ui-react';
-import isEmail from 'validator/lib/isEmail';
+import axios from 'axios';
 
 class Register extends Component {
   constructor(props, context) {
@@ -12,7 +12,7 @@ class Register extends Component {
       username: '',
       password: '',
       email: '',
-      fieldErrors: {},
+      fieldErrors: [],
       requestError: null
     };
   }
@@ -22,42 +22,26 @@ class Register extends Component {
     if (length === 0) {
       return null;
     }
-    return length >= 6 && length <= 15
+    return length >= 6 && length <= 25
       ? 'success' : 'error';
   }
 
-  getEmailValidationState () {
-    if (this.state.email.length === 0) {
-      return null;
-    }
-    return isEmail(this.state.email) ? 'success' : 'error';
-  }
-
   async handleFormSubmit () {
-    const url = `http://localhost:8000/register`;
-
-    await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.state)
-    }).then(response => {
-      response.json().then(errors => {
+    try {
+      const response = await axios.post("/register", this.state);
+      console.log(response);
+      if (response.error) {
         this.setState({
-          fieldErrors: JSON.parse(errors),
+          fieldErrors: response.error,
           requestError: null
-        });
-      }).catch(error => {
-        console.log("Response parse error: ", error);
-      });
-    }).catch(error => {
+        })
+      }
+    } catch(err) {
       this.setState({
         fieldErrors: null,
-        requestError: "Failed to fetch from server"
+        requestError: err
       });
-    });
+    }
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -69,6 +53,7 @@ class Register extends Component {
       <div className="formBox">
         <Form onSubmit={this.handleFormSubmit}>
           <Form.Input
+            required={true}
             label="Username"
             name='username'
             value={username}
@@ -76,6 +61,7 @@ class Register extends Component {
             onChange={this.handleChange}
           />
           <Form.Input
+            required={true}
             label="Password"
             name='password'
             value={password}
@@ -84,6 +70,7 @@ class Register extends Component {
             onChange={this.handleChange}
           />
           <Form.Input
+            required={true}
             label="Email"
             name='email'
             value={email}
@@ -91,7 +78,7 @@ class Register extends Component {
             placeholder="john@doe.com"
             onChange={this.handleChange}
           />
-          <Button type='submit'>Login</Button>
+          <Button type='submit'>Register</Button>
         </Form>
       </div>
     );
