@@ -3,7 +3,7 @@ export const tableColumns = [{
   accessor: 'date',
   width: 120,
   sortMethod: (a, b, desc) => {
-    return Date(a) - Date(b);
+    return new Date(a) - new Date(b);
   }
 }, {
   Header: 'Merchant',

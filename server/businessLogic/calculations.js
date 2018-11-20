@@ -1,4 +1,5 @@
-const _ = require('underscore');
+const _ = require('underscore'),
+      moment = require('moment');
 
 // $TODO
 // 1. Handle quarterly bonuses like with Chase Freedom
@@ -36,7 +37,7 @@ function getReturnForTransaction(card, transaction) {
 // 3. Normalize to one year?
 function getBonusWithCards(cards, transactions) {
   // Start our bonus by subtracting fees and adding perk values
-  let totalBonus = cards.reduce( (bonus, card) => {
+  let annualValue = cards.reduce( (bonus, card) => {
     bonus -= card.fees.annual;
     bonus += card.perks.reduce( (bonus, perk) => {
       return bonus + perk.defaultValue;
@@ -45,8 +46,7 @@ function getBonusWithCards(cards, transactions) {
   }, 0);
 
   // calculate bonus
-  let totalTransactionBonus = 0;
-  transactions.forEach(transaction => {
+  const totalTransactionBonus = transactions.reduce( (total, transaction) => {
     optimalCard = null;
     bestBonus = 0;
     cards.forEach(card => {
@@ -60,14 +60,23 @@ function getBonusWithCards(cards, transactions) {
       }
     });
 
-    totalTransactionBonus += bestBonus;
-  });
+    return total + bestBonus;
+  }, 0);
 
   // Adjust transaction bonus to one year period to match the perks/fees
-  transactions.sort( (a,b) => a.date - b.date);
-  const monthSpan = _.last(transactions).date.getMonth() - transactions[0].date.getMonth();
-  const adjustedTransactionBonus = totalTransactionBonus / (monthSpan / 12);
-  return totalBonus + adjustedTransactionBonus;
+  if (totalTransactionBonus > 0) {
+    transactions.sort( (a,b) => a.date - b.date);
+    const firstTransaction = moment(_.first(transactions).date);
+    const lastTransaction = moment(_.last(transactions).date);
+    let monthSpan = lastTransaction.diff(firstTransaction, 'months');
+
+    const adjustedTransactionBonus = monthSpan === 0 
+      ? totalTransactionBonus
+      : totalTransactionBonus / (monthSpan / 12);
+    return annualValue + adjustedTransactionBonus;
+  } else {
+    return annualValue;
+  }
 }
 
 module.exports = {

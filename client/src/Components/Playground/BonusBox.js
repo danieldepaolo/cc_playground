@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
-import Loader from 'react-loader';
-import classNames from 'classnames';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 class BonusBox extends Component {
   render() {
     const { loading, bonus } = this.props;
 
-    const bonusBoxClass = classNames({
-      bonusBox: true,
-      loadingDimmer: loading
-    });
-
     return (
-      <div className={bonusBoxClass}>
-        <Loader
-          loaded={!loading}
-          length={5}
-          width={3}
-          radius={5}
-        >
-        </Loader>
+      <div className="bonusBox">
+        <Dimmer active={loading}>
+          <Loader />
+        </Dimmer>
         <p className="bonus">One Year Bonus: ${Number(bonus).toFixed(2)}</p>
       </div>
     );

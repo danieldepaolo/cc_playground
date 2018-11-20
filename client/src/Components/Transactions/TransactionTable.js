@@ -6,9 +6,12 @@ import { tableColumns } from './constants';
 
 const TransactionTable = ( ({transactions}) => {
   const displayData = transactions.map(transaction => {
-    transaction.date = moment(transaction.date).format('MM/DD/YYYY');
-    transaction.amount = Number(transaction.amount).toFixed(2);
-    return transaction;
+    return {
+      date: moment(transaction.date).format('MM/DD/YYYY'),
+      amount: Number(transaction.amount).toFixed(2),
+      category: transaction.category,
+      merchant: transaction.merchant
+    };
   });
 
   return (

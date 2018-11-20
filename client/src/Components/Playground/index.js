@@ -18,7 +18,7 @@ class Playground extends Component {
   }
 
   async componentDidMount() {
-    this.fetchData();
+    await this.fetchData();
   }
 
   async componentDidUpdate(prevProps, prevState, snapshot) {
@@ -26,19 +26,18 @@ class Playground extends Component {
     const current = this.state.cardSelectStatus;
 
     if (!_.isEqual(prev, current)) {
-      this.fetchBonusAmount();
+      await this.fetchBonusAmount();
     }
   }
 
   fetchData = async () => {
     let response = await axios('/cards');
-    console.log(response);
 
     const cardStatus = {};
     response.data.cards.forEach(card => {
       cardStatus[card._id] = false;
     });
-    console.log(cardStatus);
+
     this.setState({
       cardSelectStatus: cardStatus,
       cards: response.data.cards

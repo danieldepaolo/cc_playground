@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const utils = require('../businessLogic/utils');
 const Transaction = require('../models/transaction');
 
 // GET all transactions
@@ -29,20 +30,28 @@ router.get("/transactions/:id", (req, res) => {
 
 // add transaction(s) to database
 // accepts array of JSON objects each representing a transaction
-router.post("/transactions", (req, res) => {
+router.post("/transactions", async (req, res) => {
   let { transactions } = req.body; // shorthand for if we send via form with special names
 
   // We only want debit transactions (not credit)
-  transactions = transactions.filter(transaction => transaction['Transaction Type'] === 'debit');
-
+  let newTransactions = transactions.filter(transaction => transaction['Transaction Type'] === 'debit');
   // Convert to database format
-  transactions = transactions.map(transaction => fromTransactionToDbTransaction(transaction));
+  newTransactions = newTransactions.map(transaction => fromTransactionToDbTransaction(transaction));
 
-  Transaction.insertMany(transactions, (err, insertedTransactions) => {
-    res.json({
-      error: err || null,
-      message: err ? "Unable to add transactions" : "Successfully added transactions!",
-      transactions: !err ? insertedTransactions : []
+  Transaction.find({}, (err, allTransactions) => {
+    if (err) {
+      console.error(err);
+    }
+    const nonDuplicateTransactions = utils.getNonDuplicateTransactions(allTransactions, newTransactions);
+
+    Transaction.insertMany(nonDuplicateTransactions, (err, addedTransactions) => {
+      if (err) {
+        console.error(err);
+      }
+      res.json({
+        error: err || null,
+        transactions: addedTransactions
+      });
     });
   });
 });
@@ -73,10 +82,10 @@ router.delete("/transactions/:id", (req, res) => {
 
 function fromTransactionToDbTransaction(transaction) {
   return {
-    date: transaction.Date,
+    date: utils.dateFromSlashStr(transaction.Date),
     merchant: transaction.Description, // Merchant name as it appears for transaction.
     category: transaction.Category, // "Restaurants", "Gas & Fuel", "Entertainment" ...
-    amount: transaction.Amount
+    amount: Number(transaction.Amount)
   };
 }
 

@@ -31,8 +31,6 @@ class PerkForm extends Component {
       description,
       defaultValue
     } = this.state;
-
-    console.log(name);
   
     return (
       <Container text>

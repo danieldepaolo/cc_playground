@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import csvtojson from 'csvtojson';
-import { Button, Container } from 'semantic-ui-react';
+import { Button, Container, Dimmer, Loader } from 'semantic-ui-react';
 import axios from 'axios';
 
 import TransactionTable from './TransactionTable';
@@ -20,19 +20,21 @@ class Transaction extends Component {
     this.state = {
       file: '',
       fileContents: '',
-      transactions: []
+      transactions: [],
+      loading: false
     };
   }
 
   reset = () => {
     this.setState({
       file: '',
-      fileContents: ''
+      fileContents: '',
+      loading: false
     });
   }
 
   componentDidMount = async () => {
-    this.fetchTransactions();
+    await this.fetchTransactions();
   }
 
   fetchTransactions = async () => {
@@ -41,7 +43,6 @@ class Transaction extends Component {
   }
 
   handleFileSelected = (event, file) => {
-    console.log(event);
     this.setState({
       file: file,
       fileContents: event.target.result
@@ -52,17 +53,18 @@ class Transaction extends Component {
     const { fileContents } = this.state;
     const jsonData = await csvtojson().fromString(fileContents);
 
+    this.setState({loading: true});
     const response = await axios.post('/transactions', {
       transactions: jsonData
     });
 
-    this.fetchTransactions();
+    await this.fetchTransactions();
     this.reset();
     console.log(response);
   };
 
   render() {
-    const { transactions } = this.state;
+    const { transactions, loading } = this.state;
 
     return (
       <Container>
@@ -75,6 +77,9 @@ class Transaction extends Component {
             Submit
           </Button>
         </div>
+        <Dimmer active={loading}>
+          <Loader />
+        </Dimmer>
         <TransactionTable transactions={transactions} />
       </Container>
     );
