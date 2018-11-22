@@ -50,6 +50,7 @@ class ShowCard extends Component {
 
   render() {
     const { cardData } = this.state;
+    const { loggedIn } = this.props;
     console.log(cardData);
     const cardId = this.props.match.params.id;
 
@@ -76,11 +77,15 @@ class ShowCard extends Component {
         
         <Label>Bonus Categories</Label>
         <BonusCategoryList categories={cardData.bonusReward.categories} />
-        <Link to={`/cards/${cardId}/edit`}>
-          <Button>Edit</Button>
-        </Link>
-        <Button onClick={this.onDelete}>Delete</Button>
-        
+
+        {loggedIn && (
+          <div>
+            <Link to={`/cards/${cardId}/edit`}>
+              <Button>Edit</Button>
+            </Link>
+            <Button onClick={this.onDelete}>Delete</Button>
+          </div>
+        )}
       </Container>
     );
   }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Form } from 'semantic-ui-react';
-import isEmail from 'validator/lib/isEmail';
+import axios from 'axios';
+
+import { setToken } from '../../AuthService';
 
 // props
 // onLogin: func(token_key)
@@ -15,38 +17,25 @@ class Login extends Component {
     };
   }
 
-  async handleFormSubmit () {
-    const url = 'http://localhost:8080/';
+  handleFormSubmit = async () => {
+    const { username, password } = this.state;
 
-    let loginBody = isEmail(this.state.userOrEmail) ? {
-      email: this.state.userOrEmail
-    } : {
-      username: this.state.userOrEmail
-    };
-    loginBody.password = this.state.password;
-    console.log(loginBody);
-
-    await fetch(url, {
-      method: 'POST',
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(loginBody)
-    }).then(response => {
-      response.json().then(parsed => {
-        if (parsed.hasOwnProperty('key')) {
-          this.setState({error: null});
-          this.props.onLogin(parsed.key);
-        } else {
-          this.setState({error: parsed.non_field_errors[0]});
-        }
-      }).catch(error => {
-        console.log("Response parse error: ", error);
+    try {
+      var response = await axios.post('/login', {
+        username: username,
+        password: password
       });
-    }).catch(() => {
-      this.setState({error: "Failed to fetch from server"});
-    });
+      console.log(response);
+    } catch (err) {
+      this.setState({error: "Failed to communicate with server"});
+    }
+    
+    if (response.data.success) {
+      setToken(response.data.token);
+      this.props.onLogin();
+    } else {
+      this.setState({error: response.error});
+    }
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
@@ -69,7 +58,7 @@ class Login extends Component {
             name='password'
             value={password}
             type='password'
-            placeholder="Username"
+            placeholder="Password"
             onChange={this.handleChange}
           />
           <Button type='submit'>Login</Button>

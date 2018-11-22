@@ -8,7 +8,6 @@ const ListBox = styled.div`
 `;
 
 const BonusCategoryList = ({categories}) => {
-  console.log(categories);
   const categoryList = _.flatten(_.values(categories));
 
   return (

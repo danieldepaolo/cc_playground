@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const passport = require('passport');
+
 const Perk = require("../models/perk");
 
 // get all perks
@@ -30,7 +32,7 @@ router.get("/perks/:id", (req, res) => {
   });
 });
 
-router.post("/perks", (req, res) => {
+router.post("/perks", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { perk } = req.body;
 
   let responseMsg = "Successfully added perk";
@@ -49,7 +51,7 @@ router.post("/perks", (req, res) => {
   });
 });
 
-router.put("/perks/:id", (req, res) => {
+router.put("/perks/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { id } = req.params;
   const { perk } = req.body;
 
@@ -61,7 +63,7 @@ router.put("/perks/:id", (req, res) => {
   });
 });
 
-router.delete("/perks/:id", (req, res) => {
+router.delete("/perks/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { id } = req.params;
 
   Perk.deleteOne({_id: id}, err => {

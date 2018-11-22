@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import FileInput from 'react-simple-file-input';
 import csvtojson from 'csvtojson';
 import { Button, Container, Dimmer, Loader } from 'semantic-ui-react';
-import axios from 'axios';
 
+import { sendRequestAuth } from '../../AuthService';
 import TransactionTable from './TransactionTable';
 
 /*
@@ -38,7 +38,7 @@ class Transaction extends Component {
   }
 
   fetchTransactions = async () => {
-    const response = await axios('/transactions');
+    const response = await sendRequestAuth('/transactions');
     this.setState({transactions: response.data.transactions});
   }
 
@@ -54,7 +54,7 @@ class Transaction extends Component {
     const jsonData = await csvtojson().fromString(fileContents);
 
     this.setState({loading: true});
-    const response = await axios.post('/transactions', {
+    const response = await sendRequestAuth('/transactions', 'post', {
       transactions: jsonData
     });
 

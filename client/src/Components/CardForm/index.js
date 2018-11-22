@@ -51,8 +51,6 @@ class CardForm extends Component {
       this.optionsData,
       props.initialState || this.defaultState
     );
-    
-    console.log(this.state);
   }
 
   reset = () => {
@@ -80,7 +78,6 @@ class CardForm extends Component {
   }
 
   categoryAdded = (categoryType, category, icon, returnAmt) => {
-    console.log(this.state);
     this.setState({addedCategories: update(
       this.state.addedCategories, {
         [categoryType]: {$push: 

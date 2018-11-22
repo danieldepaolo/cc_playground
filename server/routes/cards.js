@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const _ = require('underscore');
+const _        = require('underscore'),
+      passport = require('passport');
 
-const rewardCategories = require('../constants/rewardCategories');
-const Perk = require("../models/perk"),
-      Card = require("../models/card");
+const Card = require("../models/card");
 
 // Types of annual bonus:
 // 1. Reaching spend threshold
@@ -43,7 +42,7 @@ router.get("/cards/:id", (req, res) => {
 });
 
 // add a new card to database
-router.post("/cards", (req, res) => {
+router.post("/cards", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { card } = req.body;
   const cardDbObj = formCardToDbCard(card);
 
@@ -57,7 +56,7 @@ router.post("/cards", (req, res) => {
 });
 
 // modify a particular card in database
-router.put("/cards/:id", (req, res) => {
+router.put("/cards/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { id } = req.params;
   const { card } = req.body;
   const cardDbObj = formCardToDbCard(card);
@@ -72,7 +71,7 @@ router.put("/cards/:id", (req, res) => {
 });
 
 // delete one card
-router.delete("/cards/:id", (req, res) => {
+router.delete("/cards/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { id } = req.params;
 
   Card.findOneAndDelete({_id: id}, err => {

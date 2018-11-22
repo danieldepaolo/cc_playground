@@ -15,13 +15,13 @@ function getReturnForTransaction(card, transaction) {
 
   const { categories } = card.bonusReward;
   if ('merchant' in categories) {
-    const bonusCategory = _.findWhere(categories.merchant, {category: transaction.merchant});
+    const bonusCategory = _.findWhere(categories.merchant, {name: transaction.merchant});
     if (bonusCategory) {
       returns.merchant = bonusCategory.bonusReturn;
     }
   }
   if ('product' in categories) {
-    const bonusCategory = _.findWhere(categories.product, {category: transaction.category});
+    const bonusCategory = _.findWhere(categories.product, {name: transaction.category});
     if (bonusCategory) {
       returns.product = bonusCategory.bonusReturn;
     }

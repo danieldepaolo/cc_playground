@@ -1,36 +1,35 @@
 const express = require("express");
 const router = express.Router();
+const passport = require('passport');
 
 const utils = require('../businessLogic/utils');
 const Transaction = require('../models/transaction');
 
 // GET all transactions
-router.get("/transactions", (req, res) => {
-  Transaction.find({}, (err, transactions) => {
-    res.json({
-      error: err || null,
-      message: err ? "Unable to retrieve transactions" : "Successfully retrieved transactions!",
-      transactions: !err ? transactions : []
-    });
+router.get("/transactions", passport.authenticate('jwt', {session: false}), (req, res) => {
+  const { transactions } = req.user;
+  console.log(transactions);
+  res.json({
+    transactions: transactions
   });
 });
 
-// get a particular transaction
-router.get("/transactions/:id", (req, res) => {
-  const { id } = req.params;
+// // get a particular transaction
+// router.get("/transactions/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
+//   const { id } = req.params;
 
-  Transaction.findById(id, (err, foundTransaction) => {
-    res.json({
-      error: err || null,
-      message: err ? "Unable to retrieve transaction" : "Successfully retrieved transaction!",
-      transaction: !err ? transaction : null
-    });
-  });
-});
+//   Transaction.findById(id, (err, foundTransaction) => {
+//     res.json({
+//       error: err || null,
+//       message: err ? "Unable to retrieve transaction" : "Successfully retrieved transaction!",
+//       transaction: !err ? transaction : null
+//     });
+//   });
+// });
 
 // add transaction(s) to database
 // accepts array of JSON objects each representing a transaction
-router.post("/transactions", async (req, res) => {
+router.post("/transactions", passport.authenticate('jwt', {session: false}), async (req, res) => {
   let { transactions } = req.body; // shorthand for if we send via form with special names
 
   // We only want debit transactions (not credit)
@@ -38,26 +37,18 @@ router.post("/transactions", async (req, res) => {
   // Convert to database format
   newTransactions = newTransactions.map(transaction => fromTransactionToDbTransaction(transaction));
 
-  Transaction.find({}, (err, allTransactions) => {
-    if (err) {
-      console.error(err);
-    }
-    const nonDuplicateTransactions = utils.getNonDuplicateTransactions(allTransactions, newTransactions);
-
-    Transaction.insertMany(nonDuplicateTransactions, (err, addedTransactions) => {
-      if (err) {
-        console.error(err);
-      }
-      res.json({
-        error: err || null,
-        transactions: addedTransactions
-      });
-    });
+  const userTransactions = req.user.transactions;
+  const nonDuplicateTransactions = utils.getNonDuplicateTransactions(userTransactions, newTransactions);
+  req.user.transactions.push(...nonDuplicateTransactions);
+  req.user.save();
+  
+  res.json({
+    addedTransactions: nonDuplicateTransactions
   });
 });
 
 // modify a particular transaction
-router.put("/transactions/:id", (req, res) => {
+router.put("/transactions/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { id } = req.params;
   const { transaction } = req.body;
 
@@ -71,7 +62,7 @@ router.put("/transactions/:id", (req, res) => {
 });
 
 // delete a transaction
-router.delete("/transactions/:id", (req, res) => {
+router.delete("/transactions/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
   Transaction.deleteOne({_id: req.params.id}, err => {
     res.json({
       error: err || null,

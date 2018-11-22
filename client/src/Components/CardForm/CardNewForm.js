@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 
 import CardForm from '.';
-import axios from 'axios';
+
+import { sendRequestAuth } from '../../AuthService';
 
 class CardNewForm extends Component {
   handleFormSubmit = async (formObj) => {
@@ -12,7 +13,7 @@ class CardNewForm extends Component {
       formObj.signupBonus = null;
     }
 
-    const response = await axios.post("/cards", {card: formObj});
+    const response = await sendRequestAuth("/cards", "post", {card: formObj});
     console.log(response);
   }
 

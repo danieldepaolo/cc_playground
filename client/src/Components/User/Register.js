@@ -34,7 +34,7 @@ class Register extends Component {
         this.setState({
           fieldErrors: response.error,
           requestError: null
-        })
+        });
       }
     } catch(err) {
       this.setState({

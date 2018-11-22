@@ -28,14 +28,12 @@ class AddCategory extends Component {
   }
 
   getIconForName = categoryName => {
-    console.log(this.props.categories);
-    console.log(this.state.categoryType);
     const category = _.findWhere(
       this.props.categories[this.state.categoryType],
       {label: categoryName}
     );
 
-    return category.icon;
+    return category ? category.icon : null;
   }
 
   onAdd = () => {
@@ -55,7 +53,6 @@ class AddCategory extends Component {
     const { categories } = this.props;
     const { categoryType, category, returnAmt } = this.state;
 
-    console.log(categories);
     const productCategoryOptions = categories.product.map(category => {
       return {
         text: category.label,

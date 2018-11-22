@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
+import { sendRequestAuth } from '../../AuthService';
 import PerkForm from './PerkForm';
 
 class PerkNewForm extends Component {
 
   handleFormSubmit = async (body) => {
-    const response = await axios.post("/perks", {
-      perk: body
-    });
-
-    console.log(response);
+    try {
+      const response = await sendRequestAuth("/perks", 'post', {
+        perk: body
+      });
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {

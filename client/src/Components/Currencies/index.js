@@ -31,6 +31,7 @@ class Currencies extends Component {
 
   render() {
     const { currencies } = this.state;
+    const { loggedIn } = this.props;
     const sortedCurrencies = currencies.sort( (a,b) => +(a.name > b.name) || -(a.name < b.name));
 
     const style = {
@@ -53,10 +54,14 @@ class Currencies extends Component {
           <BorderedItem style={style.borderedItem} key={currency.name}>
             <List.Header>
               {currency.name}
-              <Button style={style.miniBtn} onClick={() => this.onDelete(currency._id)}>Delete</Button>
-              <Link to={`/currencies/${currency._id}/edit`}>
-                <Button style={style.miniBtn}>Edit</Button>
-              </Link>
+              {loggedIn && (
+                <div>
+                  <Button style={style.miniBtn} onClick={() => this.onDelete(currency._id)}>Delete</Button>
+                  <Link to={`/currencies/${currency._id}/edit`}>
+                    <Button style={style.miniBtn}>Edit</Button>
+                  </Link>
+                </div>
+              )}
             </List.Header>
             <List.Content>
               <p>Value: {currency.defaultValue}c</p>

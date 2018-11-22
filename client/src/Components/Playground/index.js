@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import _ from 'underscore';
 import axios from 'axios';
 
+import { sendRequestAuth } from '../../AuthService';
 import CardGridView from './CardGridView';
 import BonusBox from './BonusBox';
 
@@ -57,12 +58,18 @@ class Playground extends Component {
 
     this.setState({bonusLoading: true});
 
-    let response = await axios(url);
-
-    this.setState({
-      bonus: response.data.bonus,
-      bonusLoading: false
-    });
+    try {
+      let response = await sendRequestAuth(url);
+      this.setState({
+        bonus: response.data.bonus,
+        bonusLoading: false
+      });
+    } catch (err) {
+      console.error(err);
+      this.setState({
+        bonusLoading: false
+      });
+    }
   };
 
   handleSelectChange = (cardId) => {

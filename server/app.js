@@ -1,18 +1,17 @@
 const express        = require('express'),
       cookieParser   = require('cookie-parser'),
       bodyParser     = require('body-parser'),
-      session        = require('express-session'),
       morgan         = require('morgan'),
       mongoose       = require('mongoose'),
-      passport       = require('passport'),
-      localStrategy  = require("passport-local"),
-      methodOverride = require('method-override'),
-      cors           = require('cors');
+      cors           = require('cors'),
+      passport       = require('passport');
 
-const User = require('./models/user');
+// Set up passport.js
+require('./passportSetup');
 
 // Route files
 const indexRoutes         = require('./routes'),
+      authRoutes          = require('./routes/auth'),
       cardRoutes          = require("./routes/cards"),
       currencyRoutes      = require("./routes/currencies"),
       perkRoutes          = require("./routes/perks"),
@@ -23,27 +22,15 @@ mongoose.connect("mongodb://localhost/cc_playground", { useNewUrlParser: true })
 
 /* Setup our app */
 const app = express();
+app.use(passport.initialize());
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(methodOverride("_method"));
 app.use(cors());
-
-// PASSPORT setup
-app.use(session({
-  secret: "Bountiful rewards await",
-  resave: false,
-  saveUninitialized: false
-}));
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new localStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 /* Routes */
 app.use(indexRoutes);
+app.use(authRoutes);
 app.use(cardRoutes);
 app.use(currencyRoutes);
 app.use(perkRoutes);

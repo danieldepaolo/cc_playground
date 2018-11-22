@@ -11,13 +11,15 @@ class Navigation extends Component {
   }
 
   render() {
+    const { userStatus } = this.props;
+
     return (
       <Menu>
         <Menu.Header>
           <Link to="/">CC Playground</Link>
         </Menu.Header>
         <Menu.Menu position='left'>
-          {navItems.loggedOut.left.map(item => (
+          {navItems[userStatus].left.map(item => (
             <Link 
               key={item.name} 
               to={item.path} 
@@ -28,8 +30,8 @@ class Navigation extends Component {
           ))}
         </Menu.Menu>
         <Menu.Menu position='right'>
-          {navItems.loggedOut.right.map(item => (
-            <Link 
+          {navItems[userStatus].right.map(item => (
+            <Link
               key={item.name} 
               to={item.path} 
               className="navLink"

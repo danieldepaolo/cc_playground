@@ -8,6 +8,7 @@ export const pEditPerk = "/perks/:id/edit";
 export const pPerks = "/perks";
 export const pCurrencies = "/currencies";
 export const pLogin = "/login";
+export const pLogout = "/logout";
 export const pRegister = "/register";
 export const pTransactions = "/transactions";
 
@@ -20,7 +21,10 @@ export const navItems = {
       {name: "Currencies", path: pCurrencies}
     ],
     right: [
-      {name: "Logout", path: "/"}
+      {name: "Add Card", path: pNewCard},
+      {name: "Add Perk", path: pNewPerk},
+      {name: "Add Currency", path: pNewCurrency},
+      {name: "Logout", path: pLogout}
     ]
   },
   loggedOut: {
@@ -31,9 +35,6 @@ export const navItems = {
       {name: "Currencies", path: pCurrencies}
     ],
     right: [
-      {name: "Add Card", path: pNewCard},
-      {name: "Add Perk", path: pNewPerk},
-      {name: "Add Currency", path: pNewCurrency},
       {name: "Login", path: pLogin},
       {name: "Register", path: pRegister}
     ]

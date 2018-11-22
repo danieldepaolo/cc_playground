@@ -36,6 +36,7 @@ class Perks extends Component {
 
   render() {
     const { perks } = this.state;
+    const { loggedIn } = this.props;
     const sortedPerks = perks.sort( (a,b) => +(a.name > b.name) || -(a.name < b.name));
 
     const style = {
@@ -58,10 +59,14 @@ class Perks extends Component {
           <BorderedItem style={style.borderedItem} key={perk.name}>
             <List.Header>
               {perk.name}
-              <Button style={style.miniBtn} onClick={e => this.onDelete(perk._id)}>Delete</Button>
-              <Link to={`/perks/${perk._id}/edit`}>
-                <Button style={style.miniBtn}>Edit</Button>
-              </Link>
+              {loggedIn && (
+                <div>
+                  <Button style={style.miniBtn} onClick={e => this.onDelete(perk._id)}>Delete</Button>
+                  <Link to={`/perks/${perk._id}/edit`}>
+                    <Button style={style.miniBtn}>Edit</Button>
+                  </Link>
+                </div>
+              )}
             </List.Header>
             <List.Content>
               <p>Value: ${perk.defaultValue}</p>
