@@ -17,7 +17,8 @@ import {
   pLogin,
   pLogout,
   pRegister,
-  pTransactions
+  pTransactions,
+  pPlayground
 } from './constants';
 
 import AuthRoute from './Components/AuthRoute';
@@ -38,6 +39,7 @@ import CurrencyNewForm from './Components/Currencies/NewForm';
 import CurrencyEditForm from './Components/Currencies/EditForm';
 import Currencies from './Components/Currencies';
 import ShowCard from './Components/Cards/show';
+import LandingPage from './Components/LandingPage';
 
 class App extends Component {
   constructor(props) {
@@ -64,12 +66,10 @@ class App extends Component {
           />
           <div id="mainArea">
             <Switch>
-              <Route exact path="/" component={Playground} />
+              <Route exact path="/" component={LandingPage} />
+              <AuthRoute path={pPlayground} component={Playground} />
               <AuthRoute path={pNewPerk} component={PerkNewForm} />
-              <AuthRoute
-                path={pEditPerk}
-                render={props => <PerkEditForm {...props} />}
-              />
+              <AuthRoute path={pEditPerk} component={PerkEditForm} />
               <Route 
                 path={pPerks} 
                 render={props =>
@@ -80,10 +80,7 @@ class App extends Component {
                 } 
               />
               <AuthRoute path={pNewCurrency} component={CurrencyNewForm} />
-              <AuthRoute
-                path={pEditCurrency}
-                render={props => <CurrencyEditForm {...props} />}
-              />
+              <AuthRoute path={pEditCurrency} component={CurrencyEditForm} />
               <Route 
                 path={pCurrencies} 
                 render={props =>
@@ -95,10 +92,7 @@ class App extends Component {
               />
               <AuthRoute path={pTransactions} component={Transactions} />
               <AuthRoute path={pNewCard} component={CardNewForm} />
-              <AuthRoute
-                path={pEditCard}
-                render={props => <CardEditForm {...props} />}
-              />
+              <AuthRoute path={pEditCard} component={CardEditForm} />
               <Route 
                 path={pShowCard} 
                 render={props =>

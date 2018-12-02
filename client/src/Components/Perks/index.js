@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
+import { sendRequestAuth } from '../../AuthService';
+
 const BorderedItem = styled(List.Item)`
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 5px;
@@ -29,7 +31,7 @@ class Perks extends Component {
   }
 
   onDelete = async (id) => {
-    const response = await axios.delete(`/perks/${id}`);
+    const response = await sendRequestAuth(`/perks/${id}`, 'delete');
     console.log(response);
     this.refreshPerks();
   }

@@ -11,11 +11,12 @@ export const pLogin = "/login";
 export const pLogout = "/logout";
 export const pRegister = "/register";
 export const pTransactions = "/transactions";
+export const pPlayground = "/playground";
 
 export const navItems = {
   loggedIn: {
     left: [
-      {name: "Playground", path: "/"},
+      {name: "Playground", path: pPlayground},
       {name: "Transactions", path: pTransactions},
       {name: "Perks", path: pPerks},
       {name: "Currencies", path: pCurrencies}
@@ -29,8 +30,6 @@ export const navItems = {
   },
   loggedOut: {
     left: [
-      {name: "Playground", path: "/"},
-      {name: "Transactions", path: pTransactions},
       {name: "Perks", path: pPerks},
       {name: "Currencies", path: pCurrencies}
     ],

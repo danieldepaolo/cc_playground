@@ -16,7 +16,12 @@ class Navigation extends Component {
     return (
       <Menu>
         <Menu.Header>
-          <Link to="/">CC Playground</Link>
+          <Link 
+            to="/"
+            className="navLink"
+          >
+            CC Playground
+          </Link>
         </Menu.Header>
         <Menu.Menu position='left'>
           {navItems[userStatus].left.map(item => (

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import { sendRequestAuth } from '../../AuthService';
 import PerkForm from './PerkForm';
 
 class PerkEditForm extends Component {
@@ -20,7 +21,7 @@ class PerkEditForm extends Component {
 
   handleFormSubmit = async (body) => {
     const { match: {params} } = this.props;
-    const response = await axios.put(`/perks/${params.id}`, {
+    const response = await sendRequestAuth(`/perks/${params.id}`, 'put', {
       perk: body
     });
 
