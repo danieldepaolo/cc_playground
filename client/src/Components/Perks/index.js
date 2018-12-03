@@ -71,7 +71,7 @@ class Perks extends Component {
               )}
             </List.Header>
             <List.Content>
-              <p>Value: ${perk.defaultValue}</p>
+              <p>Default Value: ${perk.defaultValue}</p>
               <p>{perk.description || "No description."}</p>
             </List.Content>
           </BorderedItem>

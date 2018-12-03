@@ -64,7 +64,7 @@ class Currencies extends Component {
               )}
             </List.Header>
             <List.Content>
-              <p>Value: {currency.defaultValue}c</p>
+              <p>Default Value: {currency.defaultValue}c</p>
               <p>{currency.description || "No description."}</p>
             </List.Content>
           </BorderedItem>

@@ -11,6 +11,16 @@ const cardSchema = new mongoose.Schema({
     ref: "Currency",
     required: true
   },
+
+  // What user contributed this card?
+  contributor: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    username: String
+  },
+
   fees: {
     annual: {type: Number, required: true},
     foreign: Boolean, // charges foreign transaction fees or not?

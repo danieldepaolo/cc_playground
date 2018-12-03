@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import CurrencyView from './currencyView';
 import BonusCategoryList from '../../CardForm/bonusCategories/BonusCategoryList';
 import { processorLookup } from './constants';
+import { sendRequestAuth } from '../../../AuthService';
 
 /*
   Show all details of one credit card on a page
@@ -23,6 +24,7 @@ class ShowCard extends Component {
 
     this.state = {
       cardData: {
+        contributor: 'Unknown',
         bonusReward: {
           categories: {}
         },
@@ -38,13 +40,13 @@ class ShowCard extends Component {
 
   componentDidMount = async () => {
     const { match } = this.props;
-    const response = await axios(`/cards/${match.params.id}`);
+    const response = await sendRequestAuth(`/cards/${match.params.id}`);
     this.setState({cardData: response.data.card});
   }
 
   onDelete = async (e) => {
     const { match } = this.props;
-    const response = await axios.delete(`/cards/${match.params.id}`);
+    const response = await sendRequestAuth(`/cards/${match.params.id}`, 'delete');
     console.log(response);
   }
 
@@ -60,7 +62,8 @@ class ShowCard extends Component {
       <Container text>
         <h3>{cardData.name}</h3>
         <SmallImage src={cardData.imageUrl} alt={cardData.name} />
-        <Label>Processor</Label> {processor}
+        <div><Label>Added By</Label> {cardData.contributor.username}</div>
+        <div><Label>Processor</Label> {processor}</div>
         <CurrencyView rewardCurrency={cardData.rewardCurrency} />
         <Label>Fees</Label>
         <List>

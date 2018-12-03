@@ -8,7 +8,6 @@ const Transaction = require('../models/transaction');
 // GET all transactions
 router.get("/transactions", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { transactions } = req.user;
-  console.log(transactions);
   res.json({
     transactions: transactions
   });

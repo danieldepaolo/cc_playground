@@ -41,7 +41,6 @@ router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false
           });
         } else {
           const transactions = req.user ? req.user.transactions : [];
-          console.log(transactions);
           const bonus = calc.getBonusWithCards(foundCards, transactions);
           res.json({
             error: err,
