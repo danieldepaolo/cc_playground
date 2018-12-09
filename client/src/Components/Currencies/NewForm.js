@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import CurrencyForm from './CurrencyForm';
+import { sendRequestAuth } from '../../AuthService';
 
 class CurrencyNewForm extends Component {
 
   handleFormSubmit = async (body) => {
-    const response = await axios.post("/currencies", {
+    const response = await sendRequestAuth("/currencies", "post", {
       currency: body
     });
 

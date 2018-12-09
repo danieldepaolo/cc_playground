@@ -40,7 +40,8 @@ class ShowCard extends Component {
 
   componentDidMount = async () => {
     const { match } = this.props;
-    const response = await sendRequestAuth(`/cards/${match.params.id}`);
+    const response = await axios(`/cards/${match.params.id}`);
+    console.log(response.data.card);
     this.setState({cardData: response.data.card});
   }
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import CurrencyForm from './CurrencyForm';
 
+import { sendRequestAuth } from '../../AuthService';
+
 class CurrencyEditForm extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +21,7 @@ class CurrencyEditForm extends Component {
 
   handleFormSubmit = async (body) => {
     const { match: {params} } = this.props;
-    const response = await axios.put(`/currencies/${params.id}`, {
+    const response = await sendRequestAuth(`/currencies/${params.id}`, 'put', {
       currency: body
     });
 

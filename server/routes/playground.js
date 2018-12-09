@@ -37,14 +37,14 @@ router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false
           console.error(err);
           res.json({
             error: "Unable to find card in DB: " + cardId,
-            bonus: 0
+            bonusReport: null
           });
         } else {
           const transactions = req.user ? req.user.transactions : [];
-          const bonus = calc.getBonusWithCards(foundCards, transactions);
+          const bonusObj = calc.getBonusWithCards(foundCards, transactions);
           res.json({
             error: err,
-            bonus: bonus
+            bonusReport: bonusObj
           });
         }
     });

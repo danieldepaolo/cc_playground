@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container } from 'semantic-ui-react';
 
+import { sendRequestAuth } from '../../AuthService';
 import CardForm from '.';
 import axios from 'axios';
 
@@ -28,7 +29,7 @@ class CardEditForm extends Component {
     console.log(formObj);
   
     const url = `/cards/${this.props.match.params.id}`;
-    const response = await axios.put(url, {card: formObj});
+    const response = await sendRequestAuth(url, 'put', {card: formObj});
     
     console.log(response);
   }

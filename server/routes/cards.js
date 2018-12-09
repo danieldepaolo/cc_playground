@@ -47,14 +47,12 @@ router.get("/cards/:id", (req, res) => {
 router.post("/cards", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { card } = req.body;
   const cardDbObj = formCardToDbCard(card);
+  cardDbObj.contributor = {
+    id: req.user._id,
+    username: req.user.username
+  };
 
   Card.create(cardDbObj, (err, addedCard) => {
-    addedCard.contributor = {
-      id: req.user._id,
-      username: req.user.username
-    };
-    addedCard.save();
-
     res.json({
       card: addedCard,
       error: err || null,
@@ -71,6 +69,10 @@ router.put("/cards/:id",
   const { id } = req.params;
   const { card } = req.body;
   const cardDbObj = formCardToDbCard(card);
+  cardDbObj.contributor = {
+    id: req.user._id,
+    username: req.user.username
+  };
 
   Card.replaceOne({_id: id}, cardDbObj, (err, updatedCard) => {
     res.json({

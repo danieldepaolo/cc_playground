@@ -1,10 +1,34 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
 import axios from 'axios';
+import { Grid } from 'semantic-ui-react';
+import styled from 'styled-components';
 
 import { sendRequestAuth } from '../../AuthService';
 import CardGridView from './CardGridView';
-import BonusBox from './BonusBox';
+import BonusReport from './BonusReport';
+import SelectedCards from './SelectedCards';
+import { loggedIn } from '../../AuthService';
+import SpendCategories from './SpendCategories';
+
+const OuterGrid = styled(Grid)`
+  height: 62em;
+  &&& {
+    margin-left: 3rem;
+    margin-right: 3rem;
+  }
+  
+  .grid {
+    height: 50%;
+  }
+  .column {
+    overflow-y: auto;
+  }
+`;
+
+// const BorderGrid = styled(Grid)`
+//   border: 1px solid rgba(0,0,0,0.4);
+// `;
 
 class Playground extends Component {
   constructor(props) {
@@ -12,8 +36,10 @@ class Playground extends Component {
 
     this.state = {
       cards: [],
-      bonus: '$0.00',
+      bonusReport: null,
       cardSelectStatus: {},
+      categorySpend: {},
+      useTransactions: loggedIn() ? true : false,
       bonusLoading: false
     }
   }
@@ -33,26 +59,45 @@ class Playground extends Component {
 
   fetchData = async () => {
     let response = await axios('/cards');
+    const cards = response.data.cards;
 
     const cardStatus = {};
-    response.data.cards.forEach(card => {
+    cards.forEach(card => {
       cardStatus[card._id] = false;
     });
 
+    response = await axios('/rewardcategories');
+    const categories = response.data.product;
+    const categoryMap = categories.reduce( (map, category) => {
+      map[category.label] = 0;
+      return map;
+    }, {});
+
     this.setState({
       cardSelectStatus: cardStatus,
-      cards: response.data.cards
+      categorySpend: categoryMap,
+      cards: cards
     });
+  }
+
+  getSelectedCards = () => {
+    const { cards, cardSelectStatus } = this.state;
+    let selectedCards = [];
+
+    cards.forEach(card => {
+      if (cardSelectStatus[card._id]) {
+        selectedCards.push(card);
+      }
+    });
+    
+    return selectedCards;
   }
 
   fetchBonusAmount = async () => {
     let url = '/playground/calcbonus';
 
-    let cardIdsToGet = _.filter(
-      _.keys(this.state.cardSelectStatus),
-      cardId => this.state.cardSelectStatus[cardId] === true
-    );
-    let args = cardIdsToGet.map(cardId => `card_id=${cardId}`);
+    const selectedCards = this.getSelectedCards();
+    let args = selectedCards.map(card => `card_id=${card._id}`);
     url += args.length > 0 ? '?' + args.join('&') : '';
     console.log(url);
 
@@ -61,7 +106,7 @@ class Playground extends Component {
     try {
       let response = await sendRequestAuth(url);
       this.setState({
-        bonus: response.data.bonus,
+        bonusReport: response.data.bonusReport,
         bonusLoading: false
       });
     } catch (err) {
@@ -77,27 +122,54 @@ class Playground extends Component {
     this.setState({ 
       cardSelectStatus: { ...cardSelectStatus, 
         [cardId]: !cardSelectStatus[cardId] 
-      } 
+      }
     });
   };
+
+  handleCategorySpendChange = (category, data) => {
+    this.setState(prevState => {
+      let newCategorySpend = prevState.categorySpend;
+      newCategorySpend[category] = +data.value;
+      return {
+        categorySpend: newCategorySpend
+      };
+    });
+  }
   
   render() {
-    const { cards, cardSelectStatus, bonus } = this.state;
+    const { cards, cardSelectStatus, bonusReport, bonusLoading, categorySpend, useTransactions } = this.state;
 
     return (
-      <div>
-        <BonusBox
-          loading={this.state.bonusLoading}
-          bonus={bonus}
-        />
-        <div className="playgroundArea">
-          <CardGridView
-            cards={cards}
-            cardSelectStatus={cardSelectStatus}
-            onSelectChange={this.handleSelectChange}
+      <OuterGrid columns={2}>
+        <Grid.Column width={7}>
+          <Grid columns={1}>
+            <Grid.Column width={16}>
+              <CardGridView
+                cards={cards}
+                cardSelectStatus={cardSelectStatus}
+                onSelectChange={this.handleSelectChange}
+              />
+            </Grid.Column>
+          </Grid>
+          <Grid columns={2}>
+            <Grid.Column width={8}>
+              <SpendCategories
+                categorySpend={categorySpend}
+                onChange={this.handleCategorySpendChange}
+              />
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <SelectedCards cards={this.getSelectedCards()} />
+            </Grid.Column>
+          </Grid>
+        </Grid.Column>
+        <Grid.Column width={9}>
+          <BonusReport
+            loading={bonusLoading}
+            bonusReport={bonusReport}
           />
-        </div>
-      </div>
+        </Grid.Column>
+      </OuterGrid>
     );
   }
 }

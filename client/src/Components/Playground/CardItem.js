@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CardItem = (props) => {
-  const { _id, name, imageUrl } = props.cardInfo;
+const CardItem = ( ({cardInfo}) => {
+  const { _id, name, imageUrl } = cardInfo;
   const detailUrl = `/cards/${_id}`;
 
   return (
@@ -13,6 +13,6 @@ const CardItem = (props) => {
       </Link>
     </div>
   );
-};
+});
 
 export default CardItem;

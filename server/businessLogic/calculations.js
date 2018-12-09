@@ -45,38 +45,75 @@ function getBonusWithCards(cards, transactions) {
     return bonus;
   }, 0);
 
+  // Bonus earned per transaction!
+  let transactionInfo = [];
+  let transactionBonusTotal = 0;
+  let currencyBonus = {};
+
   // calculate bonus
-  const totalTransactionBonus = transactions.reduce( (total, transaction) => {
-    optimalCard = null;
-    bestBonus = 0;
-    cards.forEach(card => {
-      const returnWithCard = getReturnForTransaction(card, transaction);
+  if (cards.length) {
+    transactions.forEach( transaction => {
+      let optimalCard = null;
+      let bestBonus = {
+        points: 0,
+        value: 0
+      };
 
-      // 0.01 at the end converts back down to cents, since card point value is in cents
-      const bonusValue = transaction.amount * returnWithCard * card.rewardCurrency.defaultValue * 0.01;
-      if (bonusValue > bestBonus) {
-        bestBonus = bonusValue;
-        optimalCard = card;
+      cards.forEach(card => {
+        const returnWithCard = getReturnForTransaction(card, transaction);
+
+        // 0.01 at the end converts back down to cents, since card point value is in cents
+        const pointsEarned = transaction.amount * returnWithCard;
+        const bonusValue = pointsEarned * card.rewardCurrency.defaultValue * 0.01;
+        if (bonusValue > bestBonus.value) {
+          bestBonus.points = pointsEarned;
+          bestBonus.value = bonusValue;
+          optimalCard = card;
+        }
+      });
+
+      if (!(optimalCard.rewardCurrency.name in currencyBonus)) {
+        currencyBonus[optimalCard.rewardCurrency.name] = bestBonus.points;
+      } else {
+        currencyBonus[optimalCard.rewardCurrency.name] += bestBonus.points;
       }
-    });
 
-    return total + bestBonus;
-  }, 0);
+      transactionInfo.push({
+        transaction: transaction,
+        cardUsed: optimalCard,
+        pointsEarned: bestBonus.points,
+        bonusValue: bestBonus.value
+      });
+
+      transactionBonusTotal += bestBonus.value;
+    });
+  }
+
+  console.log(currencyBonus);
+
+  let returnObj = {
+    currencyEarned: currencyBonus,
+    totalBonusValue: 0,
+    transactionInfo: transactionInfo
+  };
 
   // Adjust transaction bonus to one year period to match the perks/fees
-  if (totalTransactionBonus > 0) {
+  if (transactionBonusTotal > 0) {
     transactions.sort( (a,b) => a.date - b.date);
     const firstTransaction = moment(_.first(transactions).date);
     const lastTransaction = moment(_.last(transactions).date);
     let monthSpan = lastTransaction.diff(firstTransaction, 'months');
 
     const adjustedTransactionBonus = monthSpan === 0 
-      ? totalTransactionBonus
-      : totalTransactionBonus / (monthSpan / 12);
-    return annualValue + adjustedTransactionBonus;
+      ? transactionBonusTotal
+      : transactionBonusTotal / (monthSpan / 12);
+
+    returnObj.totalBonusValue = annualValue + adjustedTransactionBonus;
   } else {
-    return annualValue;
+    returnObj.totalBonusValue = annualValue;
   }
+
+  return returnObj;
 }
 
 module.exports = {

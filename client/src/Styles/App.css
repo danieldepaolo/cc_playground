@@ -16,14 +16,12 @@ span.requestErr {
   color: #db1111; }
 
 .cardDisplayArea {
-  border: 2px solid rgba(0, 0, 0, 0.6);
-  padding: 0.5em;
-  margin: 0.5em;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 1em;
   overflow-y: auto;
-  width: 65em;
   height: 100%;
-  min-width: 30em;
-  max-width: 65em; }
+  min-width: 15em; }
 
 .cardSettings {
   width: 25em; }
@@ -41,8 +39,7 @@ span.requestErr {
   width: 23%; }
 
 .cardContent {
-  border: 1px solid black;
-  padding: 10px;
+  padding: 0.5em;
   width: 100%;
   margin-bottom: 2px; }
   .cardContent img {
