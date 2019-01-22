@@ -14,16 +14,17 @@ import SpendCategories from './SpendCategories';
 const OuterGrid = styled(Grid)`
   height: 62em;
   &&& {
-    margin-left: 3rem;
-    margin-right: 3rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
   }
-  
-  .grid {
-    height: 50%;
-  }
+
   .column {
     overflow-y: auto;
   }
+`;
+
+const LeftSideGrid = styled(Grid)`
+  height: 50%;
 `;
 
 // const BorderGrid = styled(Grid)`
@@ -105,6 +106,7 @@ class Playground extends Component {
 
     try {
       let response = await sendRequestAuth(url);
+      console.log(response.data.bonusReport);
       this.setState({
         bonusReport: response.data.bonusReport,
         bonusLoading: false
@@ -142,7 +144,7 @@ class Playground extends Component {
     return (
       <OuterGrid columns={2}>
         <Grid.Column width={7}>
-          <Grid columns={1}>
+          <LeftSideGrid columns={1}>
             <Grid.Column width={16}>
               <CardGridView
                 cards={cards}
@@ -150,8 +152,8 @@ class Playground extends Component {
                 onSelectChange={this.handleSelectChange}
               />
             </Grid.Column>
-          </Grid>
-          <Grid columns={2}>
+          </LeftSideGrid>
+          <LeftSideGrid columns={2}>
             <Grid.Column width={8}>
               <SpendCategories
                 categorySpend={categorySpend}
@@ -161,7 +163,7 @@ class Playground extends Component {
             <Grid.Column width={8}>
               <SelectedCards cards={this.getSelectedCards()} />
             </Grid.Column>
-          </Grid>
+          </LeftSideGrid>
         </Grid.Column>
         <Grid.Column width={9}>
           <BonusReport

@@ -3,6 +3,7 @@ import { Container, Button, Label, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import update from 'immutability-helper'
 
 import CurrencyView from './currencyView';
 import BonusCategoryList from '../../CardForm/bonusCategories/BonusCategoryList';
@@ -24,7 +25,7 @@ class ShowCard extends Component {
 
     this.state = {
       cardData: {
-        contributor: 'Unknown',
+        contributor: '????',
         bonusReward: {
           categories: {}
         },
@@ -42,7 +43,7 @@ class ShowCard extends Component {
     const { match } = this.props;
     const response = await axios(`/cards/${match.params.id}`);
     console.log(response.data.card);
-    this.setState({cardData: response.data.card});
+    this.setState({cardData: update(this.state.cardData, {$merge: response.data.card})});
   }
 
   onDelete = async (e) => {
