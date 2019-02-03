@@ -5,11 +5,11 @@ import { Grid } from 'semantic-ui-react';
 import styled from 'styled-components';
 
 import { sendRequestAuth } from '../../AuthService';
-import CardGridView from './CardGridView';
+import CardSelectList from './CardSelectList';
 import BonusReport from './BonusReport';
 import SelectedCards from './SelectedCards';
 import { loggedIn } from '../../AuthService';
-import SpendCategories from './SpendCategories';
+// import SpendCategories from './SpendCategories'; // Re-introduce later
 
 const OuterGrid = styled(Grid)`
   height: 62em;
@@ -23,7 +23,13 @@ const OuterGrid = styled(Grid)`
   }
 `;
 
-const LeftSideGrid = styled(Grid)`
+const FullHeightColumn = styled(Grid.Column)`
+  height: 100%;
+`;
+const FullHeightGrid = styled(Grid)`
+  height: 100%;
+`;
+const HalfHeightGrid = styled(Grid)`
   height: 50%;
 `;
 
@@ -143,34 +149,26 @@ class Playground extends Component {
 
     return (
       <OuterGrid columns={2}>
-        <Grid.Column width={7}>
-          <LeftSideGrid columns={1}>
-            <Grid.Column width={16}>
-              <CardGridView
+        <FullHeightColumn width={7}>
+          <FullHeightGrid columns={2}>
+            <Grid.Column width={10}>
+              <CardSelectList
                 cards={cards}
                 cardSelectStatus={cardSelectStatus}
                 onSelectChange={this.handleSelectChange}
               />
             </Grid.Column>
-          </LeftSideGrid>
-          <LeftSideGrid columns={2}>
-            <Grid.Column width={8}>
-              <SpendCategories
-                categorySpend={categorySpend}
-                onChange={this.handleCategorySpendChange}
-              />
-            </Grid.Column>
-            <Grid.Column width={8}>
+            <Grid.Column width={6}>
               <SelectedCards cards={this.getSelectedCards()} />
             </Grid.Column>
-          </LeftSideGrid>
-        </Grid.Column>
-        <Grid.Column width={9}>
+          </FullHeightGrid>
+        </FullHeightColumn>
+        <FullHeightColumn width={9}>
           <BonusReport
             loading={bonusLoading}
             bonusReport={bonusReport}
           />
-        </Grid.Column>
+        </FullHeightColumn>
       </OuterGrid>
     );
   }

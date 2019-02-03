@@ -38,13 +38,6 @@ span.requestErr {
   margin: 5px;
   width: 23%; }
 
-.cardContent {
-  padding: 0.5em;
-  width: 100%;
-  margin-bottom: 2px; }
-  .cardContent img {
-    width: 100%; }
-
 .tableContainer {
   margin: 0.5em;
   height: 100%; }

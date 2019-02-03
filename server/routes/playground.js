@@ -8,19 +8,6 @@ const calc = require('../businessLogic/calculations');
 const Card = require('../models/card');
 
 // Used to calculate the bonus value
-// Response has overall bonus and FUTURE FEATURE bonus per transaction
-// $TODO FUTURE: Plus card used for each transaction to get that bonus
-/*
-  {
-    overallBonus: x,
-    transactions: [{
-      id: =transaction id=,
-      cardUsed: =card id=,
-      bonus: y
-    }]
-  }
-*/
-
 router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false}), (req, res) => {
   // get cards from the query string
   let { card_id } = req.query;

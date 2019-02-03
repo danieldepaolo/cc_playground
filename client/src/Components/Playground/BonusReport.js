@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import { Dimmer, Loader, List, Label } from 'semantic-ui-react';
 import { tableColumns } from './constants';
+import { CenteredHeader } from '../styled'
 
 const BonusContainer = styled.div`
   height: 100%;
@@ -18,7 +19,6 @@ const BonusContainer = styled.div`
 const BonusSummary = styled(Grid)`
   height: 30%;
 `;
-
 const BonusTableContainer = styled(Grid)`
   height: 70%;
 `;
@@ -43,13 +43,15 @@ class BonusReport extends Component {
 
     return (
       <BonusContainer>
+        <Dimmer active={loading}>
+          <Loader />
+        </Dimmer>
         <BonusSummary columns={1}>
           <Grid.Column width={16}>
-            <h3>Bonus Report</h3>
+            <CenteredHeader>
+              <i class="dollar sign icon"></i> Bonus Report
+            </CenteredHeader>
             <div className="bonusBox">
-              <Dimmer active={loading}>
-                <Loader />
-              </Dimmer>
               <p className="bonus">
                 One Year Bonus: ${Number(bonusReport ? bonusReport.totalBonusValue : 0).toFixed(2)}
               </p>
@@ -69,6 +71,7 @@ class BonusReport extends Component {
             <ReactTable
               columns={tableColumns}
               data={bonusReport ? this.formatTableData(bonusReport) : []}
+              defaultPageSize={10}
             />
           </Grid.Column>
         </BonusTableContainer>

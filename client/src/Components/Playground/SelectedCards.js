@@ -1,26 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { List, Image } from 'semantic-ui-react';
+
+import { CenteredHeader } from '../styled'
+import SelectedCard from './SelectedCard';
 
 const CardList = styled.div`
   padding: 1em;
+  height: 100%;
+  border: 1px inset rgba(0,0,0,0.2);
+  border-radius: 5px;
 `;
 
 const SelectedCards = ( ({cards}) => {
   return (
-    <List relaxed="very" divided>
+    <CardList>
+      <CenteredHeader><i class="credit card icon"></i> Selected</CenteredHeader>
       {cards.map(card => (
-        <List.Item key={card._id}>
-          <Image size='tiny' src={card.imageUrl} />
-          <List.Content>
-            <List.Header>{card.name}</List.Header>
-            <List.Description>
-              Annual Fee: ${card.fees.annual}
-            </List.Description>
-          </List.Content>
-        </List.Item>
+        <SelectedCard card={card} />
       ))}
-    </List>
+    </CardList>
   );
 });
 

@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import CardItem from './CardItem';
+import CardListItem from './CardListItem';
+import styled from 'styled-components';
+import { List } from 'semantic-ui-react';
 
-class CardSelectItem extends Component {
+const CheckboxDiv = styled.div`
+  float: right;
+`;
+
+class CardSelectListItem extends Component {
   handleChange = (event) => {
     this.props.notifySelectChange(this.props.cardInfo._id);
   }
@@ -10,11 +16,11 @@ class CardSelectItem extends Component {
     const { cardInfo, isSelected } = this.props;
 
     return (
-      <div className="cardItem">
-        <CardItem
+      <List.Item id={cardInfo._id}>
+        <CardListItem
           cardInfo={cardInfo}
         />
-        <div className="pretty p-switch p-fill">
+        <CheckboxDiv className="pretty p-switch p-fill">
           <input
             type="checkbox"
             name="card"
@@ -24,10 +30,10 @@ class CardSelectItem extends Component {
           <div className="state">
             <label></label>
           </div>
-        </div>
-      </div>
+        </CheckboxDiv>
+      </List.Item>
     );
   }
 }
 
-export default CardSelectItem;
+export default CardSelectListItem;
