@@ -29,6 +29,7 @@ router.get("/transactions", passport.authenticate('jwt', {session: false}), (req
 // add transaction(s) to database
 // accepts array of JSON objects each representing a transaction
 router.post("/transactions", passport.authenticate('jwt', {session: false}), async (req, res) => {
+  console.log(req.body);
   let { transactions } = req.body; // shorthand for if we send via form with special names
 
   // We only want debit transactions (not credit)

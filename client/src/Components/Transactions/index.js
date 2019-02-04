@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import FileInput from 'react-simple-file-input';
+import { FilePond } from 'react-filepond';
 import csvtojson from 'csvtojson';
 import { Button, Container, Dimmer, Loader } from 'semantic-ui-react';
 
-import { sendRequestAuth } from '../../AuthService';
+import { sendRequestAuth, getToken } from '../../AuthService';
 import TransactionTable from './TransactionTable';
 
 /*
@@ -18,8 +18,7 @@ class Transaction extends Component {
     super(props);
 
     this.state = {
-      file: '',
-      fileContents: '',
+      files: [],
       transactions: [],
       loading: false
     };
@@ -27,8 +26,7 @@ class Transaction extends Component {
 
   reset = () => {
     this.setState({
-      file: '',
-      fileContents: '',
+      file: [],
       loading: false
     });
   }
@@ -42,41 +40,37 @@ class Transaction extends Component {
     this.setState({transactions: response.data.transactions});
   }
 
-  handleFileSelected = (event, file) => {
-    this.setState({
-      file: file,
-      fileContents: event.target.result
-    });
-  };
-
-  handleSubmit = async (event) => {
-    const { fileContents } = this.state;
-    const jsonData = await csvtojson().fromString(fileContents);
-
-    this.setState({loading: true});
-    const response = await sendRequestAuth('/transactions', 'post', {
-      transactions: jsonData
-    });
-
-    await this.fetchTransactions();
-    this.reset();
-    console.log(response);
-  };
+  handleInit = () => {
+    console.log("File pond is ready to go");
+  }
 
   render() {
-    const { transactions, loading } = this.state;
+    const { files, transactions, loading } = this.state;
 
     return (
       <Container>
-        <div className="spaciousBox">
-          <FileInput
-            readAs="text"
-            onLoad={(e, file) => this.handleFileSelected(e, file)}
-          />
-          <Button onClick={(e) => this.handleSubmit(e)}>
-            Submit
-          </Button>
-        </div>
+        <h3>Upload transactions</h3>
+        <FilePond ref={ref => this.pond = ref}
+          files={files}
+          allowMultiple={true}
+          maxFiles={7}
+          server={{
+            url: "http://localhost:8080/transactions",
+            process: {
+              headers: {
+                Authorization: `Bearer ${getToken()}`
+              }
+            }
+          }}
+          oninit={() => this.handleInit() }
+          onupdatefiles={fileItems => {
+            // Set currently active file objects to this.state
+            this.setState({
+                files: fileItems.map(fileItem => fileItem.file)
+            });
+          }}>
+        </FilePond>
+        <h3>Your transactions</h3>
         <Dimmer active={loading}>
           <Loader />
         </Dimmer>
