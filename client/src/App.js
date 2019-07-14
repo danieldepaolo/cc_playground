@@ -9,6 +9,9 @@ import {
   pNewCard,
   pShowCard,
   pEditCard,
+  pNewNonAcceptMerchant,
+  pEditNonAcceptMerchant,
+  pNonAcceptMerchants,
   pNewCurrency,
   pEditCurrency,
   pCurrencies,
@@ -31,6 +34,8 @@ import Transactions from './Components/Transactions';
 import Register from './Components/User/Register';
 import Login from './Components/User/Login';
 import Logout from './Components/User/Logout';
+import MerchantNonAccept from './Components/MerchantNonAccept';
+import MerchantNewForm from './Components/MerchantNonAccept/MerchantNewForm';
 import CardNewForm from './Components/CardForm/CardNewForm';
 import CardEditForm from './Components/CardForm/CardEditForm';
 import PerkNewForm from './Components/Perks/PerkNewForm';
@@ -68,6 +73,8 @@ class App extends Component {
           <div id="mainArea">
             <Switch>
               <Route exact path="/" component={LandingPage} />
+              <AuthRoute path='/nonacceptmerchants' component={MerchantNonAccept} />
+              <AuthRoute path={pNewNonAcceptMerchant} component={MerchantNewForm} />
               <AuthRoute path={pPlayground} component={Playground} />
               <AuthRoute path={pNewPerk} component={PerkNewForm} />
               <AuthRoute path={pEditPerk} component={PerkEditForm} />

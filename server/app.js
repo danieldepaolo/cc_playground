@@ -14,6 +14,7 @@ const indexRoutes         = require('./routes'),
       authRoutes          = require('./routes/auth'),
       cardRoutes          = require("./routes/cards"),
       currencyRoutes      = require("./routes/currencies"),
+      nonAcceptMerchantRoutes = require('./routes/non_accept_merchants'),
       perkRoutes          = require("./routes/perks"),
       playgroundRoutes    = require("./routes/playground"),
       transactionsRoutes  = require("./routes/transactions");
@@ -33,6 +34,7 @@ app.use(indexRoutes);
 app.use(authRoutes);
 app.use(cardRoutes);
 app.use(currencyRoutes);
+app.use(nonAcceptMerchantRoutes);
 app.use(perkRoutes);
 app.use(playgroundRoutes);
 app.use(transactionsRoutes);

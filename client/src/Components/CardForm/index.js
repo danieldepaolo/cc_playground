@@ -92,6 +92,10 @@ class CardForm extends Component {
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value })
+  submitPressed = () => {
+    this.reset();
+    this.props.onHandleSubmit(this.state);
+  }
 
   render() {
     const {
@@ -115,7 +119,7 @@ class CardForm extends Component {
     } = this.state;
   
     return (
-      <Form onSubmit={() => this.props.onHandleSubmit(this.state)}>
+      <Form onSubmit={this.submitPressed}>
         <Form.Group>
           <Form.Input
             required={true}

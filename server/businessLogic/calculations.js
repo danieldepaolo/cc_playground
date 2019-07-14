@@ -1,17 +1,28 @@
 const _ = require('underscore'),
       moment = require('moment');
 
+const merch = require('../constants/nonAcceptMerchants');
+      
 // $TODO
 // 1. Handle quarterly bonuses like with Chase Freedom
 // 2. Handle delivery type (Chase Pay, Google pay...)
+// 3. Have merchants linked to transactions (from merchant table)
 function getReturnForTransaction(card, transaction) {
   // $TODO stop short and return 0 if merchant doesn't accept card
-
   let returns = {
     default: card.defaultReturn,
     merchant: 0,
     product: 0
   };
+
+  const merchantInfo = _.find(merch.nonAcceptMerchants, merchant => {
+    return merchant.name === transaction.merchant
+      || merchant.otherNames.includes(transaction.merchant)
+    });
+
+  if (merchantInfo && !merchantInfo.processorAcceptance[card.processor]) {
+    return 0;
+  }
 
   const { categories } = card.bonusReward;
   if ('merchant' in categories) {
@@ -36,6 +47,7 @@ function getReturnForTransaction(card, transaction) {
 // 2. Keep track and return [{transaction id, bestCard, bestBonus}...]
 // 3. Normalize to one year?
 function getBonusWithCards(cards, transactions) {
+  console.log(cards);
   // Start our bonus by subtracting fees and adding perk values
   let annualValue = cards.reduce( (bonus, card) => {
     bonus -= card.fees.annual;
@@ -53,7 +65,7 @@ function getBonusWithCards(cards, transactions) {
   // calculate bonus
   if (cards.length) {
     transactions.forEach( transaction => {
-      let optimalCard = null;
+      let optimalCard = cards[0];
       let bestBonus = {
         points: 0,
         value: 0

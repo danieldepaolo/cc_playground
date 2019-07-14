@@ -14,7 +14,7 @@ const CardList = styled.div`
 const SelectedCards = ( ({cards}) => {
   return (
     <CardList>
-      <CenteredHeader><i class="credit card icon"></i> Selected</CenteredHeader>
+      <CenteredHeader><i className="credit card icon"></i> Selected</CenteredHeader>
       {cards.map(card => (
         <SelectedCard card={card} />
       ))}

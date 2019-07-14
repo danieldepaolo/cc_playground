@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { FilePond } from 'react-filepond';
 import csvtojson from 'csvtojson';
+import FileInput from 'react-simple-file-input';
 import { Button, Container, Dimmer, Loader } from 'semantic-ui-react';
 
 import { sendRequestAuth, getToken } from '../../AuthService';
@@ -18,7 +18,8 @@ class Transaction extends Component {
     super(props);
 
     this.state = {
-      files: [],
+      file: '',
+      fileContents: '',
       transactions: [],
       loading: false
     };
@@ -26,7 +27,8 @@ class Transaction extends Component {
 
   reset = () => {
     this.setState({
-      file: [],
+      file: '',
+      fileContents: '',
       loading: false
     });
   }
@@ -35,13 +37,27 @@ class Transaction extends Component {
     await this.fetchTransactions();
   }
 
+  handleFileSelected = (event, file) => {
+    console.log(event);
+    csvtojson().fromString(event.target.result).then(jsonObj => {
+      console.log(jsonObj);
+      this.setState({ file: file, fileContents: jsonObj });
+    });
+  }
+
+  handleFileSubmit = async () => {
+    const response = await sendRequestAuth(
+      '/transactions',
+      'post',
+      {transactions: this.state.fileContents}
+    );
+    console.log(response);
+    this.reset();
+  }
+
   fetchTransactions = async () => {
     const response = await sendRequestAuth('/transactions');
     this.setState({transactions: response.data.transactions});
-  }
-
-  handleInit = () => {
-    console.log("File pond is ready to go");
   }
 
   render() {
@@ -50,26 +66,11 @@ class Transaction extends Component {
     return (
       <Container>
         <h3>Upload transactions</h3>
-        <FilePond ref={ref => this.pond = ref}
-          files={files}
-          allowMultiple={true}
-          maxFiles={7}
-          server={{
-            url: "http://localhost:8080/transactions",
-            process: {
-              headers: {
-                Authorization: `Bearer ${getToken()}`
-              }
-            }
-          }}
-          oninit={() => this.handleInit() }
-          onupdatefiles={fileItems => {
-            // Set currently active file objects to this.state
-            this.setState({
-                files: fileItems.map(fileItem => fileItem.file)
-            });
-          }}>
-        </FilePond>
+        <FileInput
+          readAs='text'        
+          onLoad={this.handleFileSelected}
+        />
+        <Button onClick={this.handleFileSubmit}>Submit</Button>
         <h3>Your transactions</h3>
         <Dimmer active={loading}>
           <Loader />

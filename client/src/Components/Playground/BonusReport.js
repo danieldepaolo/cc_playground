@@ -49,7 +49,7 @@ class BonusReport extends Component {
         <BonusSummary columns={1}>
           <Grid.Column width={16}>
             <CenteredHeader>
-              <i class="dollar sign icon"></i> Bonus Report
+              <i className="dollar sign icon"></i> Bonus Report
             </CenteredHeader>
             <div className="bonusBox">
               <p className="bonus">
