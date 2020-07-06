@@ -46,12 +46,20 @@ class Transaction extends Component {
   }
 
   handleFileSubmit = async () => {
-    const response = await sendRequestAuth(
-      '/transactions',
-      'post',
-      {transactions: this.state.fileContents}
-    );
-    console.log(response);
+    const submitReqs = [];
+    const maxRecords = 200;
+    // We need to split up the requests into multiple since it doesn't
+    // like very large POST body
+    for (let i = 0; i < this.state.fileContents.length; i += maxRecords) {
+      submitReqs.push(await sendRequestAuth(
+        '/transactions',
+        'post',
+        {transactions: this.state.fileContents.slice(i, i + maxRecords)}
+      ));
+    }
+    Promise.all(submitReqs).then(responses => {
+      console.log(responses);
+    });
     this.reset();
   }
 
