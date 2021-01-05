@@ -5,7 +5,7 @@
   "private": true,
   "repository": "github:danieldepaolo/cc_playground",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "csvtojson": "^2.0.8",
     "filepond": "^3.8.2",
