@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/danieldepaolo/cc_playground#readme",
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",

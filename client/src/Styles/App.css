@@ -1,19 +1,24 @@
 #mainArea {
-  margin: 1em auto 0 auto; }
+  margin: 1em auto 0 auto;
+}
 
 input[type=number] {
-  width: 5em; }
+  width: 5em;
+}
 
 div.formBox {
   max-width: 25em;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 .help-block.error {
-  color: #db1111; }
+  color: #db1111;
+}
 
 span.requestErr {
   margin-left: 2em;
-  color: #db1111; }
+  color: #db1111;
+}
 
 .cardDisplayArea {
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -21,30 +26,36 @@ span.requestErr {
   padding: 1em;
   overflow-y: auto;
   height: 100%;
-  min-width: 15em; }
+  min-width: 15em;
+}
 
 .cardSettings {
-  width: 25em; }
+  width: 25em;
+}
 
 .cardListBox {
   margin-right: 1em;
   width: 20em;
-  overflow-y: auto; }
+  overflow-y: auto;
+}
 
 .cardItem {
   display: inline-block;
   font-size: 16px;
   text-align: center;
   margin: 5px;
-  width: 23%; }
+  width: 23%;
+}
 
 .tableContainer {
   margin: 0.5em;
-  height: 100%; }
+  height: 100%;
+}
 
 div.ReactTable {
   height: 100%;
-  min-width: 45em; }
+  min-width: 45em;
+}
 
 .spaciousBox {
   border: 2px solid grey;
@@ -52,7 +63,8 @@ div.ReactTable {
   text-align: center;
   padding: 15px;
   max-width: 20em;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 .bonusBox {
   position: relative;
@@ -62,15 +74,19 @@ div.ReactTable {
   width: 14em;
   color: blue;
   margin: 1em auto;
-  height: 2em; }
-  .bonusBox .loader {
-    position: relative;
-    top: 50%; }
-  .bonusBox p.bonus {
-    line-height: 1.8em; }
+  height: 2em;
+}
+.bonusBox .loader {
+  position: relative;
+  top: 50%;
+}
+.bonusBox p.bonus {
+  line-height: 1.8em;
+}
 
 .loadingDimmer {
-  opacity: 0.4; }
+  opacity: 0.4;
+}
 
 .valueEditArea {
   padding: 10px;
@@ -79,30 +95,40 @@ div.ReactTable {
   max-width: 60em;
   display: flex;
   height: 50em;
-  margin: 0 auto; }
-  .valueEditArea img {
-    width: 269px;
-    height: 180px; }
-  .valueEditArea span.label {
-    margin-right: 4px;
-    padding: 2px; }
-  .valueEditArea .ptValueEdit {
-    margin: 10px 0; }
+  margin: 0 auto;
+}
+.valueEditArea img {
+  width: 269px;
+  height: 180px;
+}
+.valueEditArea span.label {
+  margin-right: 4px;
+  padding: 2px;
+}
+.valueEditArea .ptValueEdit {
+  margin: 10px 0;
+}
 
 .playgroundArea {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  height: 48em; }
+  height: 48em;
+}
 
 .transactionDesc {
-  padding: 10px; }
+  padding: 10px;
+}
 
 .navLink {
   display: inline-block;
   line-height: 20px;
   padding: 15px;
   margin: 0 5px;
-  text-decoration: none; }
-  .navLink:hover {
-    background: lightgray; }
+  text-decoration: none;
+}
+.navLink:hover {
+  background: lightgray;
+}
+
+/*# sourceMappingURL=App.css.map */
