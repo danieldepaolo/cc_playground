@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import 'react-table/react-table.css'
 import 'filepond/dist/filepond.min.css';
-import './Styles/App.css';
+import './styles/App.scss';
 
 import {
   pNewCard,
