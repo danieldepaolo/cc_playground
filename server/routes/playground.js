@@ -8,7 +8,7 @@ const calc = require('../businessLogic/calculations');
 const Card = require('../models/card');
 
 // Used to calculate the bonus value
-router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false}), (req, res) => {
+router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false}), async (req, res) => {
   // get cards from the query string
   let { card_id } = req.query;
   if (!Array.isArray(card_id)) {
@@ -16,24 +16,28 @@ router.get("/playground/calcbonus", passport.authenticate('jwt', {session: false
   }
 
   if (card_id) {
-    Card.find({ _id: {$in: card_id} })
+    let foundCards = []
+
+    try {
+      foundCards = await Card.find({ _id: {$in: card_id} })
       .populate('rewardCurrency')
       .populate('perks')
-      .exec( (err, foundCards) => {
-        if (err) {
-          console.error(err);
-          res.json({
-            error: "Unable to find card in DB: " + cardId,
-            bonusReport: null
-          });
-        } else {
-          const transactions = req.user ? req.user.transactions : [];
-          const bonusObj = calc.getBonusWithCards(foundCards, transactions);
-          res.json({
-            error: err,
-            bonusReport: bonusObj
-          });
-        }
+      .exec();
+    } catch (err) {
+      console.error(err);
+
+      res.json({
+        error: "Unable to find card in DB: " + card_id,
+        bonusReport: null
+      });
+    }
+
+    const transactions = req.user ? req.user.transactions : [];
+    const bonusObj = calc.getBonusWithCards(foundCards, transactions);
+
+    res.json({
+      error: null,
+      bonusReport: bonusObj
     });
   }
 });

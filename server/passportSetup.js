@@ -8,14 +8,13 @@ const User = require('./models/user');
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: 'Bountiful Rewards Await'
-}, function (jwtPayload, done) {
+}, async function (jwtPayload, done) {
     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-    return User.findOne({_id: jwtPayload.id}, (err, user) => {
-      if (err) {
-        return done(err);
-      } else {
-        return done(null, user);
-      }
-    });
+    try {
+      const user = await User.findOne({_id: jwtPayload.id});
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
   }
 ));

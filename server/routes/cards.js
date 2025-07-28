@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const _        = require('underscore'),
-      passport = require('passport');
+const _ = require("underscore"),
+  passport = require("passport");
 
 const Card = require("../models/card");
-const middleware = require('../middleware');
+const middleware = require("../middleware");
 
 // Types of annual bonus:
 // 1. Reaching spend threshold
@@ -19,84 +19,130 @@ const middleware = require('../middleware');
 // $TODO perks will be their own model and referenced in card
 
 // get all cards
-router.get("/cards", (req, res) => {
-  Card.find({}, (err, allCards) => {
+router.get("/cards", async (req, res) => {
+  let allCards = [],
+    error = null;
+
+  try {
+    allCards = await Card.find({});
+  } catch (err) {
+    error = err;
+  } finally {
     res.json({
-      error: err || null,
-      message: err ? "Unable to retrieve cards" : "Retrieved all cards",
-      cards: allCards
+      error,
+      message: error ? "Unable to retrieve cards" : "Retrieved all cards",
+      cards: allCards,
     });
-  });
+  }
 });
 
 // get one card by id
-router.get("/cards/:id", (req, res) => {
+router.get("/cards/:id", async (req, res) => {
   const { id } = req.params;
 
-  Card.findById(id).populate('rewardCurrency').populate('perks').exec( (err, foundCard) => {
-    // We only want to send back the username for now
+  let foundCard,
+    error = null;
+
+  try {
+    foundCard = await Card.findById(id)
+      .populate("rewardCurrency")
+      .populate("perks")
+      .exec();
+  } catch (err) {
+    error = err;
+  } finally {
     res.json({
-      error: err || null,
-      message: err ? "Unable to retrieve card" : "Retrieved card!",
-      card: foundCard
+      error,
+      message: error ? "Unable to retrieve card" : "Retrieved card!",
+      card: foundCard,
     });
-  });
+  }
 });
 
 // add a new card to database
-router.post("/cards", passport.authenticate('jwt', {session: false}), (req, res) => {
-  const { card } = req.body;
-  const cardDbObj = formCardToDbCard(card);
-  cardDbObj.contributor = {
-    id: req.user._id,
-    username: req.user.username
-  };
+router.post(
+  "/cards",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const { card } = req.body;
 
-  Card.create(cardDbObj, (err, addedCard) => {
-    res.json({
-      card: addedCard,
-      error: err || null,
-      message: err ? "Unable to add card" : "Successfully added card!"
-    });
-  });
-});
+    const cardDbObj = formCardToDbCard(card);
+    cardDbObj.contributor = {
+      id: req.user._id,
+      username: req.user.username,
+    };
+
+    let addedCard,
+      error = null;
+
+    try {
+      addedCard = await Card.create(cardDbObj);
+    } catch (err) {
+      error = err;
+    } finally {
+      res.json({
+        card: addedCard,
+        error,
+        message: error ? "Unable to add card" : "Successfully added card!",
+      });
+    }
+  }
+);
 
 // modify a particular card in database
-router.put("/cards/:id",
-          passport.authenticate('jwt', {session: false}),
-          middleware.userCreatedCard,
-          (req, res) => {
-  const { id } = req.params;
-  const { card } = req.body;
-  const cardDbObj = formCardToDbCard(card);
-  cardDbObj.contributor = {
-    id: req.user._id,
-    username: req.user.username
-  };
+router.put(
+  "/cards/:id",
+  passport.authenticate("jwt", { session: false }),
+  middleware.userCreatedCard,
+  async (req, res) => {
+    const { id } = req.params;
+    const { card } = req.body;
 
-  Card.replaceOne({_id: id}, cardDbObj, (err, updatedCard) => {
-    res.json({
-      error: err || null,
-      message: err ? "Unable to update card" : "Updated card!",
-      card: updatedCard
-    });
-  });
-});
+    const cardDbObj = formCardToDbCard(card);
+    cardDbObj.contributor = {
+      id: req.user._id,
+      username: req.user.username,
+    };
+
+    let updatedCard,
+      error = null;
+
+    try {
+      updatedCard = await Card.replaceOne({ _id: id }, cardDbObj);
+    } catch (err) {
+      error = err;
+    } finally {
+      res.json({
+        error,
+        message: error ? "Unable to update card" : "Updated card!",
+        card: updatedCard,
+      });
+    }
+  }
+);
 
 // delete one card
-router.delete("/cards/:id",
-              passport.authenticate('jwt', {session: false}),
-              middleware.userCreatedCard,
-              (req, res) => {
-  const { id } = req.params;
+router.delete(
+  "/cards/:id",
+  passport.authenticate("jwt", { session: false }),
+  middleware.userCreatedCard,
+  async (req, res) => {
+    const { id } = req.params;
 
-  Card.findOneAndDelete({_id: id}, err => {
-    res.json({
-      error: err || null,
-      message: err ? "Unable to delete card" : "Deleted card"
-    });
-  });
-});
+    let error = null;
+
+    try {
+      await Card.findOneAndDelete({ _id: id });
+    } catch (err) {
+      error = err;
+    } finally {
+      res.json({
+        error,
+        message: error ? "Unable to delete card" : "Deleted card",
+      });
+    }
+  }
+);
 
 function formCardToDbCard(formCard) {
   return {
@@ -105,18 +151,19 @@ function formCardToDbCard(formCard) {
     imageUrl: formCard.imageUrl, // same
     defaultReturn: formCard.defaultReturn, // same
     rewardCurrency: formCard.selectedCurrency, // different
-    fees: { // different
+    fees: {
+      // different
       annual: formCard.annualFee, // different
       foreign: formCard.ftf, // different
-      waivedFirstYear: formCard.waivedFirstYear // same
+      waivedFirstYear: formCard.waivedFirstYear, // same
     },
     bonusReward: {
       categories: formCard.addedCategories, // same
-      signup: formCard.signupBonusActive ? formCard.signupBonus : undefined // different
+      signup: formCard.signupBonusActive ? formCard.signupBonus : undefined, // different
       //special: $TODO
     },
-    perks: formCard.selectedPerks // different
-  }
+    perks: formCard.selectedPerks, // different
+  };
 }
 
 module.exports = router;

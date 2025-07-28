@@ -3,59 +3,94 @@ const router = express.Router();
 
 const Currency = require("../models/currency");
 
-router.get("/currencies", (req, res) => {
-  Currency.find({}, (err, allCurrencies) => {
+router.get("/currencies", async (_, res) => {
+  let currencies = [];
+  let error = null;
+
+  try {
+    currencies = await Currency.find({});
+  } catch (err) {
+    error = err;
+  } finally {
     res.json({
-      err: err || null,
-      message: err ? "Could not find currency" : "Successfully found currency",
-      currencies: allCurrencies
+      err: error,
+      message: error
+        ? "Could not find currencies"
+        : "Successfully found currencies",
+      currencies,
     });
-  });
+  }
 });
 
-router.get("/currencies/:id", (req, res) => {
+router.get("/currencies/:id", async (req, res) => {
   const { id } = req.params;
+  let currency;
+  let err;
 
-  Currency.findById(id, (err, foundCurrency) => {
+  try {
+    currency = await Currency.findById(id);
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
       message: err ? err : "Retrieved currency!",
-      currency: foundCurrency
+      currency,
     });
-  });
+  }
 });
 
-router.post("/currencies", (req, res) => {
+router.post("/currencies", async (req, res) => {
   const { currency } = req.body;
 
-  Currency.create(currency, (err, newCurrency) => {
+  let createdCurrency;
+  let err;
+
+  try {
+    createdCurrency = await Currency.create(currency);
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
-      currency: newCurrency,
+      currency: createdCurrency,
       message: err ? "Error creating currency" : "Successfully added currency",
-      err: err || null
+      err: err || null,
     });
-  });
+  }
 });
 
-router.put("/currencies/:id", (req, res) => {
+router.put("/currencies/:id", async (req, res) => {
   const { id } = req.params;
   const { currency } = req.body;
 
-  Currency.replaceOne({_id: id}, currency, (err, updatedCurrency) => {
+  let updatedCurrency;
+  let err;
+
+  try {
+    updatedCurrency = await Currency.replaceOne({ _id: id }, currency);
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
       message: err ? err : "Updated currency!",
-      currency: updatedCurrency
+      currency: updatedCurrency,
     });
-  });
+  }
 });
 
-router.delete("/currencies/:id", (req, res) => {
+router.delete("/currencies/:id", async (req, res) => {
   const { id } = req.params;
 
-  Currency.deleteOne({_id: id}, err => {
+  let err;
+
+  try {
+    await Currency.deleteOne({ _id: id });
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
-      message: err ? err : "Successfully deleted currency!"
+      message: err ? err : "Successfully deleted currency!",
     });
-  });
+  }
 });
 
 module.exports = router;

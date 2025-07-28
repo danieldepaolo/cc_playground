@@ -4,7 +4,10 @@
   "description": "This is the backend for the CC Playground app. ",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:db": "mongod",
+    "dev:api": "node app.js",
+    "dev:start": "npm-run-all --parallel dev:db dev:api"
   },
   "repository": {
     "type": "git",
@@ -24,12 +27,14 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "moment": "^2.30.1",
-    "mongoose": "^5.3.7",
-    "mongoose-unique-validator": "^2.0.2",
+    "mongoose": "^7.8.7",
+    "mongoose-unique-validator": "^4.0.1",
     "morgan": "^1.10.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "underscore": "^1.13.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

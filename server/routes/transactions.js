@@ -8,6 +8,7 @@ const Transaction = require('../models/transaction');
 // GET all transactions
 router.get("/transactions", passport.authenticate('jwt', {session: false}), (req, res) => {
   const { transactions } = req.user;
+
   res.json({
     transactions: transactions
   });
@@ -48,27 +49,39 @@ router.post("/transactions", passport.authenticate('jwt', {session: false}), asy
 });
 
 // modify a particular transaction
-router.put("/transactions/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
+router.put("/transactions/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
   const { id } = req.params;
   const { transaction } = req.body;
 
-  Transaction.replaceOne({_id: id}, transaction, (err, updatedTransaction) => {
+  let updatedTransaction, err = null;
+
+  try {
+    updatedTransaction = await Transaction.replaceOne({_id: id}, transaction);
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
-      error: err || null,
+      error: err,
       message: err ? "Unable to update transaction" : "Updated transaction!",
       transaction: updatedTransaction
     });
-  });
+  }
 });
 
 // delete a transaction
-router.delete("/transactions/:id", passport.authenticate('jwt', {session: false}), (req, res) => {
-  Transaction.deleteOne({_id: req.params.id}, err => {
+router.delete("/transactions/:id", passport.authenticate('jwt', {session: false}), async (req, res) => {
+  let err = null;
+
+  try {
+    await Transaction.deleteOne({_id: req.params.id});
+  } catch (error) {
+    err = error;
+  } finally {
     res.json({
-      error: err || null,
+      error: err,
       message: err ? "Unable to delete transaction" : "Successfully deleted transaction!"
     });
-  });
+  }
 });
 
 function fromTransactionToDbTransaction(transaction) {
