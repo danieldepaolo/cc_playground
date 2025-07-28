@@ -114,11 +114,9 @@ function getBonusWithCards(cards, transactions) {
     transactions.sort( (a,b) => a.date - b.date);
     const firstTransaction = moment(_.first(transactions).date);
     const lastTransaction = moment(_.last(transactions).date);
-    let monthSpan = lastTransaction.diff(firstTransaction, 'months');
+    let daysSpan = lastTransaction.diff(firstTransaction, 'days');
 
-    const adjustedTransactionBonus = monthSpan === 0 
-      ? transactionBonusTotal
-      : transactionBonusTotal / (monthSpan / 12);
+    const adjustedTransactionBonus = transactionBonusTotal * daysSpan / 365;
 
     returnObj.totalBonusValue = annualValue + adjustedTransactionBonus;
   } else {

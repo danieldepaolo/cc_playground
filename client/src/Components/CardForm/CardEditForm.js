@@ -50,7 +50,7 @@ class CardEditForm extends Component {
       waivedFirstYear: cardData.fees.waivedFirstYear,
       addedCategories: cardData.bonusReward.categories,
       signupBonusActive: (cardData.bonusReward.signup !== undefined),
-      signupBonus: cardData.bonusReward.signup,
+      signupBonus: cardData.bonusReward.signup || {},
       selectedPerks: new Set(cardData.perks.map(perk => perk._id))
     } : null;
   }
