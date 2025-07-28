@@ -1,4 +1,4 @@
-import decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 
 export function loggedIn() {
@@ -8,8 +8,8 @@ export function loggedIn() {
   }
 
   try {
-    const { exp } = decode(token);
-    if ((Date.now() / 1000) > exp) {
+    const { exp } = jwtDecode(token);
+    if (exp && (Date.now() / 1000 > exp)) {
       return false;
     } else {
       return true;
