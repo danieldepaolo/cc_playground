@@ -19,7 +19,7 @@ const indexRoutes         = require('./routes'),
       playgroundRoutes    = require("./routes/playground"),
       transactionsRoutes  = require("./routes/transactions");
 
-mongoose.connect("mongodb://localhost/cc_playground", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/cc_playground");
 
 /* Setup our app */
 const app = express();
