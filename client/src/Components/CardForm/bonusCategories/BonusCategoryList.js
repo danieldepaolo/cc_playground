@@ -1,26 +1,39 @@
-import React from 'react';
-import { List } from 'semantic-ui-react'
-import _ from 'underscore';
-import styled from 'styled-components';
+import React from "react";
+import {
+  TableRow,
+  TableHeaderCell,
+  TableHeader,
+  TableCell,
+  TableBody,
+  Table,
+} from "semantic-ui-react";
+import _ from "underscore";
+import styled from "styled-components";
 
 const ListBox = styled.div`
   padding: 1em;
 `;
 
-const BonusCategoryList = ({categories}) => {
+const BonusCategoryList = ({ categories }) => {
   const categoryList = _.flatten(_.values(categories));
 
   return (
-    <ListBox>
-      <List>
-        {categoryList.map(category => (
-          <List.Item key={category.name}>
-            <List.Icon name={category.icon} />
-            <List.Content>{category.name}: {category.bonusReturn}x</List.Content> 
-          </List.Item>
+    <Table celled>
+      <TableHeader>
+        <TableRow>
+          <TableHeaderCell>Category</TableHeaderCell>
+          <TableHeaderCell>Return</TableHeaderCell>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {categoryList.map((category) => (
+          <TableRow key={category.name}>
+            <TableCell>{category.name}</TableCell>
+            <TableCell>{category.bonusReturn}x</TableCell>
+          </TableRow>
         ))}
-      </List>
-    </ListBox>
+      </TableBody>
+    </Table>
   );
 };
 

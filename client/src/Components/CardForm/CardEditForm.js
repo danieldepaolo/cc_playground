@@ -61,7 +61,7 @@ class CardEditForm extends Component {
 
     return initialState && (
       <Container>
-        <h3>Edit {initialState.name}</h3>
+        <h2>Edit {initialState.name}</h2>
         <CardForm
           {...this.props}
           initialState={initialState}

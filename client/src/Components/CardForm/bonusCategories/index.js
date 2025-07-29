@@ -9,7 +9,7 @@ const BonusCategories = (props => {
 
   return (
     <FormBorderBox>
-      <h4>Bonus Categories</h4>
+      <h3>Bonus Categories</h3>
       <AddCategory
         categories={rewardCategories}
         categoryFunc={(categoryType, category, icon, returnAmt) => {

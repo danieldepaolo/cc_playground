@@ -198,6 +198,7 @@ class CardForm extends Component {
           addedCategories={addedCategories}
         />
 
+        <h3>Signup Bonus</h3>
         <SignupBonus
           active={signupBonusActive}
           currencies={currencies}

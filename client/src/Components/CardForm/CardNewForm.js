@@ -20,7 +20,7 @@ class CardNewForm extends Component {
   render() {
     return (
       <Container>
-        <h3>Create New Card</h3>
+        <h2>Create New Card</h2>
         <CardForm
           {...this.props}
           onHandleSubmit={(formObj) => this.handleFormSubmit(formObj)}

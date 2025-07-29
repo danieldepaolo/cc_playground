@@ -44,7 +44,7 @@ class CheckGroup extends Component {
 
     return (
       <FormBorderBox>
-        <h4>{header}</h4>
+        <h3>{header}</h3>
         {groupedInputs.map( (group, i) => (
           <Form.Group key={i} widths='equal'>
             {group.map(input => input)}
