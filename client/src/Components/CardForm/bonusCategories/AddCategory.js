@@ -14,11 +14,11 @@ class AddCategory extends Component {
       returnAmt: 2
     };
 
-    this.state = this.defaultState;
+    this.state = { ...this.defaultState };
   }
 
   reset = () => {
-    this.setState(this.defaultState);
+    this.setState({ ...this.defaultState });
   }
 
   validationForAdd = () => {
