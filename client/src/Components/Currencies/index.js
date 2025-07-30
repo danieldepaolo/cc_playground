@@ -26,7 +26,6 @@ class Currencies extends Component {
 
   onDelete = async id => {
     const response = await axios.delete(`/currencies/${id}`);
-    console.log(response);
   }
 
   render() {

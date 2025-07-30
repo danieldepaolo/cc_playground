@@ -21,16 +21,13 @@ class PerkEditForm extends Component {
 
   handleFormSubmit = async (body) => {
     const { match: {params} } = this.props;
-    const response = await sendRequestAuth(`/perks/${params.id}`, 'put', {
+    await sendRequestAuth(`/perks/${params.id}`, 'put', {
       perk: body
     });
-
-    console.log(response);
   }
 
   render() {
     const { perkData } = this.state;
-    console.log(perkData);
 
     return perkData && (
       <PerkForm

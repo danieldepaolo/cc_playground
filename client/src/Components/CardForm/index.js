@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
-import { Button, Form } from 'semantic-ui-react';
-import update from 'immutability-helper';
-import _ from 'underscore';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Button, Form } from "semantic-ui-react";
+import update from "immutability-helper";
+import _ from "underscore";
+import axios from "axios";
 
-import BonusCategories from './bonusCategories';
-import SignupBonus from './SignupBonus';
-import CheckGroup from './CheckGroup';
-import { processorOptions, trueFalse, categoryTypeOptions } from './constants';
+import BonusCategoryList from "./bonusCategories/BonusCategoryList";
+import AddCategory from "./bonusCategories/AddCategory";
+import SignupBonus from "./SignupBonus";
+import CheckGroup from "./CheckGroup";
+import { FormBorderBox } from "./styled";
+
+import { processorOptions, trueFalse, categoryTypeOptions } from "./constants";
 
 class CardForm extends Component {
   constructor(props) {
     super(props);
 
     let defaultCategoryArrays = {};
-    categoryTypeOptions.forEach(categoryType => {
+    categoryTypeOptions.forEach((categoryType) => {
       defaultCategoryArrays[categoryType.value] = [];
     });
 
@@ -23,14 +26,14 @@ class CardForm extends Component {
       currencies: [],
       rewardCategories: {
         delivery: [],
-        product: []
-      }
+        product: [],
+      },
     };
 
     this.defaultState = {
-      name: '',
-      processor: '',
-      imageUrl: '',
+      name: "",
+      processor: "",
+      imageUrl: "",
       selectedCurrency: null,
       defaultReturn: 1,
       annualFee: 0,
@@ -41,9 +44,9 @@ class CardForm extends Component {
       signupBonus: {
         months: 3,
         minSpend: 2000,
-        amount: 30000
+        amount: 30000,
       },
-      selectedPerks: new Set()
+      selectedPerks: new Set(),
     };
 
     this.state = _.extend(
@@ -51,19 +54,23 @@ class CardForm extends Component {
       this.optionsData,
       props.initialState || this.defaultState
     );
+
+    this.handleDeleteCategories = this.handleDeleteCategories.bind(this);
   }
 
   reset = () => {
-    this.setState(_.extend(
-      {},
-      this.optionsData,
-      this.props.initialState || this.defaultState
-    ));
-  }
+    this.setState(
+      _.extend(
+        {},
+        this.optionsData,
+        this.props.initialState || this.defaultState
+      )
+    );
+  };
 
   componentDidMount = async () => {
     this.fetchData();
-  }
+  };
 
   fetchData = async () => {
     const perkResponse = await axios("/perks");
@@ -73,29 +80,43 @@ class CardForm extends Component {
     this.setState({
       cardPerks: perkResponse.data.perks,
       currencies: currencyResponse.data.currencies,
-      rewardCategories: categoriesResponse.data
+      rewardCategories: categoriesResponse.data,
     });
-  }
+  };
 
   categoryAdded = (categoryType, category, icon, returnAmt) => {
-    this.setState({addedCategories: update(
-      this.state.addedCategories, {
-        [categoryType]: {$push: 
-          [{
-            name: category,
-            icon: icon,
-            bonusReturn: returnAmt
-          }]
-        }
-      }
-    )});
+    this.setState({
+      addedCategories: update(this.state.addedCategories, {
+        [categoryType]: {
+          $push: [
+            {
+              name: category,
+              icon: icon,
+              bonusReturn: returnAmt,
+            },
+          ],
+        },
+      }),
+    });
+  };
+
+  handleDeleteCategories(categories) {
+    const newAddedCategories = structuredClone(this.state.addedCategories);
+
+    _.each(categories, (toDelete) => {
+      newAddedCategories[toDelete.type] = newAddedCategories[
+        toDelete.type
+      ].filter((category) => category.name !== toDelete.name);
+    });
+
+    this.setState({ addedCategories: newAddedCategories })
   }
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+  handleChange = (e, { name, value }) => this.setState({ [name]: value });
   submitPressed = () => {
     this.reset();
     this.props.onHandleSubmit(this.state);
-  }
+  };
 
   render() {
     const {
@@ -115,16 +136,16 @@ class CardForm extends Component {
       // options we need from other db collections
       cardPerks,
       currencies,
-      rewardCategories
+      rewardCategories,
     } = this.state;
-  
+
     return (
       <Form onSubmit={this.submitPressed}>
         <Form.Group>
           <Form.Input
             required={true}
             label="Name"
-            name='name'
+            name="name"
             value={name}
             placeholder="Card name"
             width={5}
@@ -132,7 +153,7 @@ class CardForm extends Component {
           />
           <Form.Input
             label="Image URL"
-            name='imageUrl'
+            name="imageUrl"
             value={imageUrl}
             placeholder="Card image URL"
             width={7}
@@ -141,62 +162,73 @@ class CardForm extends Component {
           <Form.Select
             required={true}
             label="Processor"
-            name='processor'
+            name="processor"
             value={processor}
             options={processorOptions}
             width={4}
             onChange={this.handleChange}
           />
         </Form.Group>
-        <Form.Group widths='equal'>
+        <Form.Group widths="equal">
           <Form.Input
             required={true}
             label="Default Return"
-            name='defaultReturn'
-            type='number'
+            name="defaultReturn"
+            type="number"
             value={defaultReturn}
             placeholder="1-3%"
             onChange={this.handleChange}
           />
           <Form.Input
             required={true}
-            label='Annual Fee'
-            name='annualFee'
-            type='number'
+            label="Annual Fee"
+            name="annualFee"
+            type="number"
             value={annualFee}
             placeholder="Annual Fee ($)"
             onChange={this.handleChange}
           />
           <Form.Select
             label="Foreign Transaction Fees"
-            name='ftf'
+            name="ftf"
             value={ftf}
             options={trueFalse}
             onChange={this.handleChange}
           />
           <Form.Select
             label="Fee Waived First Year"
-            name='waivedFirstYear'
+            name="waivedFirstYear"
             value={waivedFirstYear}
             options={trueFalse}
             onChange={this.handleChange}
           />
         </Form.Group>
 
+        <h3>Currency</h3>
         <CheckGroup
-          type='radio'
+          type="radio"
           header="Currency"
           items={currencies}
           cols={3}
           checkedFunc={(currencyId) => currencyId === selectedCurrency}
-          onChangeFunc={(currencyId) => this.setState({selectedCurrency: currencyId})}
+          onChangeFunc={(currencyId) =>
+            this.setState({ selectedCurrency: currencyId })
+          }
         />
 
-        <BonusCategories
-          rewardCategories={rewardCategories}
-          categoryFunc={this.categoryAdded}
-          addedCategories={addedCategories}
-        />
+        <h3>Bonus Categories</h3>
+        <FormBorderBox>
+          <AddCategory
+            categories={rewardCategories}
+            categoryFunc={(categoryType, category, icon, returnAmt) => {
+              this.categoryAdded(categoryType, category, icon, returnAmt);
+            }}
+          />
+          <BonusCategoryList
+            categories={addedCategories}
+            onDelete={this.handleDeleteCategories}
+          />
+        </FormBorderBox>
 
         <h3>Signup Bonus</h3>
         <SignupBonus
@@ -206,31 +238,37 @@ class CardForm extends Component {
           signupBonusActive={signupBonusActive}
           onFormChange={(name, value) =>
             this.setState({
-              signupBonus: update(this.state.signupBonus,
-                {[name]: {$set: value}}
-              )
+              signupBonus: update(this.state.signupBonus, {
+                [name]: { $set: value },
+              }),
             })
           }
-          onToggle={() => 
-            this.setState(prevState => {
-              return {signupBonusActive: !prevState.signupBonusActive}
+          onToggle={() =>
+            this.setState((prevState) => {
+              return { signupBonusActive: !prevState.signupBonusActive };
             })
           }
         />
 
+        <h3>Perks</h3>
         <CheckGroup
-          type='checkbox'
+          type="checkbox"
           header="Perks"
           items={cardPerks}
           cols={3}
           checkedFunc={(perkId) => selectedPerks.has(perkId)}
-          onChangeFunc={(perkId) => {selectedPerks.has(perkId)
-            ? this.setState({ selectedPerks: update(selectedPerks, {$remove: [perkId]}) })
-            : this.setState({ selectedPerks: update(selectedPerks, {$add: [perkId]}) })
+          onChangeFunc={(perkId) => {
+            selectedPerks.has(perkId)
+              ? this.setState({
+                  selectedPerks: update(selectedPerks, { $remove: [perkId] }),
+                })
+              : this.setState({
+                  selectedPerks: update(selectedPerks, { $add: [perkId] }),
+                });
           }}
         />
 
-        <Button type='submit'>Submit</Button>
+        <Button type="submit">Submit</Button>
       </Form>
     );
   }

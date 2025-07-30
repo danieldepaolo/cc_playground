@@ -39,12 +39,10 @@ class CheckGroup extends Component {
   }
 
   render() {
-    const { header } = this.props;
     const groupedInputs = this.getGroupedInputs();
 
     return (
       <FormBorderBox>
-        <h3>{header}</h3>
         {groupedInputs.map( (group, i) => (
           <Form.Group key={i} widths='equal'>
             {group.map(input => input)}

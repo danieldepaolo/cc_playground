@@ -12,10 +12,16 @@ class CardEditForm extends Component {
     this.state = {
       cardData: null
     };
+
+    this.cardsUrl = this.cardsUrl.bind(this);
+  }
+
+  cardsUrl() {
+    return `/cards/${this.props.match.params.id}`;
   }
 
   componentDidMount = async () => {
-    const response = await axios(`/cards/${this.props.match.params.id}`);
+    const response = await axios(this.cardsUrl());
     this.setState({cardData: response.data.card});
   }
 
@@ -25,13 +31,11 @@ class CardEditForm extends Component {
     if (!formObj.signupBonusActive) {
       formObj.signupBonus = null;
     }
-
-    console.log(formObj);
   
-    const url = `/cards/${this.props.match.params.id}`;
+    const url = this.cardsUrl();
     const response = await sendRequestAuth(url, 'put', {card: formObj});
     
-    console.log(response);
+    this.props.history.push(url);
   }
 
   getInitialState = () => {
@@ -57,7 +61,6 @@ class CardEditForm extends Component {
 
   render() {
     const initialState = this.getInitialState();
-    console.log(initialState);
 
     return initialState && (
       <Container>

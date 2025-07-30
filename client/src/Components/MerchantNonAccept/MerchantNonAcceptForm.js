@@ -24,7 +24,6 @@ class MerchantNonAcceptForm extends Component {
   resetState = () => this.setState(this.defaultState)
 
   handleFormSubmit = () => {
-    console.log(this.state);
     this.props.onHandleSubmit(this.state);
     this.resetState();
   }

@@ -87,19 +87,19 @@ class ShowCard extends Component {
   componentDidMount = async () => {
     const { match } = this.props;
     const response = await axios(`/cards/${match.params.id}`);
-    console.log(response.data.card);
+
     this.setState({
       cardData: update(this.state.cardData, { $merge: response.data.card }),
     });
   };
 
-  onDelete = async (e) => {
+  onDelete = async () => {
     const { match } = this.props;
-    const response = await sendRequestAuth(
+
+    await sendRequestAuth(
       `/cards/${match.params.id}`,
       "delete"
     );
-    console.log(response);
   };
 
   render() {
@@ -114,7 +114,7 @@ class ShowCard extends Component {
       <Container>
         <Header as="h2">{cardData.name}</Header>
         {loggedIn && (
-          <div>
+          <div style={{ marginBottom: 16 }}>
             <Link to={`/cards/${cardId}/edit`}>
               <Button>Edit</Button>
             </Link>

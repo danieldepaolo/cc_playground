@@ -6,11 +6,9 @@ import { sendRequestAuth } from '../../AuthService';
 class CurrencyNewForm extends Component {
 
   handleFormSubmit = async (body) => {
-    const response = await sendRequestAuth("/currencies", "post", {
+    await sendRequestAuth("/currencies", "post", {
       currency: body
     });
-
-    console.log(response);
   }
 
   render() {

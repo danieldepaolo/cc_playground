@@ -112,13 +112,14 @@ class Playground extends Component {
 
     try {
       let response = await sendRequestAuth(url);
-      console.log(response.data.bonusReport);
+
       this.setState({
         bonusReport: response.data.bonusReport,
         bonusLoading: false
       });
     } catch (err) {
       console.error(err);
+
       this.setState({
         bonusLoading: false
       });

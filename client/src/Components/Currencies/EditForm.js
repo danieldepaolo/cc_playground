@@ -30,7 +30,6 @@ class CurrencyEditForm extends Component {
 
   render() {
     const { data } = this.state;
-    console.log(data);
 
     return data && (
       <CurrencyForm

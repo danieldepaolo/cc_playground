@@ -39,7 +39,6 @@ class BonusReport extends Component {
 
   render() {
     const { loading, bonusReport } = this.props;
-    console.log(bonusReport);
 
     return (
       <BonusContainer>
