@@ -1,5 +1,5 @@
 const _ = require('underscore'),
-      moment = require('moment');
+      dayjs = require('dayjs');
 
 const merch = require('../constants/nonAcceptMerchants');
       
@@ -75,7 +75,7 @@ function getBonusWithCards(cards, transactions) {
         const returnWithCard = getReturnForTransaction(card, transaction);
 
         // 0.01 at the end converts back down to cents, since card point value is in cents
-        const pointsEarned = transaction.amount * returnWithCard;
+        const pointsEarned = Math.abs(transaction.amount) * returnWithCard;
         const bonusValue = pointsEarned * card.rewardCurrency.defaultValue * 0.01;
         if (bonusValue > bestBonus.value) {
           bestBonus.points = pointsEarned;
@@ -112,8 +112,8 @@ function getBonusWithCards(cards, transactions) {
   // Adjust transaction bonus to one year period to match the perks/fees
   if (transactionBonusTotal > 0) {
     transactions.sort( (a,b) => a.date - b.date);
-    const firstTransaction = moment(_.first(transactions).date);
-    const lastTransaction = moment(_.last(transactions).date);
+    const firstTransaction = dayjs(_.first(transactions).date);
+    const lastTransaction = dayjs(_.last(transactions).date);
     let daysSpan = lastTransaction.diff(firstTransaction, 'days');
 
     const adjustedTransactionBonus = transactionBonusTotal * daysSpan / 365;

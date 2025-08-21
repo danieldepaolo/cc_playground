@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require('passport');
+const dayjs = require('dayjs');
 
 const utils = require('../businessLogic/utils');
 const Transaction = require('../models/transaction');
@@ -30,11 +31,11 @@ router.get("/transactions", passport.authenticate('jwt', {session: false}), (req
 // add transaction(s) to database
 // accepts array of JSON objects each representing a transaction
 router.post("/transactions", passport.authenticate('jwt', {session: false}), async (req, res) => {
-  console.log(req.body);
   let { transactions } = req.body; // shorthand for if we send via form with special names
 
   // We only want debit transactions (not credit)
-  let newTransactions = transactions.filter(transaction => transaction['Transaction Type'] === 'debit');
+  let newTransactions = transactions.filter(transaction => Number(transaction['Amount']) < 0);
+  console.log(newTransactions)
   // Convert to database format
   newTransactions = newTransactions.map(transaction => fromTransactionToDbTransaction(transaction));
 
@@ -84,10 +85,15 @@ router.delete("/transactions/:id", passport.authenticate('jwt', {session: false}
   }
 });
 
+// Monarch Money CSV headers
+/*
+Date,Merchant,Category,Account,Original Statement,Notes,Amount,Tags
+*/
+
 function fromTransactionToDbTransaction(transaction) {
   return {
-    date: utils.dateFromSlashStr(transaction.Date),
-    merchant: transaction.Description, // Merchant name as it appears for transaction.
+    date: dayjs(transaction.Date, 'YYYY-MM-DD').toDate(),
+    merchant: transaction.Merchant, // Merchant name as it appears for transaction.
     category: transaction.Category, // "Restaurants", "Gas & Fuel", "Entertainment" ...
     amount: Number(transaction.Amount)
   };

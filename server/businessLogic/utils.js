@@ -1,12 +1,3 @@
-function dateFromSlashStr(slashDate) {
-  const dateItems = slashDate.split('/');
-  const year = Number(dateItems[2]);
-  const monthIndex = Number(dateItems[0]) - 1;
-  const day = Number(dateItems[1]);
-
-  return new Date(year, monthIndex, day);
-}
-
 function getNonDuplicateTransactions(existing, insertTransactions) {
   const fieldSets = {
     date: new Set(),
@@ -35,6 +26,5 @@ function getNonDuplicateTransactions(existing, insertTransactions) {
 };
 
 module.exports = {
-  dateFromSlashStr: dateFromSlashStr,
   getNonDuplicateTransactions: getNonDuplicateTransactions
 };
