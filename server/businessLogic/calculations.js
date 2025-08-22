@@ -75,7 +75,7 @@ function getBonusWithCards(cards, transactions) {
         const returnWithCard = getReturnForTransaction(card, transaction);
 
         // 0.01 at the end converts back down to cents, since card point value is in cents
-        const pointsEarned = Math.abs(transaction.amount) * returnWithCard;
+        const pointsEarned = transaction.amount * returnWithCard;
         const bonusValue = pointsEarned * card.rewardCurrency.defaultValue * 0.01;
         if (bonusValue > bestBonus.value) {
           bestBonus.points = pointsEarned;
@@ -114,9 +114,9 @@ function getBonusWithCards(cards, transactions) {
     transactions.sort( (a,b) => a.date - b.date);
     const firstTransaction = dayjs(_.first(transactions).date);
     const lastTransaction = dayjs(_.last(transactions).date);
-    let daysSpan = lastTransaction.diff(firstTransaction, 'days');
+    let daysSpan = lastTransaction.diff(firstTransaction, 'day');
 
-    const adjustedTransactionBonus = transactionBonusTotal * daysSpan / 365;
+    const adjustedTransactionBonus = transactionBonusTotal / daysSpan * 365;
 
     returnObj.totalBonusValue = annualValue + adjustedTransactionBonus;
   } else {
