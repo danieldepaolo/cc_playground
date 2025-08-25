@@ -43,4 +43,14 @@ const rewardCategories = {
   ],
 };
 
-module.exports = rewardCategories;
+const categoryAltNamesMap = {
+  Restaurants: ['Restaurant', 'Restaurants & Bars'],
+  Groceries: ['Grocery Store', 'Grocery Stores'],
+  Travel: ['Travel & Vacation'],
+  Entertainment: ['Entertainment & Recreation']
+}
+
+module.exports = {
+  rewardCategories,
+  categoryAltNamesMap
+};

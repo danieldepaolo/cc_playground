@@ -2,6 +2,7 @@ const _ = require('underscore'),
       dayjs = require('dayjs');
 
 const merch = require('../constants/nonAcceptMerchants');
+const { categoryAltNamesMap } = require('../constants/rewardCategories');
       
 // $TODO
 // 1. Handle quarterly bonuses like with Chase Freedom
@@ -25,14 +26,20 @@ function getReturnForTransaction(card, transaction) {
   }
 
   const { categories } = card.bonusReward;
+
   if ('merchant' in categories) {
     const bonusCategory = _.findWhere(categories.merchant, {name: transaction.merchant});
     if (bonusCategory) {
       returns.merchant = bonusCategory.bonusReturn;
     }
   }
+
   if ('product' in categories) {
-    const bonusCategory = _.findWhere(categories.product, {name: transaction.category});
+    const bonusCategory = _.find(categories.product, (product) => {
+      const withAltNames = [product.name, ...(categoryAltNamesMap[product.name] || [])];
+      return withAltNames.includes(transaction.category);
+    });
+
     if (bonusCategory) {
       returns.product = bonusCategory.bonusReturn;
     }
@@ -47,7 +54,6 @@ function getReturnForTransaction(card, transaction) {
 // 2. Keep track and return [{transaction id, bestCard, bestBonus}...]
 // 3. Normalize to one year?
 function getBonusWithCards(cards, transactions) {
-  console.log(cards);
   // Start our bonus by subtracting fees and adding perk values
   let annualValue = cards.reduce( (bonus, card) => {
     bonus -= card.fees.annual;
@@ -100,8 +106,6 @@ function getBonusWithCards(cards, transactions) {
       transactionBonusTotal += bestBonus.value;
     });
   }
-
-  console.log(currencyBonus);
 
   let returnObj = {
     currencyEarned: currencyBonus,

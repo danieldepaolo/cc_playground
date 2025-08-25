@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
       
-const rewardCategories = require("../constants/rewardCategories");
+const { rewardCategories } = require("../constants/rewardCategories");
 
 // OTHER
 
 router.get('/rewardcategories', (req, res) => {
-  const sortedProductCategories = rewardCategories.product.sort( (a,b) => {
+  const sortedProductCategories = rewardCategories.product.slice().sort( (a,b) => {
     return +(a.label > b.label) || -(a.label < b.label);
   });
 

@@ -38,7 +38,6 @@ class Transaction extends Component {
   }
 
   handleFileSelected = (event, file) => {
-    console.log(event);
     csvtojson().fromString(event.target.result).then(jsonObj => {
       console.log(jsonObj);
       this.setState({ file: file, fileContents: jsonObj });
