@@ -16,18 +16,10 @@ class CardForm extends Component {
   constructor(props) {
     super(props);
 
-    let defaultCategoryArrays = {};
-    categoryTypeOptions.forEach((categoryType) => {
-      defaultCategoryArrays[categoryType.value] = [];
-    });
-
     this.optionsData = {
       cardPerks: [],
       currencies: [],
-      rewardCategories: {
-        delivery: [],
-        product: [],
-      },
+      rewardCategories: [],
     };
 
     this.defaultState = {
@@ -39,7 +31,7 @@ class CardForm extends Component {
       annualFee: 0,
       ftf: false,
       waivedFirstYear: false,
-      addedCategories: defaultCategoryArrays,
+      addedCategories: [],
       signupBonusActive: true,
       signupBonus: {
         months: 3,
@@ -84,32 +76,27 @@ class CardForm extends Component {
     });
   };
 
-  categoryAdded = (categoryType, category, icon, returnAmt) => {
+  categoryAdded = (categoryType, categoryName, icon, returnAmt) => {
     this.setState({
       addedCategories: update(this.state.addedCategories, {
-        [categoryType]: {
-          $push: [
-            {
-              name: category,
-              icon: icon,
-              bonusReturn: returnAmt,
-            },
-          ],
-        },
+        $push: [
+          {
+            categoryType,
+            name: categoryName,
+            icon: icon,
+            bonusReturn: returnAmt,
+          },
+        ],
       }),
     });
   };
 
   handleDeleteCategories(categories) {
-    const newAddedCategories = structuredClone(this.state.addedCategories);
+    const newAddedCategories = structuredClone(this.state.addedCategories).filter(category => {
+      return _.every(categories, deleteCategory => deleteCategory.name !== category.name);
+    })
 
-    _.each(categories, (toDelete) => {
-      newAddedCategories[toDelete.type] = newAddedCategories[
-        toDelete.type
-      ].filter((category) => category.name !== toDelete.name);
-    });
-
-    this.setState({ addedCategories: newAddedCategories })
+    this.setState({ addedCategories: newAddedCategories });
   }
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
@@ -220,6 +207,7 @@ class CardForm extends Component {
         <FormBorderBox>
           <AddCategory
             categories={rewardCategories}
+            addedCategories={addedCategories}
             categoryFunc={(categoryType, category, icon, returnAmt) => {
               this.categoryAdded(categoryType, category, icon, returnAmt);
             }}

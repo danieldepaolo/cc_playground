@@ -22,7 +22,7 @@ class BonusCategoryList extends Component {
     super(props);
 
     this.state = {
-      selectedCategories: [], // names
+      selectedCategories: [],
     };
 
     this.handleToggleAll = this.handleToggleAll.bind(this);
@@ -33,18 +33,18 @@ class BonusCategoryList extends Component {
   }
 
   categoryWithName(name) {
-    return _.find(this.categories(), (category) => category.name === name);
+    return _.find(this.props.categories, (category) => category.name === name);
   }
 
-  categories() {
-    const categoriesWithType = []
+  // categories() {
+  //   const categoriesWithType = []
 
-    _.each(this.props.categories, (categories, type) => {
-      categoriesWithType.push(..._.map(categories, category => ({ ...category, type })))
-    });
+  //   _.each(this.props.categories, (categories, type) => {
+  //     categoriesWithType.push(..._.map(categories, category => ({ ...category, type })))
+  //   });
 
-    return categoriesWithType;
-  }
+  //   return categoriesWithType;
+  // }
 
   toggleSelected(categoryName) {
     const { selectedCategories } = this.state;
@@ -61,7 +61,7 @@ class BonusCategoryList extends Component {
   checkboxIndeterminate() {
     return (
       this.state.selectedCategories.length > 0 &&
-      this.state.selectedCategories.length < this.categories().length
+      this.state.selectedCategories.length < this.props.categories.length
     );
   }
 
@@ -70,7 +70,7 @@ class BonusCategoryList extends Component {
       this.state.selectedCategories.length === 0 ||
       this.checkboxIndeterminate()
     ) {
-      this.setState({ selectedCategories: _.pluck(this.categories(), "name") });
+      this.setState({ selectedCategories: _.pluck(this.props.categories, "name") });
     } else {
       this.setState({ selectedCategories: [] });
     }
@@ -88,6 +88,8 @@ class BonusCategoryList extends Component {
 
   render() {
     const { selectedCategories } = this.state;
+
+    if (!this.props.categories?.length) return null;
 
     return (
       <Container>
@@ -110,7 +112,7 @@ class BonusCategoryList extends Component {
                   <Checkbox
                     indeterminate={this.checkboxIndeterminate()}
                     checked={
-                      selectedCategories.length === this.categories().length
+                      selectedCategories.length === this.props.categories.length
                     }
                     onClick={this.handleToggleAll}
                   />
@@ -122,7 +124,7 @@ class BonusCategoryList extends Component {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {this.categories().map((category) => (
+            {this.props.categories.map((category) => (
               <TableRow key={category.name}>
                 {this.props.onDelete && (
                   <TableCell>
@@ -133,7 +135,7 @@ class BonusCategoryList extends Component {
                   </TableCell>
                 )}
                 <TableCell>{category.name}</TableCell>
-                <TableCell>{category.type}</TableCell>
+                <TableCell>{category.categoryType}</TableCell>
                 <TableCell>{category.bonusReturn}x</TableCell>
               </TableRow>
             ))}

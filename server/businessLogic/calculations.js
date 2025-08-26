@@ -9,7 +9,6 @@ const { categoryAltNamesMap } = require('../constants/rewardCategories');
 // 2. Handle delivery type (Chase Pay, Google pay...)
 // 3. Have merchants linked to transactions (from merchant table)
 function getReturnForTransaction(card, transaction) {
-  // $TODO stop short and return 0 if merchant doesn't accept card
   let returns = {
     default: card.defaultReturn,
     merchant: 0,
@@ -27,32 +26,25 @@ function getReturnForTransaction(card, transaction) {
 
   const { categories } = card.bonusReward;
 
-  if ('merchant' in categories) {
-    const bonusCategory = _.findWhere(categories.merchant, {name: transaction.merchant});
-    if (bonusCategory) {
-      returns.merchant = bonusCategory.bonusReturn;
-    }
+  const merchantCategory = _.findWhere(categories, { categoryType: 'merchant', name: transaction.merchant });
+  if (merchantCategory) {
+    returns.merchant = merchantCategory.bonusReturn;
   }
 
-  if ('product' in categories) {
-    const bonusCategory = _.find(categories.product, (product) => {
-      const withAltNames = [product.name, ...(categoryAltNamesMap[product.name] || [])];
-      return withAltNames.includes(transaction.category);
+  const productCategory = _.find(categories, (category) => {
+      const withAltNames = [category.name, ...(categoryAltNamesMap[category.name] || [])];
+      return category.categoryType === 'product' && withAltNames.includes(transaction.category);
     });
 
-    if (bonusCategory) {
-      returns.product = bonusCategory.bonusReturn;
-    }
+  if (productCategory) {
+    returns.product = productCategory.bonusReturn;
   }
 
   return Math.max(returns.default, returns.merchant, returns.product);
 }
 
 // $TODO
-// 0. Adjust bonus for card fees and perk values
 // 1. Take into account special bonuses like annual bonus
-// 2. Keep track and return [{transaction id, bestCard, bestBonus}...]
-// 3. Normalize to one year?
 function getBonusWithCards(cards, transactions) {
   // Start our bonus by subtracting fees and adding perk values
   let annualValue = cards.reduce( (bonus, card) => {

@@ -6,14 +6,7 @@ const { rewardCategories } = require("../constants/rewardCategories");
 // OTHER
 
 router.get('/rewardcategories', (req, res) => {
-  const sortedProductCategories = rewardCategories.product.slice().sort( (a,b) => {
-    return +(a.label > b.label) || -(a.label < b.label);
-  });
-
-  res.json({
-    delivery: rewardCategories.delivery,
-    product: sortedProductCategories
-  });
+  res.send(rewardCategories);
 });
 
 // ROOT route

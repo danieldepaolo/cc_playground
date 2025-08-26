@@ -9,7 +9,6 @@ class MerchantNonAccept extends Component {
 
   async componentDidMount() {
     const {data: {nonAcceptMerchants}} = await sendRequestAuth('/nonacceptmerchants');
-    console.log(nonAcceptMerchants);
     this.setState({ nonAcceptMerchants: nonAcceptMerchants });
   }
 

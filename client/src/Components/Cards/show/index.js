@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import {
   Container,
   Button,
-  Label,
   List,
   Header,
-  Table,
   Popup,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
@@ -72,7 +70,7 @@ class ShowCard extends Component {
       cardData: {
         contributor: "????",
         bonusReward: {
-          categories: {},
+          categories: [],
         },
         fees: {
           annual: 0,

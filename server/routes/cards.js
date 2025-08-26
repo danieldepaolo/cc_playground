@@ -77,14 +77,13 @@ router.post(
 
     try {
       addedCard = await Card.create(cardDbObj);
-    } catch (err) {
-      error = err;
-    } finally {
-      res.json({
+
+      res.status(201).json({
         card: addedCard,
-        error,
-        message: error ? "Unable to add card" : "Successfully added card!",
+        message: "Successfully added card!",
       });
+    } catch (err) {
+      res.status(400).json({ error: err, message: "Unable to add card" })
     }
   }
 );
@@ -158,7 +157,7 @@ function formCardToDbCard(formCard) {
       waivedFirstYear: formCard.waivedFirstYear, // same
     },
     bonusReward: {
-      categories: formCard.addedCategories, // same
+      categories: formCard.addedCategories, // different
       signup: formCard.signupBonusActive ? formCard.signupBonus : undefined, // different
       //special: $TODO
     },

@@ -1,14 +1,14 @@
 const mongoose = require("mongoose"),
   uniqueValidator = require("mongoose-unique-validator");
 
-// const rewardCategory = new mongoose.Schema({
-//   categoryType: { type: String, enum: ['product', 'merchant', 'delivery'] },
-//   name: { type: String, required: true, unique: true, },
-//   bonusReturn: { type: Number, required: true },
-//   description: String,
-//   startDate: Date,
-//   endDate: Date,
-// });
+const rewardCategorySchema = new mongoose.Schema({
+  categoryType: { type: String, enum: ['product', 'merchant', 'delivery'], default: 'product', required: true },
+  name: { type: String, required: true },
+  bonusReturn: { type: Number, required: true },
+  description: String,
+  startDate: Date,
+  endDate: Date,
+});
 
 const cardSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
@@ -37,26 +37,7 @@ const cardSchema = new mongoose.Schema({
   },
   bonusReward: {
     // Information relating to getting more value than default
-    categories: {
-      merchant: [
-        {
-          name: String,
-          bonusReturn: Number,
-        },
-      ],
-      product: [
-        {
-          name: String,
-          bonusReturn: Number,
-        },
-      ],
-      delivery: [
-        {
-          name: String, // Chase Pay, Apple Pay, etc.
-          bonusReturn: Number,
-        },
-      ],
-    },
+    categories: [rewardCategorySchema],
     signup: {
       months: Number, // # of months to reach min spend
       minSpend: Number, // Current min spend requirement
@@ -65,16 +46,19 @@ const cardSchema = new mongoose.Schema({
     special: [
       {
         // Describes the requirement for earning this special bonus
+        // Examples:
+        // - 30 transactions in a month (Amex Everyday Preferred)
+        // - $xxx spent in a calendar year (Alaska Visa companion fare)
         requirement: {
-          period: String, // Annual, Monthly
-          unit: String, // transactions, spend
+          period: { type: String, enum: ['annual', 'monthly'] },
+          unit: { type: String, enum: ['transactions', 'spend'] },
           amount: Number,
         },
         currency: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Currency",
         },
-        amount: Number,
+        bonus: Number,
       },
     ],
   },
@@ -84,6 +68,33 @@ const cardSchema = new mongoose.Schema({
       ref: "Perk",
     },
   ],
+});
+
+function categoriesHaveDuplicates(categories) {
+  const categorySet = new Set();
+
+  console.log('duplciate func: ', categories);
+
+  for (const category of categories) {
+    const key = `${category.categoryType}-${category.name}`;
+
+    if (categorySet.has(key)) {
+      return true;
+    }
+
+    categorySet.add(key);
+  }
+
+  return false;
+}
+
+//check for duplicates in reward categories
+cardSchema.pre("save", function (next) {
+  if (categoriesHaveDuplicates(this.bonusReward.categories)) {
+    next(new Error('There are two reward categories with the same type and name.'));
+  } else {
+    next();
+  }
 });
 
 cardSchema.plugin(uniqueValidator);

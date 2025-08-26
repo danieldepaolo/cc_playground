@@ -74,9 +74,9 @@ class Playground extends Component {
     });
 
     response = await axios('/rewardcategories');
-    const categories = response.data.product;
+    const categories = response.data;
     const categoryMap = categories.reduce( (map, category) => {
-      map[category.label] = 0;
+      map[category.name] = 0;
       return map;
     }, {});
 
@@ -106,7 +106,6 @@ class Playground extends Component {
     const selectedCards = this.getSelectedCards();
     let args = selectedCards.map(card => `card_id=${card._id}`);
     url += args.length > 0 ? '?' + args.join('&') : '';
-    console.log(url);
 
     this.setState({bonusLoading: true});
 

@@ -1,47 +1,43 @@
 // Font Awesome icons
 
-const rewardCategories = {
-  product: [
+const rewardCategories = [
     // Food/Dining
-    { label: "Restaurants", icon: "utensils" },
-    { label: "Groceries", icon: "shopping-basket" },
-    { label: "Coffee Shops", icon: "coffee" },
+    { categoryType: 'product', name: "Restaurants" },
+    { categoryType: 'product', name: "Groceries" },
+    { categoryType: 'product', name: "Coffee Shops" },
 
     // Travel category
-    { label: "Travel", icon: "suitcase" },
-    { label: "Air Travel", icon: "plane" },
-    { label: "Hotel", icon: "hotel" },
-    { label: "Vacation Rental", icon: "home" },
-    { label: "Rental Car & Taxi", icon: "taxi" },
-    { label: "Public Transportation", icon: "subway" },
-    { label: "Parking", icon: "parking" },
-    { label: "Cruise", icon: "ship" }, // New Citi Prestige has this category (2018)
+    { categoryType: 'product', name: "Travel" },
+    { categoryType: 'product', name: "Air Travel" },
+    { categoryType: 'product', name: "Hotel" },
+    { categoryType: 'product', name: "Vacation Rental" },
+    { categoryType: 'product', name: "Rental Car & Taxi" },
+    { categoryType: 'product', name: "Public Transportation" },
+    { categoryType: 'product', name: "Parking" },
+    { categoryType: 'product', name: "Cruise" }, // New Citi Prestige has this category (2018)
 
     // Entertainment category
-    { label: "Entertainment", icon: "film" },
-    { label: "Movies & DVDs", icon: "film" },
-    { label: "Music", icon: "drum" },
-    { label: "Arts", icon: "theater-masks" },
+    { categoryType: 'product', name: "Entertainment" },
+    { categoryType: 'product', name: "Movies & DVDs" },
+    { categoryType: 'product', name: "Music" },
+    { categoryType: 'product', name: "Arts" },
 
     // Health/Services
-    { label: "Gym", icon: "dumbbell" },
-    { label: "Pharmacy", icon: "prescription" },
-    { label: "Home Phone", icon: "phone" },
-    { label: "Mobile Phone", icon: "mobile-alt" },
-    { label: "Internet", icon: "network-wired" },
-    { label: "Television", icon: "tv" },
+    { categoryType: 'product', name: "Gym" },
+    { categoryType: 'product', name: "Pharmacy" },
+    { categoryType: 'product', name: "Home Phone" },
+    { categoryType: 'product', name: "Mobile Phone" },
+    { categoryType: 'product', name: "Internet" },
+    { categoryType: 'product', name: "Television" },
 
     // Other
-    { label: "Gas & Fuel", icon: "gas-pump" },
-    { label: "Department Stores", icon: "tshirt" },
-  ],
-  delivery: [
-    { label: "Apple Pay", icon: "apple" },
-    { label: "Samsung Pay", icon: "mobile-alt" },
-    { label: "Google Pay", icon: "google" },
-    { label: "Chase Pay", icon: "piggy-bank" },
-  ],
-};
+    { categoryType: 'product', name: "Gas & Fuel" },
+    { categoryType: 'product', name: "Department Stores" },
+    { categoryType: 'delivery', name: "Apple Pay" },
+    { categoryType: 'delivery', name: "Samsung Pay" },
+    { categoryType: 'delivery', name: "Google Pay" },
+    { categoryType: 'delivery', name: "Chase Pay" }
+];
 
 const categoryAltNamesMap = {
   Restaurants: ['Restaurant', 'Restaurants & Bars'],
