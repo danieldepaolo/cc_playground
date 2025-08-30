@@ -21,3 +21,5 @@ export const tableColumns = [{
     return Number(a) - Number(b);
   }
 }];
+
+export const allowedFileTypes = ['text/csv', 'text/plain'];

@@ -12,7 +12,7 @@ class PerkNewForm extends Component {
       });
       console.log(response);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 

@@ -1,3 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  box-sizing: inherit;
+}
+
 #mainArea {
   margin: 1em auto 0 auto;
 }
@@ -18,6 +28,10 @@ div.formBox {
 span.requestErr {
   margin-left: 2em;
   color: #db1111;
+}
+
+.mb-small {
+  margin-bottom: 8px;
 }
 
 .cardDisplayArea {

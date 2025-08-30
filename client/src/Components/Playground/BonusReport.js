@@ -64,7 +64,6 @@ class BonusReport extends Component {
             </List>
           </Grid.Column>
         </BonusSummary>
-        <hr />
         <BonusTableContainer columns={1}>
           <Grid.Column width={16}>
             <ReactTable
